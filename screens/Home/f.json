@@ -1,0 +1,20 @@
+{
+  "id": "1",
+  "timestamp": "DateTime",
+  "actionType": "enum",
+
+  "feature": "turnover or",
+  "target": "turnover",
+
+  "createdBy": "user.id",
+  //JSON field
+  "data": {
+    "turnoverId": "turnover.id",
+    "assignedById": "managerProfile.id",
+    "assignedToId": "managerProfile.id"
+  },
+  // JSON field
+  "immutableData": {
+    "oldData": "something which cannot be accessed from current database"
+  }
+}
