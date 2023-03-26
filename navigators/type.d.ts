@@ -5,7 +5,10 @@ declare global {
   type IRootStackParams = {
     'Bottom Tabs': undefined
     Gallery: undefined
-    'Chapter List': undefined
+    'Chapter List': {
+      id: string
+      manga: IManga
+    }
   }
   type IRootBottomTabsParams = {
     Home: undefined

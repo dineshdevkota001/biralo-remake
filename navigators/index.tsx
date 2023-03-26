@@ -3,8 +3,10 @@ import { ThemeProvider } from '@react-navigation/native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import BottomTabs from './BottomTabs'
+import ChapterList from '@screens/Home/ChapterDetails'
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element'
 
-const Stack = createNativeStackNavigator<IRootStackParams>()
+const Stack = createSharedElementStackNavigator<IRootStackParams>()
 
 function RootNavigation() {
   return (
@@ -14,6 +16,14 @@ function RootNavigation() {
         component={BottomTabs}
         options={{
           headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="Chapter List"
+        component={ChapterList}
+        sharedElements={route => {
+          const { id } = route.params
+          return [`${id}.cover`]
         }}
       />
     </Stack.Navigator>

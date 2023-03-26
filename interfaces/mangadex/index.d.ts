@@ -26,8 +26,7 @@ type IResponse<T extends 'entity' | 'collection', U> =
       errors: IError[]
     }
 
-type IObject<T extends 'manga' | 'tag' | 'string' | 'cover_art', U> = {
+type IObjectIdentifier<T extends 'manga' | 'tag' | 'string' | 'cover_art'> = {
   id: string
   type: T
-  attributes: U
 }

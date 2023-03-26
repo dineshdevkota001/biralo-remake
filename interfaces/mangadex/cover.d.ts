@@ -1,6 +1,5 @@
-type ICover = IObject<
-  'cover_art',
-  {
+type ICover = IObject<'cover_art'> & {
+  attributes: {
     fileName: string
   }
->
+}

@@ -2,10 +2,8 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import {
   AspectRatio,
   Card,
-  Container,
   FlatList,
   Heading,
-  Image,
   Pressable,
   Skeleton,
   Text
@@ -15,11 +13,11 @@ import { flatten } from 'lodash'
 import { MANGA } from '@constants/api/routes'
 import CoverImage from '@components/Home/Image'
 import { RefreshControl } from 'react-native-gesture-handler'
-import { ActivityIndicator, TouchableOpacity } from 'react-native'
+import { ActivityIndicator } from 'react-native'
+import { SharedElement } from 'react-navigation-shared-element'
 
 export default function Home({
-  navigation,
-  route
+  navigation
 }: IRootBottomTabsScreenProps<'Home'>) {
   const {
     data,
@@ -55,11 +53,15 @@ export default function Home({
             flex={1 / 2}
             marginLeft={index % 2 === 1 ? 2 : 0}
             padding={0}
-            onPress={navigation.navigate('')}
+            onPress={() =>
+              navigation.navigate('Chapter List', { id: item.id, manga: item })
+            }
           >
-            <AspectRatio w="100%" ratio={9 / 16}>
-              <CoverImage id={item.id} relationships={item.relationships} />
-            </AspectRatio>
+            <SharedElement id={`${item.id}.cover`}>
+              <AspectRatio w="100%" ratio={9 / 16}>
+                <CoverImage id={item.id} relationships={item.relationships} />
+              </AspectRatio>
+            </SharedElement>
             <Card bgColor="white" w="100%">
               <Heading size="sm" noOfLines={2}>
                 {item?.attributes?.title?.en}
