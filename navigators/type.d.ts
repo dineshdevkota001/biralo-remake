@@ -1,10 +1,11 @@
+import { QualityEnum } from '@interfaces/enum'
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 declare global {
   type IRootStackParams = {
     'Bottom Tabs': undefined
-    Gallery: undefined
+    Gallery: { chapterId: string; quality?: QualityEnum }
     'Chapter List': {
       id: string
       manga: IManga

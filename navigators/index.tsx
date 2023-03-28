@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import BottomTabs from './BottomTabs'
 import ChapterList from '@screens/Home/ChapterDetails'
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element'
+import Gallery from '@screens/Common/Gallery'
 
 const Stack = createSharedElementStackNavigator<IRootStackParams>()
 
@@ -24,6 +25,14 @@ function RootNavigation() {
         sharedElements={route => {
           const { id } = route.params
           return [`${id}.cover`]
+        }}
+      />
+      <Stack.Screen
+        name="Gallery"
+        component={Gallery}
+        options={{
+          presentation: 'modal',
+          headerShown: false
         }}
       />
     </Stack.Navigator>

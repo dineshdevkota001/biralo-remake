@@ -3,22 +3,19 @@ import {
   AspectRatio,
   Card,
   Column,
-  Container,
   FlatList,
   Heading,
   Icon,
   Pressable,
   Row,
-  SectionList,
-  Skeleton,
   Text
 } from 'native-base'
 import { queryFn, getNextPageParam } from 'api'
-import { flatten, groupBy } from 'lodash'
-import { MANGA_FEED, MANGA } from '@constants/api/routes'
+import { flatten } from 'lodash'
+import { MANGA_FEED } from '@constants/api/routes'
 import { RefreshControl } from 'react-native-gesture-handler'
 import { ActivityIndicator, Dimensions } from 'react-native'
-import { EvilIcons, Feather, MaterialCommunityIcons } from '@expo/vector-icons'
+import { Feather } from '@expo/vector-icons'
 import CoverImage from '@components/Home/Image'
 import { SharedElement } from 'react-navigation-shared-element'
 
@@ -60,32 +57,37 @@ export default function ChapterList({
         </Column>
       }
       renderItem={({ item }) => (
-        <Card bgColor="white" mb={2}>
-          <Heading size="sm" mb={1}>
-            {item.attributes.title}
-          </Heading>
-          <Row flexWrap="wrap">
-            <Text width="50%">
-              <Icon as={Feather} name="book-open" /> {item.attributes.volume}-
-              {item.attributes.chapter}
-            </Text>
-            <Text width="50%">
-              <Icon as={Feather} name="globe" />{' '}
-              {item.attributes.translatedLanguage}
-            </Text>
-            <Text width="50%">
-              <Icon as={Feather} name="file" /> {item.attributes.pages}
-            </Text>
-            <Text width="50%" noOfLines={1}>
-              <Icon as={Feather} name="calendar" />{' '}
-              {
-                new Date(item.attributes.createdAt)
-                  .toISOString()
-                  .split('T')?.[0]
-              }
-            </Text>
-          </Row>
-        </Card>
+        <Pressable
+          onPress={() => navigation.navigate('Gallery', { chapterId: item.id })}
+        >
+          <Card bgColor="white" mb={2}>
+            <Heading size="sm" mb={1}>
+              {item.attributes.title ??
+                `${manga?.attributes?.title?.en} Chapter ${item.attributes.chapter}`}
+            </Heading>
+            <Row flexWrap="wrap">
+              <Text width="50%">
+                <Icon as={Feather} name="book-open" />{' '}
+                {item.attributes.volume ?? 0}-{item.attributes.chapter}
+              </Text>
+              <Text width="50%">
+                <Icon as={Feather} name="globe" />{' '}
+                {item.attributes.translatedLanguage}
+              </Text>
+              <Text width="50%">
+                <Icon as={Feather} name="file" /> {item.attributes.pages}
+              </Text>
+              <Text width="50%" noOfLines={1}>
+                <Icon as={Feather} name="calendar" />{' '}
+                {
+                  new Date(item.attributes.createdAt)
+                    .toISOString()
+                    .split('T')?.[0]
+                }
+              </Text>
+            </Row>
+          </Card>
+        </Pressable>
       )}
       refreshControl={
         <RefreshControl refreshing={isRefetching} onRefresh={refetch} />

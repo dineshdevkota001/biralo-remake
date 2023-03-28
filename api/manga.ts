@@ -2,7 +2,6 @@ import {
   GetNextPageParamFunction,
   QueryFunctionContext
 } from '@tanstack/react-query'
-import { AxiosResponse } from 'axios'
 import axios from 'utils/axios'
 
 export async function queryFn({ queryKey, pageParam }: QueryFunctionContext) {
@@ -14,8 +13,6 @@ export async function queryFn({ queryKey, pageParam }: QueryFunctionContext) {
         offset: pageParam
       }
     })
-
-    if (location.charAt(1) === 'c') console.log(res)
 
     return res.data
   } catch (e) {
