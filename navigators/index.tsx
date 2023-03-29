@@ -27,14 +27,7 @@ function RootNavigation() {
           return [`${id}.cover`]
         }}
       />
-      <Stack.Screen
-        name="Gallery"
-        component={Gallery}
-        options={{
-          presentation: 'modal',
-          headerShown: false
-        }}
-      />
+      <Stack.Screen name="Gallery" component={Gallery} />
     </Stack.Navigator>
   )
 }

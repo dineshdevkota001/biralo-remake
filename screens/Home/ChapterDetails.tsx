@@ -35,6 +35,8 @@ export default function ChapterList({
 
   const chapters = flatten((data?.pages ?? [])?.map(({ data }) => data))
 
+  const chapterIds = chapters.map(chapter => chapter.id)
+
   return (
     <FlatList
       data={chapters}
@@ -58,7 +60,9 @@ export default function ChapterList({
       }
       renderItem={({ item }) => (
         <Pressable
-          onPress={() => navigation.navigate('Gallery', { chapterId: item.id })}
+          onPress={() =>
+            navigation.navigate('Gallery', { chapterId: item.id, chapterIds })
+          }
         >
           <Card bgColor="white" mb={2}>
             <Heading size="sm" mb={1}>
