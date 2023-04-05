@@ -1,7 +1,6 @@
 import { useColorModeValue, useTheme } from 'native-base'
 import { ThemeProvider } from '@react-navigation/native'
 import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import BottomTabs from './BottomTabs'
 import ChapterList from '@screens/Home/ChapterDetails'
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element'
@@ -27,7 +26,13 @@ function RootNavigation() {
           return [`${id}.cover`]
         }}
       />
-      <Stack.Screen name="Gallery" component={Gallery} />
+      <Stack.Screen
+        name="Gallery"
+        component={Gallery}
+        options={{
+          headerShown: false
+        }}
+      />
     </Stack.Navigator>
   )
 }

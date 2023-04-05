@@ -5,10 +5,10 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 declare global {
   type IRootStackParams = {
     'Bottom Tabs': undefined
-    Gallery: { chapterId: string; quality?: QualityEnum }
+    Gallery: { chapterId: string; quality?: QualityEnum; mangaId: string }
     'Chapter List': {
       id: string
-      manga: IManga
+      manga: Manga.Type
     }
   }
   type IRootBottomTabsParams = {

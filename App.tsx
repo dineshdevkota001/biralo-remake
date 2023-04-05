@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import QueryProvider from '@utils/react-query'
 import Navigation from './navigators'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 export default function App() {
   const [loaded] = useFonts({
@@ -18,12 +19,14 @@ export default function App() {
   }, [loaded])
 
   return (
-    <QueryProvider>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <NativeBaseProvider>
-          <Navigation />
-        </NativeBaseProvider>
-      </GestureHandlerRootView>
-    </QueryProvider>
+    <SafeAreaProvider>
+      <QueryProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <NativeBaseProvider>
+            <Navigation />
+          </NativeBaseProvider>
+        </GestureHandlerRootView>
+      </QueryProvider>
+    </SafeAreaProvider>
   )
 }

@@ -1,32 +1,23 @@
-import { useInfiniteQuery } from '@tanstack/react-query'
-import {
-  AspectRatio,
-  Card,
-  FlatList,
-  Heading,
-  Pressable,
-  Skeleton,
-  Text
-} from 'native-base'
-import { queryFn, getNextPageParam } from 'api'
-import { flatten } from 'lodash'
+import Duplicate from '@components/Core/Duplicate'
+import Thumbnail, { ThumbnailSkeleton } from '@components/Home/Thumbnail'
 import { MANGA } from '@constants/api/routes'
-import CoverImage from '@components/Home/Image'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import getFlattenedList from '@utils/getFlattenedList'
+import { getNextPageParam, queryFn } from 'api'
+import { flatten } from 'lodash'
+import {
+  FlatList
+} from 'native-base'
 import { RefreshControl } from 'react-native-gesture-handler'
-import { ActivityIndicator } from 'react-native'
-import { SharedElement } from 'react-navigation-shared-element'
 
-export default function Home({
-  navigation
-}: IRootBottomTabsScreenProps<'Home'>) {
+export default function Home() {
   const {
     data,
     isLoading,
     isRefetching,
-    isFetchingNextPage,
     refetch,
     fetchNextPage
-  } = useInfiniteQuery<[string, IMangaRequest], IError, ICollection<IManga>>(
+  } = useInfiniteQuery<[string, Manga.Request], IError, Manga.ListResponse>(
     [MANGA, { limit: 10, includes: ['cover_art'] }],
     queryFn,
     {
@@ -34,50 +25,22 @@ export default function Home({
     }
   )
 
+  const mangas = getFlattenedList(data)
+  const noOfMangas = mangas?.length
+  const total = data?.pages?.[0]?.total
+
+
   return (
     <FlatList
-      data={flatten((data?.pages ?? [])?.map(({ data }) => data))}
+      data={mangas}
       numColumns={2}
-      renderItem={({ item, index }) =>
-        isLoading ? (
-          <Card bgColor="white" marginBottom={2} flex={1 / 2} marginX={2}>
-            <AspectRatio w="100%" ratio={16 / 9}>
-              <Skeleton height="100%" width="100%" />
-            </AspectRatio>
-            <Skeleton fontSize="xl" />
-            <Skeleton />
-          </Card>
-        ) : (
-          <Pressable
-            marginBottom={2}
-            flex={1 / 2}
-            marginLeft={index % 2 === 1 ? 2 : 0}
-            padding={0}
-            onPress={() =>
-              navigation.navigate('Chapter List', { id: item.id, manga: item })
-            }
-          >
-            <SharedElement id={`${item.id}.cover`}>
-              <AspectRatio w="100%" ratio={9 / 16}>
-                <CoverImage id={item.id} relationships={item.relationships} />
-              </AspectRatio>
-            </SharedElement>
-            <Card bgColor="white" w="100%">
-              <Heading size="sm" noOfLines={2}>
-                {item?.attributes?.title?.en}
-              </Heading>
-              <Text fontSize="xs" noOfLines={3}>
-                {item?.attributes?.description?.en}
-              </Text>
-            </Card>
-          </Pressable>
-        )
-      }
+      renderItem={(props) => <Thumbnail {...props} />}
       refreshControl={
         <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
       }
       keyExtractor={item => item.id}
-      ListFooterComponent={isFetchingNextPage ? <ActivityIndicator /> : null}
+      onEndReachedThreshold={0.8}
+      ListFooterComponent={(noOfMangas && total && noOfMangas < total) || isLoading ? <Duplicate Component={ThumbnailSkeleton} /> : null}
       onEndReached={() => fetchNextPage()}
     />
   )
