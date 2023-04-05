@@ -3,9 +3,17 @@ namespace Chapter {
     title?: string
     volume?: string
     chapter?: string
-    translatedLanguage?: string
+    translatedLanguage?: string[]
     groups?: Array<string>
     version?: number
+    order?: {
+      createdAt?: Order
+      updatedAt?: Order
+      publishAt?: Order
+      readableAt?: Order
+      volume?: Order
+      chapter?: Order
+    }
   }
   interface Attributes {
     title?: string

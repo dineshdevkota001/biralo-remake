@@ -120,13 +120,14 @@ export default function Gallery({
           />
         )}
         refreshing={false}
-        onRefresh={() => { if (previousChapter) navigation.replace('Gallery', { chapterId: previousChapter.id ?? previousChapter.others?.[0], mangaId: mangaId }) }
+        onRefresh={() => { if (previousChapter) navigation.replace('Gallery', { chapterId: previousChapter.id ?? previousChapter.others?.[0], mangaId: mangaId }); else navigation.goBack() }
         }
         onEndReached={() => {
           if (nextChapter) navigation.replace('Gallery', { chapterId: nextChapter.id ?? nextChapter.others?.[0], mangaId: mangaId })
+          else navigation.goBack()
         }}
         horizontal={isHorizontal}
-        showsHorizontalScrollIndicator={false}
+        showsHorizontalScrollIndicator
       />
     </SafeAreaView>
   )

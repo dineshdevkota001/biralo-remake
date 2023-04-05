@@ -1,3 +1,4 @@
+import Duplicate from '@components/Core/Duplicate'
 import { Feather } from '@expo/vector-icons'
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { getTitle } from '@utils/getLocalizedString'
@@ -7,12 +8,15 @@ import {
   Icon,
   Pressable,
   Row,
-  Text
+  Skeleton,
+  Text,
+  View
 } from 'native-base'
+import { formatDistance } from "date-fns"
 
 function Detail({ iconName, children }: IHaveChildren & { iconName: string }) {
   return (
-    <Text width="50%">
+    <Text width="50%" mb={1}>
       <Icon as={Feather} name={iconName} /> {children}
     </Text>
   )
@@ -20,7 +24,7 @@ function Detail({ iconName, children }: IHaveChildren & { iconName: string }) {
 
 
 export default function Thumbnail({ attributes, id }: Chapter.Type) {
-  const { volume, title, chapter, pages, createdAt, translatedLanguage } = attributes
+  const { title, chapter, pages, createdAt, translatedLanguage } = attributes
   const route = useRoute<IRootStackScreenProps<"Chapter List">['route']>()
   const navigation = useNavigation()
 
@@ -33,14 +37,10 @@ export default function Thumbnail({ attributes, id }: Chapter.Type) {
   >
     <Card bgColor="white" mb={2}>
       <Heading size="sm" mb={1}>
-        {title ??
-          `${getTitle(manga.attributes.title)} Chapter ${chapter}`}
+        Chapter {chapter}{title ??
+          ` ${getTitle(manga.attributes.title)}`}
       </Heading>
       <Row flexWrap="wrap">
-        <Detail iconName="book-open">
-          {' '}
-          {volume ?? 0}-{chapter}
-        </Detail>
         <Detail iconName="globe">
           {' '}
           {translatedLanguage}
@@ -48,12 +48,21 @@ export default function Thumbnail({ attributes, id }: Chapter.Type) {
         <Detail iconName="file"> {pages}</Detail>
         {createdAt ? <Detail iconName="calendar">
           {
-            new Date(createdAt)
-              .toISOString()
-              .split('T')?.[0]
+            formatDistance(new Date(createdAt), new Date(), { addSuffix: true })
           }
         </Detail> : null}
       </Row>
     </Card>
   </Pressable>
+}
+
+function DetailSkeleton() {
+  return <View width="50%"><Skeleton.Text width="75%" lines={1} mb={1} /></View>
+}
+
+export function ThumbnailSkeleton() {
+  return <Card backgroundColor="white" mb={2} >
+    <Skeleton.Text fontSize={18} mb={1} lines={1} />
+    <Duplicate Component={DetailSkeleton} times={4} />
+  </Card >
 }

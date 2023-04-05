@@ -4,7 +4,6 @@ import { MANGA } from '@constants/api/routes'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import getFlattenedList from '@utils/getFlattenedList'
 import { getNextPageParam, queryFn } from 'api'
-import { flatten } from 'lodash'
 import {
   FlatList
 } from 'native-base'
