@@ -1,4 +1,5 @@
 import { get } from 'lodash'
+
 const defaultLanguage: ILocalizationLanguage = 'en'
 const defaultTitleLanguage: ILocalizationLanguage = 'jp-RO'
 

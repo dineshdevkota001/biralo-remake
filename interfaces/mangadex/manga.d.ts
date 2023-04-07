@@ -7,7 +7,7 @@ type IManga = IObjectIdentifier<'manga'> & {
     latestUploadedChapter: string
     updatedAt: string
   }
-  relationships: IObject<{}>[]
+  relationships: IObject<unkmown>[]
 }
 
 type IMangaRequest = {

@@ -1,5 +1,5 @@
-import { Center, Container, Text } from 'native-base'
+import { Container } from 'native-base'
 
 export default function Profile() {
-  return <Container></Container>
+  return <Container />
 }

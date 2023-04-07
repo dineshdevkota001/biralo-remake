@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import { FontAwesome } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from '@screens/Home/Home'

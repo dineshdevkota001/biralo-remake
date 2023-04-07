@@ -23,6 +23,6 @@ declare global {
       NativeStackScreenProps<IRootStackParams>
     >
   namespace ReactNavigation {
-    interface RootParamList extends IRootStackParams {}
+    type RootParamList = IRootStackParams
   }
 }

@@ -1,10 +1,9 @@
 import { useColorModeValue, useTheme } from 'native-base'
-import { ThemeProvider } from '@react-navigation/native'
-import { NavigationContainer } from '@react-navigation/native'
-import BottomTabs from './BottomTabs'
+import { ThemeProvider, NavigationContainer } from '@react-navigation/native'
 import ChapterList from '@screens/Home/ChapterDetails'
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element'
 import Gallery from '@screens/Common/Gallery'
+import BottomTabs from './BottomTabs'
 
 const Stack = createSharedElementStackNavigator<IRootStackParams>()
 

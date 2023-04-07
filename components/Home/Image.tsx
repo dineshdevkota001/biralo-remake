@@ -1,11 +1,11 @@
-import { COVERS, } from '@constants/api/routes'
+import { COVERS } from '@constants/api/routes'
 import { IImageProps, Image } from 'native-base'
 import { UPLOADS } from '@constants/api'
 import { COVER_QUALITY } from '@constants/static/configuration'
 
 interface ICoverImageProps extends IImageProps {
   id: string
-  relationships: IManga['relationships'],
+  relationships: IManga['relationships']
   quality?: 256 | 512
 }
 
