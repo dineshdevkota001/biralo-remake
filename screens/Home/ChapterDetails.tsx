@@ -41,13 +41,15 @@ export default function ChapterList({
   const sections = Object.keys(groupedByVolume)
     ?.map(key => {
       return {
-        title: key,
+        title: key === 'null' ? null : key,
         data: groupedByVolume?.[key]
       }
     })
     .sort((a, b) => {
-      if ((Number(a.title) ?? 0) < (Number(b.title) ?? 0)) return 1
-      if ((Number(a.title) ?? 0) > (Number(b.title) ?? 0)) return -1
+      const numA = Number(a.title ?? 9999)
+      const numB = Number(b.title ?? 9999)
+      if (numA < numB) return 1
+      if (numA > numB) return -1
       return 0
     })
 
@@ -70,7 +72,7 @@ export default function ChapterList({
       onEndReachedThreshold={0.8}
       ListFooterComponent={
         (totalChapters && noOfChapters && noOfChapters < totalChapters) ||
-        isLoading ? (
+          isLoading ? (
           <Duplicate Component={ThumbnailSkeleton} times={4} />
         ) : null
       }

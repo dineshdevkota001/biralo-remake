@@ -7,6 +7,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import QueryProvider from '@utils/react-query'
 import Navigation from './navigators'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 
 export default function App() {
   const [loaded] = useFonts({
@@ -20,13 +21,15 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <QueryProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <NativeBaseProvider>
-            <Navigation />
-          </NativeBaseProvider>
-        </GestureHandlerRootView>
-      </QueryProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NativeBaseProvider>
+          <QueryProvider>
+            <BottomSheetModalProvider>
+              <Navigation />
+            </BottomSheetModalProvider>
+          </QueryProvider>
+        </NativeBaseProvider>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   )
 }

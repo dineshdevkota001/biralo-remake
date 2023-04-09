@@ -1,20 +1,22 @@
 import { queryFn } from '@api/manga'
 import { CDN } from '@constants/api'
+import { Feather } from '@expo/vector-icons'
 import { QualityEnum } from '@interfaces/enum'
+import { useNavigation } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { flatten } from 'lodash'
-import { AspectRatio, FlatList, View, Icon, Row, Pressable } from 'native-base'
-import { Dispatch, useEffect, useState, useMemo } from 'react'
+import { AspectRatio, FlatList, Heading, Icon, Pressable, Row, View } from 'native-base'
+import { Dispatch, useEffect, useMemo, useState } from 'react'
 import {
   ActivityIndicator,
   Dimensions,
   Image,
   SafeAreaView
 } from 'react-native'
-import { Feather } from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import useBottomSheetModal, { useDynamicModal } from '@hooks/useBottomSheet'
 
 const window = Dimensions.get('window')
 const windowRatio = window.width / window.height
@@ -86,42 +88,34 @@ function Page({
 function Menu() {
   const { bottom } = useSafeAreaInsets()
   const navigation = useNavigation()
-  const [showMenu, setShowMenu] = useState(false)
+  const [props, { handleOpen }] = useBottomSheetModal()
+  const [dynamicProps, childrenProps] = useDynamicModal({ snapPoints: [bottom + 5, "CONTENT_HEIGHT"] })
+  const [isExtraMenuOpen, setIsExtraMenuOpen] = useState(false)
 
-  const toggleMenu = () => setShowMenu(prev => !prev)
-
-  if (!showMenu)
-    return (
-      <Pressable
-        top="37.5%"
-        left="35%"
-        height="25%"
-        width="30%"
-        position="absolute"
-        opacity={0}
-        onPress={toggleMenu}
-      />
-    )
-
-  return (
-    <>
-      <Pressable
-        position="absolute"
-        height="100%"
-        width="100%"
-        backgroundColor="black"
-        opacity={70}
-        onPress={toggleMenu}
-      />
+  return <>
+    <Pressable
+      top="37.5%"
+      left="35%"
+      height="25%"
+      width="30%"
+      position="absolute"
+      opacity={0}
+      onPress={handleOpen}
+    />
+    <BottomSheetModal
+      {...props}
+      {...dynamicProps}
+      index={1}
+    >
       <Row
-        paddingBottom={bottom + 16}
-        position="absolute"
-        bottom={0}
-        backgroundColor="black"
-        width="100%"
         justifyContent="space-around"
+        flexWrap="wrap"
+        {...childrenProps}
       >
-        <Icon as={Feather} margin={3} name="menu" size={6} />
+        <Icon as={Feather} margin={3} name="more-vertical" size={6} onPress={() => { setIsExtraMenuOpen(p => !p) }} />
+        <Icon as={Feather} margin={3} name="maximize" size={6} />
+        <Icon as={Feather} margin={3} name="minimize-2" size={6} />
+        <Icon as={Feather} margin={3} name="minimize" size={6} />
         <Icon
           as={Feather}
           margin={3}
@@ -129,20 +123,38 @@ function Menu() {
           onPress={() => navigation.goBack()}
           size={6}
         />
+        {isExtraMenuOpen ? <Row minWidth="90%" flex={1}>
+          <Icon as={Feather} margin={3} name="minimize" size={6} />
+          <Icon as={Feather} margin={3} name="minimize-2" size={6} />
+          <Icon as={Feather} margin={3} name="maximize" size={6} />
+        </Row> : null}
       </Row>
-    </>
-  )
+    </BottomSheetModal>
+  </>
+}
+
+
+type IChapter = {
+  chapter: string
+  id: string
+  others: string[]
+  count: number
+}
+type IVolume = {
+  volume: string
+  count: number
+  chapters: IChapter[]
 }
 
 export default function Gallery({
   route,
   navigation
 }: IRootStackScreenProps<'Gallery'>) {
-  const { quality, chapterId, mangaId } = route.params
+  const { quality = QualityEnum.DATA_SAVER, chapterId, mangaId } = route.params
   const [isHorizontal, setIsHorizontal] = useState(true)
 
   const { data } = useQuery<unknown, unknown, string[]>(
-    [chapterId, quality ?? QualityEnum.DATA_SAVER],
+    [chapterId, quality],
     async () => {
       const res = await axios.get(`${CDN}/${chapterId}`)
 
@@ -162,16 +174,7 @@ export default function Gallery({
       result: Response.Result
       volumes: Record<
         string,
-        {
-          volume: string
-          count: number
-          chapters: {
-            chapter: string
-            id: string
-            others: string[]
-            count: number
-          }[]
-        }
+        IVolume
       >
     }
   >([`/manga/${mangaId}/aggregate`, { groups: [] }], queryFn)
@@ -195,6 +198,15 @@ export default function Gallery({
     return { nextChapter: next, previousChapter: prev }
   }, [chapters, chapterId])
 
+  const loadChapter = (chapter?: IChapter | null, nullCallback = navigation.goBack) => () => {
+    if (chapter)
+      navigation.replace('Gallery', {
+        chapterId: chapter.id ?? chapter.others?.[0],
+        mangaId
+      })
+    else nullCallback()
+  }
+
   return (
     <SafeAreaView style={{ position: 'relative' }}>
       <FlatList
@@ -202,6 +214,26 @@ export default function Gallery({
           data ?? ['https://picsum.photos/200', 'https://picsum.photos/200']
         }
         pagingEnabled={isHorizontal}
+        initialScrollIndex={1}
+        getItemLayout={
+          (_, index) => ({ length: window.height, offset: window.width * index, index })
+        }
+        ListHeaderComponent={
+          <View height={window.height / 2} width={window.width} backgroundColor="black" display="flex" alignItems="center" justifyContent="center">
+            <Pressable onPress={loadChapter(previousChapter)} display="flex" alignItems="center" justifyContent="center">
+              <Icon as={Feather} color="white" name="arrow-left-circle" size="2xl" mb={2} />
+              <Heading size="lg" color="white">Previous Chapter</Heading>
+            </Pressable>
+          </View>
+        }
+        ListFooterComponent={
+          <View height={window.height / 2} width={window.width} backgroundColor="black" display="flex" alignItems="center" justifyContent="center">
+            <Pressable onPress={loadChapter(nextChapter)} display="flex" alignItems="center" justifyContent="center">
+              <Icon as={Feather} color="white" name="arrow-right-circle" size="2xl" mb={2} />
+              <Heading size="lg" color="white">Next Chapter</Heading>
+            </Pressable>
+          </View>
+        }
         renderItem={({ item: url, index }) => (
           <Page
             url={url}
@@ -210,23 +242,7 @@ export default function Gallery({
             horizontal={isHorizontal}
           />
         )}
-        refreshing={false}
-        onRefresh={() => {
-          if (previousChapter)
-            navigation.replace('Gallery', {
-              chapterId: previousChapter.id ?? previousChapter.others?.[0],
-              mangaId
-            })
-          else navigation.goBack()
-        }}
-        onEndReached={() => {
-          if (nextChapter)
-            navigation.replace('Gallery', {
-              chapterId: nextChapter.id ?? nextChapter.others?.[0],
-              mangaId
-            })
-          else navigation.goBack()
-        }}
+
         horizontal={isHorizontal}
         showsHorizontalScrollIndicator
       />
