@@ -10,6 +10,7 @@ declare global {
       id: string
       manga: Manga.Type
     }
+    Test: undefined
   }
   type IRootBottomTabsParams = {
     Home: undefined

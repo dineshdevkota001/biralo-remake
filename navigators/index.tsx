@@ -1,11 +1,11 @@
-import { useColorModeValue, useTheme } from 'native-base'
-import { ThemeProvider, NavigationContainer } from '@react-navigation/native'
-import ChapterList from '@screens/Home/ChapterDetails'
-import { createSharedElementStackNavigator } from 'react-navigation-shared-element'
-import Gallery from '@screens/Common/Gallery'
-import BottomTabs from './BottomTabs'
+import BottomTabs from "./BottomTabs";
+import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
+import Gallery from "@screens/Common/Gallery";
+import ChapterList from "@screens/Home/ChapterDetails";
+import { useColorModeValue, useTheme } from "native-base";
+import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 
-const Stack = createSharedElementStackNavigator<IRootStackParams>()
+const Stack = createSharedElementStackNavigator<IRootStackParams>();
 
 function RootNavigation() {
   return (
@@ -14,30 +14,30 @@ function RootNavigation() {
         name="Bottom Tabs"
         component={BottomTabs}
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="Chapter List"
         component={ChapterList}
-        sharedElements={route => {
-          const { id } = route.params
-          return [`${id}.cover`]
+        sharedElements={(route) => {
+          const { id } = route.params;
+          return [`${id}.cover`];
         }}
       />
       <Stack.Screen
         name="Gallery"
         component={Gallery}
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
-  )
+  );
 }
 
 export default function Navigation() {
-  const { colors } = useTheme()
+  const { colors } = useTheme();
   const theme = useColorModeValue(
     {
       dark: false,
@@ -47,8 +47,8 @@ export default function Navigation() {
         card: colors.white,
         text: colors.text[800],
         border: colors.gray[200],
-        notification: colors.red[700]
-      }
+        notification: colors.red[700],
+      },
     },
     {
       dark: true,
@@ -58,10 +58,10 @@ export default function Navigation() {
         card: colors.black,
         text: colors.gray[100],
         border: colors.gray[700],
-        notification: colors.red[700]
-      }
-    }
-  )
+        notification: colors.red[700],
+      },
+    },
+  );
 
   return (
     <ThemeProvider value={theme}>
@@ -69,5 +69,5 @@ export default function Navigation() {
         <RootNavigation />
       </NavigationContainer>
     </ThemeProvider>
-  )
+  );
 }
