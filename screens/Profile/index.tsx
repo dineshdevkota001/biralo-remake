@@ -1,5 +1,5 @@
-import { Container } from 'native-base'
+import { View } from "react-native";
 
 export default function Profile() {
-  return <Container />
+  return <View />;
 }

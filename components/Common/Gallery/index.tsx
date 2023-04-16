@@ -9,10 +9,14 @@ import { QualityEnum } from "@interfaces/enum";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { IIconProps, Row, View } from "native-base";
-import { ComponentProps, useEffect, useState } from "react";
-import { StyleProp } from "react-native";
-import { Dimensions, SafeAreaView, ViewStyle } from "react-native";
+import { Dispatch, useEffect, useState } from "react";
+import {
+  Dimensions,
+  SafeAreaView,
+  StyleProp,
+  View,
+  ViewStyle,
+} from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import {
   IconButton,
@@ -36,27 +40,25 @@ type GalleryProps = {
 const window = Dimensions.get("window");
 const { height } = window;
 
-function MenuIcon(
-  props: IconButtonProps & { name: ComponentProps<typeof Feather>["name"] },
-) {
+function MenuIcon(props: IconButtonProps) {
   const { colors } = useTheme();
   return (
     <IconButton
       iconColor={colors.onSurface}
       {...props}
-      icon={(iconProps) => {
-        return <Feather name={props.name} {...iconProps} />;
+      style={{
+        flex: 1 / 5,
       }}
     />
   );
 }
 
-function Menu() {
+function Menu({ title }: { title: string }) {
   const { bottom } = useSafeAreaInsets();
   const navigation = useNavigation();
   const [props, { handleOpen, handleClose }] = useBottomSheetModal();
   const [dynamicProps, childrenProps] = useDynamicModal({
-    snapPoints: [(bottom || 16) + 20, "CONTENT_HEIGHT"],
+    snapPoints: [(bottom || 16) + 40, "CONTENT_HEIGHT"],
   });
 
   const [isExtraMenuOpen, setIsExtraMenuOpen] = useState(false);
@@ -66,6 +68,13 @@ function Menu() {
     handleOpen();
   }, []);
 
+  const menuFunctionWrapper = (callback: () => void) => {
+    return () => {
+      handleClose();
+      callback();
+    };
+  };
+
   return (
     <BottomSheetModal
       {...props}
@@ -73,37 +82,71 @@ function Menu() {
       enablePanDownToClose={false}
       index={1}
     >
-      <View display="flex" {...childrenProps} padding={4}>
-        <Row justifyContent="space-around" flexWrap="wrap">
-          <MenuIcon
-            name="more-vertical"
-            onPress={() => {
-              setIsExtraMenuOpen((p) => !p);
-            }}
-          />
-          <MenuIcon name="chevron-left" onPress={goPrev} disabled={!hasPrev} />
-          <MenuIcon name="chevron-right" onPress={goNext} disabled={!hasNext} />
-          <MenuIcon
-            name="x"
-            onPress={() => {
-              handleClose();
-              navigation.goBack();
-            }}
-          />
-        </Row>
+      <View
+        {...childrenProps}
+        style={[
+          childrenProps?.style,
+          {
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            padding: 16,
+            paddingTop: 8,
+          },
+        ]}
+      >
+        <Text
+          style={{ minWidth: "90%", flex: 1, textAlign: "center" }}
+          variant="titleMedium"
+        >
+          {title}
+        </Text>
+        <MenuIcon
+          icon="file-image"
+          onPress={() => {
+            setIsExtraMenuOpen((p) => !p);
+          }}
+        />
+        <MenuIcon
+          icon="chevron-left"
+          onPress={menuFunctionWrapper(goPrev)}
+          disabled={!hasPrev}
+        />
+        <MenuIcon
+          icon="chevron-right"
+          onPress={menuFunctionWrapper(goNext)}
+          disabled={!hasNext}
+        />
+        <MenuIcon
+          icon="close"
+          onPress={menuFunctionWrapper(navigation.goBack)}
+        />
         {isExtraMenuOpen ? (
-          <Row minWidth="90%" flex={1}>
-            <MenuIcon name="minimize" />
-            <MenuIcon name="minimize-2" />
-            <MenuIcon name="maximize" />
-          </Row>
+          <View
+            style={{
+              flex: 1,
+              minWidth: "90%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <MenuIcon icon="fullscreen-exit" />
+            <MenuIcon icon="fullscreen" />
+            <MenuIcon icon="arrow-left-right" />
+            <MenuIcon icon="arrow-up-down" />
+          </View>
         ) : null}
       </View>
     </BottomSheetModal>
   );
 }
 
-function GalleryFlatList({ style }: { style: StyleProp<ViewStyle> }) {
+function GalleryFlatList({
+  style,
+  setTitle,
+}: { style: StyleProp<ViewStyle>; setTitle: Dispatch<string> }) {
   const route = useRoute<IRootStackScreenProps<"Gallery">["route"]>();
   const { quality = QualityEnum.DATA_SAVER, chapterId } = route.params;
   const [{ isHorizontal }] = useGallery();
@@ -122,25 +165,28 @@ function GalleryFlatList({ style }: { style: StyleProp<ViewStyle> }) {
       );
     },
   );
-  const { goNext, hasNext } = useChapterControls();
+  const { goNext, hasNext, currentChapter } = useChapterControls();
+  useEffect(() => {
+    if (currentChapter) setTitle(`Chapter ${currentChapter.chapter}`);
+  }, []);
 
   return (
     <>
       <Animated.FlatList
         style={style}
-        data={
-          data ?? ["https://picsum.photos/200", "https://picsum.photos/200"]
-        }
+        data={data ?? []}
         pagingEnabled={isHorizontal}
         ListFooterComponent={
           hasNext ? (
             <View
-              height={window.height / (isHorizontal ? 1 : 2)}
-              width={window.width}
-              backgroundColor={colors.background}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
+              style={{
+                height: window.height / (isHorizontal ? 1 : 2),
+                width: window.width,
+                backgroundColor: colors.background,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
               <TouchableRipple onPress={goNext}>
                 <View
@@ -198,11 +244,12 @@ export default function Gallery() {
     }),
     [],
   );
+  const [title, setTitle] = useState("");
 
   return (
     <GalleryContextProvider value={[]}>
       <SafeAreaView style={{ position: "relative", backgroundColor: "black" }}>
-        <GalleryFlatList style={animatedStyle} />
+        <GalleryFlatList style={animatedStyle} setTitle={setTitle} />
         <GestureDetector gesture={panGesture}>
           <Animated.View
             style={[
@@ -216,7 +263,7 @@ export default function Gallery() {
             ]}
           />
         </GestureDetector>
-        <Menu />
+        <Menu title={title} />
       </SafeAreaView>
     </GalleryContextProvider>
   );

@@ -33,7 +33,7 @@ export default function useChapterControls() {
     }
   >([`/manga/${mangaId}/aggregate`, { groups: [] }], queryFn);
 
-  const { nextChapter, previousChapter } = useMemo(() => {
+  const { nextChapter, previousChapter, currentChapter } = useMemo(() => {
     if (!chapters) return {};
 
     const flattenedVolumes = Object.values(chapters.volumes);
@@ -50,7 +50,11 @@ export default function useChapterControls() {
       currentIndex < (flattenedChapters?.length ?? 0) - 1
         ? flattenedChapters?.[currentIndex + 1]
         : null;
-    return { nextChapter: next, previousChapter: prev };
+    return {
+      nextChapter: next,
+      previousChapter: prev,
+      currentChapter: flattenedChapters?.[currentIndex],
+    };
   }, [chapters, chapterId]);
 
   const loadChapter =
@@ -70,5 +74,6 @@ export default function useChapterControls() {
     goPrev,
     hasPrev: Boolean(previousChapter),
     hasNext: Boolean(nextChapter),
+    currentChapter,
   };
 }
