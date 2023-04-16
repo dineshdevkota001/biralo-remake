@@ -1,21 +1,23 @@
 import Duplicate from "@components/Core/Duplicate";
-import Thumbnail, { ThumbnailSkeleton } from "@components/Home/Thumbnail";
+import Thumbnail, {
+  ThumbnailSkeleton,
+} from "@components/Home/ThumbnailSingleColumn";
 import { MANGA } from "@constants/api/routes";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import getFlattenedList from "@utils/getFlattenedList";
 import { getNextPageParam, queryFn } from "api";
-import { FlatList } from "native-base";
+import { FlatList } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 
 export default function Home() {
   const { data, isLoading, isRefetching, refetch, fetchNextPage } =
-    useInfiniteQuery<[string, Manga.Request], Error, Manga.ListResponse>(
-      [MANGA, { limit: 10, includes: ["cover_art"] }],
-      queryFn,
-      {
-        getNextPageParam,
-      },
-    );
+    useInfiniteQuery<
+      [string, Manga.Request],
+      Response.ErrorResponse,
+      Manga.ListResponse
+    >([MANGA, { limit: 10, includes: ["cover_art"] }], queryFn, {
+      getNextPageParam,
+    });
 
   const mangas = getFlattenedList(data);
   const noOfMangas = mangas?.length;
@@ -24,7 +26,6 @@ export default function Home() {
   return (
     <FlatList
       data={mangas}
-      numColumns={2}
       renderItem={(props) => <Thumbnail {...props} />}
       refreshControl={
         <RefreshControl refreshing={isRefetching} onRefresh={refetch} />

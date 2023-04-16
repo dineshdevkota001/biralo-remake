@@ -14,7 +14,7 @@ const imageRatio = 9 / 9;
 
 export default function Thumbnail({ index, item }: IThumbnailProps) {
   const { id, attributes } = item;
-  const { title, description } = attributes;
+  const { title, tags } = attributes;
   const navigation = useNavigation<IRootBottomTabsScreenProps<"Home">>();
 
   return (

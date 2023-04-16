@@ -6,6 +6,7 @@ specifiers:
   '@expo/metro-runtime': ^1.1.0
   '@expo/vector-icons': ^13.0.0
   '@gorhom/bottom-sheet': ^4.4.5
+  '@pchmn/expo-material3-theme': ^1.0.1
   '@react-navigation/bottom-tabs': ^6.5.7
   '@react-navigation/native': ^6.0.2
   '@react-navigation/native-stack': ^6.9.12
@@ -74,6 +75,7 @@ dependencies:
   '@expo/metro-runtime': 1.1.0_react-native@0.71.3
   '@expo/vector-icons': 13.0.0
   '@gorhom/bottom-sheet': 4.4.5_roruo4vjpd27jjmcsfgplose2a
+  '@pchmn/expo-material3-theme': 1.0.1_jj6ngvdsul3c5gtduqgwfnilhe
   '@react-navigation/bottom-tabs': 6.5.7_lzeolizq5fdjozeb3mtrlbatoi
   '@react-navigation/native': 6.1.6_yqouayos4dnow7nnkhah4yzuzq
   '@react-navigation/native-stack': 6.9.12_lzeolizq5fdjozeb3mtrlbatoi
@@ -1904,6 +1906,11 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
+  /@importantimport/material-color-utilities/0.2.2-alpha.0:
+    resolution: {integrity: sha512-/481q5LRZxr4xFGH++WpTMumCACDTAOZZK+cWrVx95hZ7c0v9q2uVPD/DkP0+iOPUwAxvGWshMPHER3gu1TzHw==}
+    requiresBuild: true
+    dev: false
+
   /@internationalized/date/3.1.0:
     resolution: {integrity: sha512-wjeur7K4AecT+YwoBmBXQ/+n5lP69tuZc34hw09s44EozZK7FZHSyfPvRp5/xEb2D6abLboskDY4jG+Nt0TNUQ==}
     dependencies:
@@ -2249,6 +2256,20 @@ packages:
     dependencies:
       mkdirp: 1.0.4
       rimraf: 3.0.2
+
+  /@pchmn/expo-material3-theme/1.0.1_jj6ngvdsul3c5gtduqgwfnilhe:
+    resolution: {integrity: sha512-jVvqQRNr+GxB7qdQBHT4puCJxGjOqLSNEOr7/RiXfAP5dJBkc3372gFKasHO8eHRpS7mx1p0sPAXjLSs5ia9SQ==}
+    peerDependencies:
+      expo: '*'
+      react: '*'
+      react-native: '*'
+    dependencies:
+      '@importantimport/material-color-utilities': 0.2.2-alpha.0
+      color: 4.2.3
+      expo: 48.0.7_@babel+core@7.21.3
+      react: 18.2.0
+      react-native: 0.71.3_klxfafkpjmb2537xfoky62a7f4
+    dev: false
 
   /@radix-ui/react-compose-refs/1.0.0_react@18.2.0:
     resolution: {integrity: sha512-0KaSv6sx787/hK3eF53iOkiSLwAGlFMx5lotrqD2pTjB18KbybKoEIgkNZTKC60YECDQTKGTRcDBILwZVqVKvA==}

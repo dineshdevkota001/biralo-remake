@@ -1,8 +1,13 @@
 import BottomTabs from "./BottomTabs";
 import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
+import {
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationDefaultTheme,
+} from "@react-navigation/native";
 import Gallery from "@screens/Common/Gallery";
-import ChapterList from "@screens/Home/ChapterDetails";
-import { useColorModeValue, useTheme } from "native-base";
+import ChapterList from "@screens/Home/MangaDetails";
+import { useColorScheme } from "react-native";
+import { adaptNavigationTheme } from "react-native-paper";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 
 const Stack = createSharedElementStackNavigator<IRootStackParams>();
@@ -37,34 +42,15 @@ function RootNavigation() {
 }
 
 export default function Navigation() {
-  const { colors } = useTheme();
-  const theme = useColorModeValue(
-    {
-      dark: false,
-      colors: {
-        primary: colors.primary[500],
-        background: colors.gray[100],
-        card: colors.white,
-        text: colors.text[800],
-        border: colors.gray[200],
-        notification: colors.red[700],
-      },
-    },
-    {
-      dark: true,
-      colors: {
-        primary: colors.primary[500],
-        background: colors.gray[900],
-        card: colors.black,
-        text: colors.gray[100],
-        border: colors.gray[700],
-        notification: colors.red[700],
-      },
-    },
-  );
+  const mode = useColorScheme();
+
+  const { LightTheme, DarkTheme } = adaptNavigationTheme({
+    reactNavigationLight: NavigationDefaultTheme,
+    reactNavigationDark: NavigationDarkTheme,
+  });
 
   return (
-    <ThemeProvider value={theme}>
+    <ThemeProvider value={mode === "dark" ? DarkTheme : LightTheme}>
       <NavigationContainer>
         <RootNavigation />
       </NavigationContainer>
