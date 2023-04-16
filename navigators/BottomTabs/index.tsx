@@ -5,8 +5,8 @@ import {
 } from "@react-navigation/bottom-tabs";
 import { getHeaderTitle } from "@react-navigation/elements";
 import { useTheme } from "@react-navigation/native";
+import Login from "@screens/Auth";
 import Home from "@screens/Home/Home";
-import Profile from "@screens/Profile";
 import { Appbar } from "react-native-paper";
 
 function TabBarIcon(props: {
@@ -29,7 +29,7 @@ const Tab = createBottomTabNavigator<IRootBottomTabsParams>();
 
 export default function BottomTabs() {
   const theme = useTheme();
-  console.log(theme);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -44,12 +44,13 @@ export default function BottomTabs() {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="Login"
+        component={Login}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="face-man" color={color} />
           ),
+          headerTitle: "Mangadex Login",
         }}
       />
     </Tab.Navigator>

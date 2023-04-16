@@ -31,9 +31,13 @@ export default function useBottomSheetModal(): [
       animateOnMount: true,
       snapPoints,
       index: 0,
-
       handleStyle: {
         backgroundColor: colors.surface,
+        borderColor: colors.elevation.level5,
+        borderWidth: 2,
+        borderBottomWidth: 0,
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24,
       },
       handleIndicatorStyle: {
         backgroundColor: colors.onSurface,
