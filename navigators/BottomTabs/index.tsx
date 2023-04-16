@@ -18,10 +18,36 @@ function TabBarIcon(props: {
 
 export function MaterialYouHeader({ options, route }: BottomTabHeaderProps) {
   const title = getHeaderTitle(options, route.name);
+
+  // const [showSearch, setShowSearch] = useState(false);
+
+  // if (showSearch)
+  //   return (
+  //     <Appbar.Header>
+  //       <Searchbar
+  //         value=""
+  //         autoFocus
+  //         style={{ marginHorizontal: 8, marginBottom: 8, flex: 1 }}
+  //         onBlur={() => setShowSearch(false)}
+  //         // right="cross"
+  //         icon="arrow-left"
+  //         onIconPress={() => setShowSearch(false)}
+  //       />
+  //     </Appbar.Header>
+  //   );
+
   return (
-    <Appbar.Header>
-      <Appbar.Content title={title} />
-    </Appbar.Header>
+    <>
+      <Appbar.Header>
+        <Appbar.Content title={title} />
+        {/* {options.headerRightContainerStyle ? (
+          <Appbar.Action
+            icon="search-web"
+            onPress={() => setShowSearch((x) => !x)}
+          />
+        ) : null} */}
+      </Appbar.Header>
+    </>
   );
 }
 
@@ -40,6 +66,7 @@ export default function BottomTabs() {
         name="Home"
         component={Home}
         options={{
+          // headerRightContainerStyle: {},
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />

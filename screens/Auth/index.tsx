@@ -1,8 +1,9 @@
-import { ScrollView, View } from "react-native";
-import { Button, Text, TextInput, useTheme } from "react-native-paper";
+import { ScrollView } from "react-native";
+import { Button, TextInput, useTheme } from "react-native-paper";
 
 export default function Profile() {
   const { colors } = useTheme();
+
   return (
     <ScrollView
       style={{
