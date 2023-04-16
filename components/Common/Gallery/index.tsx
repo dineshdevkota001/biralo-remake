@@ -111,7 +111,11 @@ export default function Gallery() {
               >
                 Next Chapter
               </Button>
-            ) : null
+            ) : (
+              <Button mode="contained" onPress={navigation.goBack}>
+                Chapter List
+              </Button>
+            )
           }
           ListFooterComponentStyle={{
             display: "flex",

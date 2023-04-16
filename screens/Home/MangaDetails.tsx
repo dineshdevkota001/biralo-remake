@@ -9,11 +9,13 @@ import { groupBy } from "lodash";
 import { SectionList, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { Surface, Text } from "react-native-paper";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ChapterList({
   route,
 }: IRootStackScreenProps<"Chapter List">) {
   const { id: mangaId } = route.params;
+  const { bottom } = useSafeAreaInsets();
   const { data, isRefetching, isLoading, refetch, fetchNextPage } =
     useInfiniteQuery<
       QueryKey<Chapter.Request>,
@@ -61,6 +63,9 @@ export default function ChapterList({
   return (
     <SectionList
       sections={sections ?? []}
+      style={{
+        marginBottom: bottom,
+      }}
       ListHeaderComponent={<MangaHeader />}
       renderSectionHeader={({ section: { title } }) => (
         <Surface

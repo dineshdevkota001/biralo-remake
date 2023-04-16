@@ -1,11 +1,9 @@
-import React, { ComponentProps, useState } from "react";
-
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { LayoutChangeEvent } from "react-native";
+import { ComponentProps } from "react";
 
-export default function Icon(
-  props: ComponentProps<typeof MaterialCommunityIcons>,
-) {
+export type IconProps = ComponentProps<typeof MaterialCommunityIcons>;
+
+export default function Icon(props: IconProps) {
   return (
     <MaterialCommunityIcons
       {...props}

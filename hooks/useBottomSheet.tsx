@@ -1,4 +1,5 @@
 import {
+  BottomSheetBackdrop,
   BottomSheetModalProps,
   useBottomSheetDynamicSnapPoints,
 } from "@gorhom/bottom-sheet";
@@ -8,12 +9,15 @@ import { ViewProps } from "react-native";
 import { useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-export default function useBottomSheetModal(): [
+export default function useBottomSheetModal(props?: {
+  shouldRenderBackdrop?: boolean;
+}): [
   Omit<BottomSheetModalProps, "ref" | "children"> & {
     ref: RefObject<BottomSheetModalMethods>;
   },
   { handleOpen: () => void; handleClose: () => void },
 ] {
+  const { shouldRenderBackdrop } = props ?? {};
   const { colors } = useTheme();
   const ref = useRef<BottomSheetModalMethods>(null);
   const handleOpen = () => ref.current?.present();
@@ -31,17 +35,19 @@ export default function useBottomSheetModal(): [
       animateOnMount: true,
       snapPoints,
       index: 0,
+      backgroundStyle: { backgroundColor: colors.surface },
       handleStyle: {
-        backgroundColor: colors.surface,
+        backgroundColor: colors.surfaceVariant,
         borderColor: colors.elevation.level5,
         borderWidth: 2,
         borderBottomWidth: 0,
-        borderTopLeftRadius: 24,
-        borderTopRightRadius: 24,
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
       },
       handleIndicatorStyle: {
         backgroundColor: colors.onSurface,
       },
+      bottomInset: bottom,
     },
     { handleOpen, handleClose },
   ];

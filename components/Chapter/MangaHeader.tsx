@@ -1,3 +1,4 @@
+import MangaStatistics from "./MangaStatistics";
 import { Tags } from "@components/Tag";
 import useCoverArt from "@hooks/useCoverArt";
 import { useRoute } from "@react-navigation/native";
@@ -37,19 +38,13 @@ export default function MangaHeader() {
             />
           </SharedElement>
           <View style={{ flex: 1, alignItems: "flex-start" }}>
-            <Card.Title
-              title={getTitle(title)}
-              titleNumberOfLines={2}
-              style={{
-                flex: 1,
-              }}
-            />
+            <Card.Title title={getTitle(title)} titleNumberOfLines={2} />
             <Card.Content>
-              <Tags includeTags={["theme", "content"]} tags={tags} />
+              <MangaStatistics />
             </Card.Content>
           </View>
         </View>
-        <Tags tags={tags} excludeTags={["theme", "content"]} />
+        <Tags tags={tags} />
         <Text>{getString(description)}</Text>
       </Card.Content>
     </Surface>

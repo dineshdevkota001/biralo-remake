@@ -10,7 +10,6 @@ import {
   Text,
   useTheme,
 } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function MenuIcon(props: IconButtonProps) {
   const { colors } = useTheme();
@@ -26,12 +25,11 @@ function MenuIcon(props: IconButtonProps) {
 }
 
 export default function Menu({ title }: { title: string }) {
-  const { bottom } = useSafeAreaInsets();
   const { colors } = useTheme();
   const navigation = useNavigation();
   const [props, { handleOpen, handleClose }] = useBottomSheetModal();
   const [dynamicProps, childrenProps] = useDynamicModal({
-    snapPoints: [(bottom || 16) + 40, "CONTENT_HEIGHT"],
+    snapPoints: [30, "CONTENT_HEIGHT"],
   });
 
   const [isExtraMenuOpen, setIsExtraMenuOpen] = useState(false);

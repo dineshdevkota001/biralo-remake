@@ -18,6 +18,7 @@ function Detail({
   iconColor?: IconProps["color"];
 }) {
   const { colors } = useTheme();
+
   return (
     <View
       style={{
@@ -32,7 +33,7 @@ function Detail({
         color={iconColor ?? colors.onSurfaceVariant}
         size={16}
       />
-      <Text style={{ color: iconColor }}> {children}</Text>
+      <Text style={{ color: iconColor ?? colors.onSurface }}> {children}</Text>
     </View>
   );
 }
@@ -66,9 +67,7 @@ export default function Thumbnail({
       }
     >
       <Card.Title
-        title={`Chapter ${chapter} ${
-          title ?? getTitle(manga.attributes.title)
-        }`}
+        title={`Ch. ${chapter} ${title ?? getTitle(manga.attributes.title)}`}
       />
       <Card.Content
         style={{
@@ -107,7 +106,7 @@ export default function Thumbnail({
 
 export function ThumbnailSkeleton() {
   return (
-    <Card style={{ marginBottom: 8, height: 48 }}>
+    <Card style={{ marginBottom: 8, height: 148, width: "100%" }}>
       <Card.Content>{null}</Card.Content>
     </Card>
   );
