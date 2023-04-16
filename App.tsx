@@ -1,35 +1,38 @@
-import { FontAwesome } from '@expo/vector-icons'
-import { useFonts } from 'expo-font'
-import { NativeBaseProvider } from 'native-base'
-import SplashScreen from 'expo-splash-screen'
-import { useEffect } from 'react'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import QueryProvider from '@utils/react-query'
-import Navigation from './navigators'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
+import Navigation from "./navigators";
+import { FontAwesome } from "@expo/vector-icons";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import QueryProvider from "@utils/react-query";
+import { useFonts } from "expo-font";
+import SplashScreen from "expo-splash-screen";
+import { NativeBaseProvider } from "native-base";
+import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Provider as PaperProvider } from "react-native-paper";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function App() {
   const [loaded] = useFonts({
-    ...FontAwesome.font
-  })
+    ...FontAwesome.font,
+  });
 
   useEffect(() => {
-    if (loaded) SplashScreen?.hideAsync()
-    else SplashScreen?.preventAutoHideAsync()
-  }, [loaded])
+    if (loaded) SplashScreen?.hideAsync();
+    else SplashScreen?.preventAutoHideAsync();
+  }, [loaded]);
 
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <NativeBaseProvider>
-          <QueryProvider>
-            <BottomSheetModalProvider>
-              <Navigation />
-            </BottomSheetModalProvider>
-          </QueryProvider>
-        </NativeBaseProvider>
+        <PaperProvider>
+          <NativeBaseProvider>
+            <QueryProvider>
+              <BottomSheetModalProvider>
+                <Navigation />
+              </BottomSheetModalProvider>
+            </QueryProvider>
+          </NativeBaseProvider>
+        </PaperProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>
-  )
+  );
 }

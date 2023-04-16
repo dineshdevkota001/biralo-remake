@@ -10,11 +10,12 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Heading, IIconProps, Icon, Pressable, Row, View } from "native-base";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleProp } from "react-native";
 import { Dimensions, SafeAreaView, ViewStyle } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -26,7 +27,7 @@ type GalleryProps = {
 };
 
 const window = Dimensions.get("window");
-const windowRatio = window.width / window.height;
+const { height } = window;
 
 function MenuIcon(props: IIconProps) {
   return (
@@ -43,56 +44,52 @@ function MenuIcon(props: IIconProps) {
 function Menu() {
   const { bottom } = useSafeAreaInsets();
   const navigation = useNavigation();
-  const [props, { handleOpen }] = useBottomSheetModal();
+  const [props, { handleOpen, handleClose }] = useBottomSheetModal();
   const [dynamicProps, childrenProps] = useDynamicModal({
-    snapPoints: [bottom + 5, "CONTENT_HEIGHT"],
+    snapPoints: [(bottom || 16) + 20, "CONTENT_HEIGHT"],
   });
+
   const [isExtraMenuOpen, setIsExtraMenuOpen] = useState(false);
 
   const { goPrev, goNext, hasPrev, hasNext } = useChapterControls();
+  useEffect(() => {
+    handleOpen();
+  }, []);
 
   return (
-    <>
-      <Pressable
-        top="37.5%"
-        left="35%"
-        height="25%"
-        width="30%"
-        position="absolute"
-        opacity={0}
-        onPress={handleOpen}
-      />
-      <BottomSheetModal {...props} {...dynamicProps} index={1}>
-        <View display="flex" {...childrenProps}>
-          <Row justifyContent="space-around" flexWrap="wrap">
-            <MenuIcon
-              name="more-vertical"
-              onPress={() => {
-                setIsExtraMenuOpen((p) => !p);
-              }}
-            />
-            <MenuIcon
-              name="chevron-left"
-              onPress={goPrev}
-              disabled={!hasPrev}
-            />
-            <MenuIcon
-              name="chevron-right"
-              onPress={goNext}
-              disabled={!hasNext}
-            />
-            <MenuIcon name="x" onPress={() => navigation.goBack()} />
+    <BottomSheetModal
+      {...props}
+      {...dynamicProps}
+      enablePanDownToClose={false}
+      index={1}
+    >
+      <View display="flex" {...childrenProps} padding={4}>
+        <Row justifyContent="space-around" flexWrap="wrap">
+          <MenuIcon
+            name="more-vertical"
+            onPress={() => {
+              setIsExtraMenuOpen((p) => !p);
+            }}
+          />
+          <MenuIcon name="chevron-left" onPress={goPrev} disabled={!hasPrev} />
+          <MenuIcon name="chevron-right" onPress={goNext} disabled={!hasNext} />
+          <MenuIcon
+            name="x"
+            onPress={() => {
+              handleClose();
+              navigation.goBack();
+            }}
+          />
+        </Row>
+        {isExtraMenuOpen ? (
+          <Row minWidth="90%" flex={1}>
+            <MenuIcon name="minimize" />
+            <MenuIcon name="minimize-2" />
+            <MenuIcon name="maximize" />
           </Row>
-          {isExtraMenuOpen ? (
-            <Row minWidth="90%" flex={1}>
-              <MenuIcon name="minimize" />
-              <MenuIcon name="minimize-2" />
-              <MenuIcon name="maximize" />
-            </Row>
-          ) : null}
-        </View>
-      </BottomSheetModal>
-    </>
+        ) : null}
+      </View>
+    </BottomSheetModal>
   );
 }
 
@@ -114,7 +111,8 @@ function GalleryFlatList({ style }: { style: StyleProp<ViewStyle> }) {
       );
     },
   );
-  const { goPrev, goNext, hasNext, hasPrev } = useChapterControls();
+  const { goNext, hasNext } = useChapterControls();
+
   return (
     <>
       <Animated.FlatList
@@ -161,20 +159,22 @@ function GalleryFlatList({ style }: { style: StyleProp<ViewStyle> }) {
   );
 }
 
-const { height } = Dimensions.get("window");
+const panDownHeight = 0.11 * height;
 
 export default function Gallery() {
+  const navigation = useNavigation();
   const yValue = useSharedValue(0);
 
   const panGesture = Gesture.Pan()
-    .minDistance(10)
     .onBegin((e) => {
-      if (e.y < 0.3 * height) yValue.value = e.translationY;
+      if (e.y < 2 * panDownHeight) yValue.value = e.translationY;
     })
     .onChange((e) => {
-      if (e.y < 0.3 * height) yValue.value = e.translationY;
+      if (e.y < 2 * panDownHeight) yValue.value = e.translationY;
     })
     .onEnd((e) => {
+      if (e.y < 2 * panDownHeight && e.translationY > 0.5 * height)
+        runOnJS(navigation.goBack)();
       yValue.value = withSpring(0);
     });
 
@@ -187,9 +187,20 @@ export default function Gallery() {
 
   return (
     <GalleryContextProvider value={[]}>
-      <SafeAreaView style={{ position: "relative" }}>
+      <SafeAreaView style={{ position: "relative", backgroundColor: "black" }}>
+        <GalleryFlatList style={animatedStyle} />
         <GestureDetector gesture={panGesture}>
-          <GalleryFlatList style={animatedStyle} />
+          <Animated.View
+            style={[
+              animatedStyle,
+              {
+                position: "absolute",
+                left: 0,
+                width: "100%",
+                height: panDownHeight,
+              },
+            ]}
+          />
         </GestureDetector>
         <Menu />
       </SafeAreaView>
