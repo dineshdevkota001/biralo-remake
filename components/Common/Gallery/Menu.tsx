@@ -29,7 +29,7 @@ export default function Menu({ title }: { title: string }) {
   const navigation = useNavigation();
   const [props, { handleOpen, handleClose }] = useBottomSheetModal();
   const [dynamicProps, childrenProps] = useDynamicModal({
-    snapPoints: [30, "CONTENT_HEIGHT"],
+    snapPoints: [32, "CONTENT_HEIGHT"],
   });
 
   const [isExtraMenuOpen, setIsExtraMenuOpen] = useState(false);

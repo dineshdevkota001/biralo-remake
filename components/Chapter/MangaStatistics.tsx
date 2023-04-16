@@ -2,12 +2,11 @@ import { queryFn } from "@api/manga";
 import Icon from "@components/Core/Icon";
 import { MANGA_STATISTICS } from "@constants/api/routes";
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
-import BottomSheet from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheet/BottomSheet";
 import useBottomSheetModal from "@hooks/useBottomSheet";
 import { useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { StyleSheet, View } from "react-native";
-import { Chip, Surface, Text, useTheme } from "react-native-paper";
+import { Chip, Text, useTheme } from "react-native-paper";
 
 type IDistributionKey = keyof Statistics.Rating["distribution"];
 const ratings: Array<IDistributionKey> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -87,19 +86,14 @@ function RatingHistoGram({
   );
 }
 
-export default function MangaStatistics() {
-  const { params } = useRoute<IRootStackScreenProps<"Chapter List">["route"]>();
-  const mangaId = params.manga.id;
-  const { data } = useQuery<
-    QueryKey,
-    Response.ErrorResponse,
-    Statistics.MangaResponse
-  >([MANGA_STATISTICS(mangaId)], queryFn);
+function DisplayMangaStatistics({
+  follows,
+  comments,
+  rating,
+}: Partial<Statistics.Manga>) {
   const [props, { handleOpen, handleClose }] = useBottomSheetModal({
     shouldRenderBackdrop: true,
   });
-
-  const { comments, rating, follows } = data?.statistics?.[mangaId] ?? {};
 
   return (
     <View
@@ -134,19 +128,9 @@ export default function MangaStatistics() {
           {...props}
           snapPoints={["50%"]}
           style={{ marginBottom: 50 }}
-          backdropComponent={({ style, ...props }) => {
+          backdropComponent={({ ...props }) => {
             return (
-              <BottomSheetBackdrop
-                {...props}
-                style={[
-                  {
-                    backgroundColor: "red",
-                  },
-                  style,
-                ]}
-                opacity={100}
-                onPress={handleClose}
-              />
+              <BottomSheetBackdrop {...props} animatedIndex={{ value: 1 }} />
             );
           }}
         >
@@ -163,6 +147,18 @@ export default function MangaStatistics() {
       </Chip>
     </View>
   );
+}
+
+export default function MangaStatistics() {
+  const { params } = useRoute<IRootStackScreenProps<"Chapter List">["route"]>();
+  const mangaId = params.manga.id;
+  const { data } = useQuery<
+    QueryKey,
+    Response.ErrorResponse,
+    Statistics.MangaResponse
+  >([MANGA_STATISTICS(mangaId)], queryFn);
+
+  return <DisplayMangaStatistics {...data?.statistics?.[mangaId]} />;
 }
 
 const styles = StyleSheet.create({
