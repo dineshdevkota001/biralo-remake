@@ -4,6 +4,7 @@ import { AspectRatio } from "native-base";
 import { useEffect, useState } from "react";
 import { Dimensions, Image } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { Text } from "react-native-paper";
 import Animated, {
   abs,
   useAnimatedStyle,
@@ -13,7 +14,6 @@ import Animated, {
 
 const window = Dimensions.get("window");
 const windowRatio = window.width / window.height;
-const HANDLE_HEIGHT = 0.1 * window.height;
 
 export default function ImagePage({ url }: { url: string }) {
   const [ratio, setRatio] = useState<number>(windowRatio);
@@ -39,7 +39,8 @@ export default function ImagePage({ url }: { url: string }) {
     .onBegin((e) => (scale.value = e.scale))
     .onChange((e) => (scale.value = e.scale))
     .onEnd(() => {
-      if (Math.abs(scale.value - 1) <= 0.1) scale.value = withSpring(1);
+      if (Math.abs(scale.value - 1) <= 0.1 || !isHorizontal)
+        scale.value = withSpring(1);
     });
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -59,7 +60,7 @@ export default function ImagePage({ url }: { url: string }) {
         style={[
           animatedStyle,
           {
-            height: "100%",
+            height: isHorizontal ? "100%" : undefined,
             width: window.width,
             display: "flex",
             alignItems: "center",
@@ -74,9 +75,16 @@ export default function ImagePage({ url }: { url: string }) {
             alt={"Image"}
           />
         ) : (
-          <AspectRatio ratio={ratio}>
-            <Image source={{ uri: url }} resizeMode="contain" alt={"Image"} />
-          </AspectRatio>
+          <Image
+            source={{
+              uri: url,
+              height: window.width / ratio,
+              width: window.width,
+            }}
+            // source={{ uri: url, ...window }}
+            resizeMode="contain"
+            alt={"Image"}
+          />
         )}
       </Animated.View>
     </GestureDetector>

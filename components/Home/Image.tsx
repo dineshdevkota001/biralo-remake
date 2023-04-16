@@ -1,32 +1,32 @@
-import { COVERS } from '@constants/api/routes'
-import { IImageProps, Image } from 'native-base'
-import { UPLOADS } from '@constants/api'
-import { COVER_QUALITY } from '@constants/static/configuration'
+import { UPLOADS } from "@constants/api";
+import { COVERS } from "@constants/api/routes";
+import { COVER_QUALITY } from "@constants/static/configuration";
+import { IImageProps, Image } from "native-base";
 
 interface ICoverImageProps extends IImageProps {
-  id: string
-  relationships: IManga['relationships']
-  quality?: 256 | 512
+  id: string;
+  relationships: Manga.Type["relationships"];
+  quality?: 256 | 512;
 }
 
 export default function CoverImage({
   id,
   relationships,
-  alt = 'image',
+  alt = "image",
   quality = COVER_QUALITY,
   ...props
 }: ICoverImageProps) {
-  const fileName = relationships.find(({ type }) => type === 'cover_art')
-    .attributes.fileName
-  const url = `${UPLOADS}${COVERS}/${id}/${fileName}.${quality}.jpg`
+  const fileName = relationships.find(({ type }) => type === "cover_art")
+    .attributes.fileName;
+  const url = `${UPLOADS}${COVERS}/${id}/${fileName}.${quality}.jpg`;
 
   return (
     <Image
       source={{
-        uri: url
+        uri: url,
       }}
       alt={alt}
       {...props}
     />
-  )
+  );
 }
