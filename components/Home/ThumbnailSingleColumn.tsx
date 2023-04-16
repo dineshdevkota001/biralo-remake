@@ -25,7 +25,6 @@ export default function Thumbnail({ index, item }: IThumbnailProps) {
         navigation.navigate("Chapter List", { id: id, manga: item })
       }
     >
-      <Card.Title title={getTitle(title)} titleNumberOfLines={2} />
       <SharedElement id={`${id}.cover`}>
         <Card.Cover
           source={{
@@ -35,7 +34,8 @@ export default function Thumbnail({ index, item }: IThumbnailProps) {
           }}
         />
       </SharedElement>
-      <Card.Content style={{ paddingTop: 4 }}>
+      <Card.Title title={getTitle(title)} />
+      <Card.Content>
         <Tags tags={tags} hideTitle includeTags={["theme"]} />
       </Card.Content>
     </Card>
