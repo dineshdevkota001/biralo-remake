@@ -7,11 +7,15 @@ import { ComponentProps } from "react";
 import { View } from "react-native";
 import { Card, Text, useTheme } from "react-native-paper";
 
+type IconProps = ComponentProps<typeof MaterialCommunityIcons>;
+
 function Detail({
   iconName,
   children,
+  iconColor,
 }: IHaveChildren & {
-  iconName: ComponentProps<typeof MaterialCommunityIcons>["name"];
+  iconName: IconProps["name"];
+  iconColor?: IconProps["color"];
 }) {
   const { colors } = useTheme();
   return (
@@ -23,19 +27,36 @@ function Detail({
         flexDirection: "row",
       }}
     >
-      <Icon name={iconName} color={colors.onSurfaceVariant} size={16} />
-      <Text> {children}</Text>
+      <Icon
+        name={iconName}
+        color={iconColor ?? colors.onSurfaceVariant}
+        size={16}
+      />
+      <Text style={{ color: iconColor }}> {children}</Text>
     </View>
   );
 }
 
-export default function Thumbnail({ attributes, id }: Chapter.Type) {
+export default function Thumbnail({
+  attributes,
+  id,
+  relationships,
+}: Chapter.Type) {
+  const { colors } = useTheme();
   const { title, chapter, pages, createdAt, translatedLanguage } = attributes;
   const route = useRoute<IRootStackScreenProps<"Chapter List">["route"]>();
   const navigation =
     useNavigation<IRootStackScreenProps<"Chapter List">["navigation"]>();
 
   const { manga } = route.params ?? {};
+
+  const { scanlation_group: scanlationGroup, user } = relationships.reduce(
+    (acc, curr) => {
+      if (curr.type) acc[curr.type] = curr.attributes;
+      return acc;
+    },
+    Object.create(null),
+  );
 
   return (
     <Card
@@ -55,6 +76,21 @@ export default function Thumbnail({ attributes, id }: Chapter.Type) {
           flexWrap: "wrap",
         }}
       >
+        {scanlationGroup ? (
+          <Detail iconName="google-circles-extended">
+            {scanlationGroup.name}
+          </Detail>
+        ) : null}
+        {user ? (
+          <Detail
+            iconColor={
+              user.roles.includes("ROLE_STAFF") ? colors.primary : undefined
+            }
+            iconName="guy-fawkes-mask"
+          >
+            {user.username}
+          </Detail>
+        ) : null}
         <Detail iconName="translate"> {translatedLanguage}</Detail>
         <Detail iconName="file"> {pages}</Detail>
         {createdAt ? (

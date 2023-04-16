@@ -29,6 +29,7 @@ export default function ChapterList({
             volume: "desc",
             chapter: "desc",
           },
+          includes: ["scanlation_group", "user"],
         } as Chapter.Request,
       ],
       queryFn,
