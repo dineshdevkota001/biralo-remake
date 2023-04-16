@@ -13,8 +13,10 @@ const windowRatio = window.width / window.height;
 
 export default function ImagePage({ url }: { url: string }) {
   const [ratio, setRatio] = useState<number>(windowRatio);
-  const [{ isHorizontal, resizeMode: resizeContext }, { setIsHorizontal }] =
-    useGallery();
+  const [
+    { isHorizontal, resizeMode: resizeContext },
+    { setIsHorizontal, setResizeMode },
+  ] = useGallery();
 
   useEffect(() => {
     const fetchImageDimensions = async () => {
@@ -22,7 +24,10 @@ export default function ImagePage({ url }: { url: string }) {
       await Image.getSize(url, (width, height) => {
         const r = width / height;
         setRatio(r);
-        if (r < windowRatio) setIsHorizontal(false);
+        if (r < windowRatio) {
+          setIsHorizontal(false);
+          setResizeMode(RESIZE_MODE.FULL_WIDTH);
+        }
       });
     };
     fetchImageDimensions();

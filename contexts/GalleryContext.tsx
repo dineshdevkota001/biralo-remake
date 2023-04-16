@@ -23,7 +23,7 @@ export enum RESIZE_MODE {
 }
 
 export const GalleryContext = createContext<IGalleryContext>([
-  { isHorizontal: true, resizeMode: RESIZE_MODE.COVER },
+  { isHorizontal: true, resizeMode: RESIZE_MODE.FIT_BOTH },
   {
     setIsHorizontal: () => undefined,
     setResizeMode: () => undefined,
@@ -51,7 +51,9 @@ export function GalleryContextProvider({
   children,
 }: IHaveChildren & { value: Partial<IGalleryContext> }) {
   const [isHorizontal, setIsHorizontal] = useState(true);
-  const [resizeMode, setResizeMode] = useState<RESIZE_MODE>(RESIZE_MODE.COVER);
+  const [resizeMode, setResizeMode] = useState<RESIZE_MODE>(
+    RESIZE_MODE.FIT_BOTH,
+  );
 
   return (
     <GalleryContext.Provider

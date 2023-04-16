@@ -17,12 +17,14 @@ export default function useBottomSheetModal(props?: {
   },
   { handleOpen: () => void; handleClose: () => void },
 ] {
+
   const { shouldRenderBackdrop } = props ?? {};
   const { colors } = useTheme();
   const ref = useRef<BottomSheetModalMethods>(null);
+  const { bottom } = useSafeAreaInsets();
+
   const handleOpen = () => ref.current?.present();
   const handleClose = () => ref.current?.dismiss();
-  const { bottom } = useSafeAreaInsets();
 
   const snapPoints = useMemo(() => [bottom + 20, "70%"], []);
 
@@ -48,6 +50,9 @@ export default function useBottomSheetModal(props?: {
         backgroundColor: colors.onSurface,
       },
       bottomInset: bottom,
+      backdropComponent: shouldRenderBackdrop ? 
+        (props) => <BottomSheetBackdrop {...props} animatedIndex={{ value: 1 }} />
+        : null,
     },
     { handleOpen, handleClose },
   ];
