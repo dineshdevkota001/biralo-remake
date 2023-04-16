@@ -1,73 +1,78 @@
-import Duplicate from '@components/Core/Duplicate'
-import { Feather } from '@expo/vector-icons'
-import { useNavigation, useRoute } from '@react-navigation/native'
-import { getTitle } from '@utils/getLocalizedString'
-import {
-  Card,
-  Heading,
-  Icon,
-  Pressable,
-  Row,
-  Skeleton,
-  Text,
-  View
-} from 'native-base'
-import { formatDistance } from 'date-fns'
+import Icon from "@components/Core/Icon";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { getTitle } from "@utils/getLocalizedString";
+import { formatDistance } from "date-fns";
+import { ComponentProps } from "react";
+import { View } from "react-native";
+import { Card, Text, useTheme } from "react-native-paper";
 
-function Detail({ iconName, children }: IHaveChildren & { iconName: string }) {
+function Detail({
+  iconName,
+  children,
+}: IHaveChildren & {
+  iconName: ComponentProps<typeof MaterialCommunityIcons>["name"];
+}) {
+  const { colors } = useTheme();
   return (
-    <Text width="50%" mb={1}>
-      <Icon as={Feather} name={iconName} /> {children}
-    </Text>
-  )
+    <View
+      style={{
+        width: "50%",
+        marginBottom: 4,
+        display: "flex",
+        flexDirection: "row",
+      }}
+    >
+      <Icon name={iconName} color={colors.onSurfaceVariant} size={16} />
+      <Text> {children}</Text>
+    </View>
+  );
 }
 
 export default function Thumbnail({ attributes, id }: Chapter.Type) {
-  const { title, chapter, pages, createdAt, translatedLanguage } = attributes
-  const route = useRoute<IRootStackScreenProps<'Chapter List'>['route']>()
-  const navigation = useNavigation()
+  const { title, chapter, pages, createdAt, translatedLanguage } = attributes;
+  const route = useRoute<IRootStackScreenProps<"Chapter List">["route"]>();
+  const navigation =
+    useNavigation<IRootStackScreenProps<"Chapter List">["navigation"]>();
 
-  const { manga } = route.params ?? {}
+  const { manga } = route.params ?? {};
 
   return (
-    <Pressable
+    <Card
+      style={{ margin: 4 }}
       onPress={() =>
-        navigation.navigate('Gallery', { chapterId: id, mangaId: manga.id })
+        navigation.navigate("Gallery", { chapterId: id, mangaId: manga.id })
       }
     >
-      <Card bgColor="white" mb={2}>
-        <Heading size="sm" mb={1}>
-          Chapter {chapter} {title ?? `${getTitle(manga.attributes.title)}`}
-        </Heading>
-        <Row flexWrap="wrap">
-          <Detail iconName="globe"> {translatedLanguage}</Detail>
-          <Detail iconName="file"> {pages}</Detail>
-          {createdAt ? (
-            <Detail iconName="calendar">
-              {formatDistance(new Date(createdAt), new Date(), {
-                addSuffix: true
-              })}
-            </Detail>
-          ) : null}
-        </Row>
-      </Card>
-    </Pressable>
-  )
-}
-
-function DetailSkeleton() {
-  return (
-    <View width="50%">
-      <Skeleton.Text width="75%" lines={1} mb={1} />
-    </View>
-  )
+      <Card.Title
+        title={`Chapter ${chapter} ${
+          title ?? getTitle(manga.attributes.title)
+        }`}
+      />
+      <Card.Content
+        style={{
+          flexDirection: "row",
+          flexWrap: "wrap",
+        }}
+      >
+        <Detail iconName="translate"> {translatedLanguage}</Detail>
+        <Detail iconName="file"> {pages}</Detail>
+        {createdAt ? (
+          <Detail iconName="calendar">
+            {formatDistance(new Date(createdAt), new Date(), {
+              addSuffix: true,
+            })}
+          </Detail>
+        ) : null}
+      </Card.Content>
+    </Card>
+  );
 }
 
 export function ThumbnailSkeleton() {
   return (
-    <Card backgroundColor="white" mb={2}>
-      <Skeleton.Text fontSize={18} mb={1} lines={1} />
-      <Duplicate Component={DetailSkeleton} times={4} />
+    <Card style={{ marginBottom: 8, height: 48 }}>
+      <Card.Content>{null}</Card.Content>
     </Card>
-  )
+  );
 }

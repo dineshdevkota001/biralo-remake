@@ -5,7 +5,6 @@ import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
 import QueryProvider from "@utils/react-query";
 import { useFonts } from "expo-font";
 import SplashScreen from "expo-splash-screen";
-import { NativeBaseProvider } from "native-base";
 import { useEffect, useMemo } from "react";
 import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -41,13 +40,11 @@ export default function App() {
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <PaperProvider theme={paperTheme}>
-          <NativeBaseProvider>
-            <QueryProvider>
-              <BottomSheetModalProvider>
-                <Navigation />
-              </BottomSheetModalProvider>
-            </QueryProvider>
-          </NativeBaseProvider>
+          <QueryProvider>
+            <BottomSheetModalProvider>
+              <Navigation />
+            </BottomSheetModalProvider>
+          </QueryProvider>
         </PaperProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>

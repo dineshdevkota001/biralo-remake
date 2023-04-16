@@ -6,9 +6,9 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import getFlattenedList from "@utils/getFlattenedList";
 import { getNextPageParam, queryFn } from "api";
 import { groupBy } from "lodash";
-import { Heading, View } from "native-base";
-import { SectionList } from "react-native";
+import { SectionList, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
+import { Surface, Text } from "react-native-paper";
 
 export default function ChapterList({
   route,
@@ -62,11 +62,16 @@ export default function ChapterList({
       sections={sections ?? []}
       ListHeaderComponent={<MangaHeader />}
       renderSectionHeader={({ section: { title } }) => (
-        <View padding={1} backgroundColor="white" marginBottom={2}>
-          <Heading width="100%" textAlign="center">
+        <Surface
+          style={{
+            padding: 4,
+            marginBottom: 8,
+          }}
+        >
+          <Text variant="headlineSmall" style={{ textAlign: "center" }}>
             Volume {title ?? "None"}
-          </Heading>
-        </View>
+          </Text>
+        </Surface>
       )}
       renderItem={({ item }) => <Thumbnail {...item} />}
       refreshControl={
