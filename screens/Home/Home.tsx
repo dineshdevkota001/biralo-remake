@@ -1,7 +1,7 @@
 import Duplicate from "@components/Core/Duplicate";
 import Thumbnail, {
   ThumbnailSkeleton,
-} from "@components/Home/ThumbnailSingleColumn";
+} from "@components/Home/ThumbnailRowStyle";
 import { MANGA } from "@constants/api/routes";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import getFlattenedList from "@utils/getFlattenedList";

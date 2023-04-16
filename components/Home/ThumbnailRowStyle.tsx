@@ -1,6 +1,8 @@
+import { Tags } from "@components/Tag";
 import useCoverArt from "@hooks/useCoverArt";
 import { useNavigation } from "@react-navigation/native";
 import { getTitle } from "@utils/getLocalizedString";
+import { View } from "react-native";
 import { Card, useTheme } from "react-native-paper";
 import { SharedElement } from "react-navigation-shared-element";
 
@@ -39,13 +41,22 @@ export default function Thumbnail({ index, item }: IThumbnailProps) {
           }}
         />
       </SharedElement>
-      <Card.Title
-        title={getTitle(title)}
-        titleNumberOfLines={2}
+      <View
         style={{
           flex: 1,
+          display: "flex",
+          alignSelf: "flex-start",
         }}
-      />
+      >
+        <Card.Title title={getTitle(title)} titleNumberOfLines={2} />
+        <Card.Content
+          style={{
+            flex: 1,
+          }}
+        >
+          <Tags tags={tags} includeTags={["theme", "genre"]} />
+        </Card.Content>
+      </View>
     </Card>
   );
 }
