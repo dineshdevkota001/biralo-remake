@@ -9,11 +9,18 @@ import { QualityEnum } from "@interfaces/enum";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Heading, IIconProps, Icon, Pressable, Row, View } from "native-base";
-import { useEffect, useState } from "react";
+import { IIconProps, Row, View } from "native-base";
+import { ComponentProps, useEffect, useState } from "react";
 import { StyleProp } from "react-native";
 import { Dimensions, SafeAreaView, ViewStyle } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import {
+  IconButton,
+  IconButtonProps,
+  Text,
+  TouchableRipple,
+  useTheme,
+} from "react-native-paper";
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -29,14 +36,17 @@ type GalleryProps = {
 const window = Dimensions.get("window");
 const { height } = window;
 
-function MenuIcon(props: IIconProps) {
+function MenuIcon(
+  props: IconButtonProps & { name: ComponentProps<typeof Feather>["name"] },
+) {
+  const { colors } = useTheme();
   return (
-    <Icon
-      as={Feather}
-      margin={3}
-      size={6}
-      disabled={!props?.onPress}
+    <IconButton
+      iconColor={colors.onSurface}
       {...props}
+      icon={(iconProps) => {
+        return <Feather name={props.name} {...iconProps} />;
+      }}
     />
   );
 }
@@ -97,6 +107,7 @@ function GalleryFlatList({ style }: { style: StyleProp<ViewStyle> }) {
   const route = useRoute<IRootStackScreenProps<"Gallery">["route"]>();
   const { quality = QualityEnum.DATA_SAVER, chapterId } = route.params;
   const [{ isHorizontal }] = useGallery();
+  const { colors, fonts } = useTheme();
 
   const { data } = useQuery<unknown, unknown, string[]>(
     [chapterId, quality],
@@ -126,28 +137,31 @@ function GalleryFlatList({ style }: { style: StyleProp<ViewStyle> }) {
             <View
               height={window.height / (isHorizontal ? 1 : 2)}
               width={window.width}
-              backgroundColor="black"
+              backgroundColor={colors.background}
               display="flex"
               alignItems="center"
               justifyContent="center"
             >
-              <Pressable
-                onPress={goNext}
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Icon
-                  as={Feather}
-                  color="white"
-                  name="arrow-right-circle"
-                  size="2xl"
-                  mb={2}
-                />
-                <Heading size="lg" color="white">
-                  Next Chapter
-                </Heading>
-              </Pressable>
+              <TouchableRipple onPress={goNext}>
+                <View
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Feather
+                    color={colors.onBackground}
+                    name="arrow-right-circle"
+                  />
+                  <Text
+                    variant="titleLarge"
+                    style={{ color: colors.onBackground }}
+                  >
+                    Next Chapter
+                  </Text>
+                </View>
+              </TouchableRipple>
             </View>
           ) : null
         }

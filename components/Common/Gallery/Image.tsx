@@ -1,12 +1,9 @@
 import useGallery from "@contexts/GalleryContext";
 import { useNavigation } from "@react-navigation/native";
-import { AspectRatio } from "native-base";
 import { useEffect, useState } from "react";
 import { Dimensions, Image } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import { Text } from "react-native-paper";
 import Animated, {
-  abs,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -18,7 +15,6 @@ const windowRatio = window.width / window.height;
 export default function ImagePage({ url }: { url: string }) {
   const [ratio, setRatio] = useState<number>(windowRatio);
   const [{ isHorizontal }, { setIsHorizontal }] = useGallery();
-  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchImageDimensions = async () => {
@@ -81,7 +77,6 @@ export default function ImagePage({ url }: { url: string }) {
               height: window.width / ratio,
               width: window.width,
             }}
-            // source={{ uri: url, ...window }}
             resizeMode="contain"
             alt={"Image"}
           />
