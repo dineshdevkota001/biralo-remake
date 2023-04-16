@@ -1,3 +1,4 @@
+import useGallery, { RESIZE_MODE } from "@contexts/GalleryContext";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import useBottomSheetModal, { useDynamicModal } from "@hooks/useBottomSheet";
 import useChapterControls from "@hooks/useChapterControl";
@@ -17,10 +18,39 @@ function MenuIcon(props: IconButtonProps) {
     <IconButton
       iconColor={colors.onSurface}
       {...props}
+      selected
       style={{
         flex: 1 / 5,
       }}
     />
+  );
+}
+
+function GroupedSetting({
+  title,
+  children,
+}: { title: string } & IHaveChildren) {
+  const { colors } = useTheme();
+  return (
+    <View
+      style={{
+        flex: 1,
+        minWidth: "90%",
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        backgroundColor: colors.surfaceVariant,
+        borderRadius: 16,
+        marginTop: 4,
+        marginBottom: 4,
+      }}
+    >
+      <Text variant="labelLarge" style={{ width: "100%", textAlign: "center" }}>
+        {title}
+      </Text>
+      {children}
+    </View>
   );
 }
 
@@ -31,6 +61,9 @@ export default function Menu({ title }: { title: string }) {
   const [dynamicProps, childrenProps] = useDynamicModal({
     snapPoints: [32, "CONTENT_HEIGHT"],
   });
+
+  const [{ isHorizontal, resizeMode }, { setIsHorizontal, setResizeMode }] =
+    useGallery();
 
   const [isExtraMenuOpen, setIsExtraMenuOpen] = useState(false);
 
@@ -43,6 +76,16 @@ export default function Menu({ title }: { title: string }) {
     return () => {
       handleClose();
       callback();
+    };
+  };
+
+  const setResizeFactory = (mode: RESIZE_MODE) => {
+    return {
+      selected: resizeMode === mode,
+      disabled: mode === resizeMode,
+      onPress: () => {
+        setResizeMode(mode);
+      },
     };
   };
 
@@ -95,20 +138,46 @@ export default function Menu({ title }: { title: string }) {
           onPress={menuFunctionWrapper(navigation.goBack)}
         />
         {isExtraMenuOpen ? (
-          <View
-            style={{
-              flex: 1,
-              minWidth: "90%",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <MenuIcon icon="fullscreen-exit" />
-            <MenuIcon icon="fullscreen" />
-            <MenuIcon icon="arrow-left-right" />
-            <MenuIcon icon="arrow-up-down" />
-          </View>
+          <>
+            <GroupedSetting title="Image style">
+              <MenuIcon
+                icon="fullscreen-exit"
+                {...setResizeFactory(RESIZE_MODE.FIT_BOTH)}
+              />
+              <MenuIcon
+                icon="fullscreen"
+                {...setResizeFactory(RESIZE_MODE.COVER)}
+              />
+              <MenuIcon
+                icon="arrow-left-right"
+                {...setResizeFactory(RESIZE_MODE.FULL_WIDTH)}
+              />
+              <MenuIcon
+                icon="arrow-up-down"
+                {...setResizeFactory(RESIZE_MODE.FULL_HEIGHT)}
+              />
+            </GroupedSetting>
+            <GroupedSetting title="Reading Direction">
+              <MenuIcon
+                icon="arrow-down"
+                selected={!isHorizontal}
+                disabled={!isHorizontal}
+                onPress={() => {
+                  setIsHorizontal(false);
+                  setResizeMode(RESIZE_MODE.FULL_WIDTH);
+                }}
+              />
+              <MenuIcon
+                icon="arrow-right"
+                selected={isHorizontal}
+                disabled={isHorizontal}
+                onPress={() => {
+                  setIsHorizontal(true);
+                  setResizeMode(RESIZE_MODE.FIT_BOTH);
+                }}
+              />
+            </GroupedSetting>
+          </>
         ) : null}
       </View>
     </BottomSheetModal>

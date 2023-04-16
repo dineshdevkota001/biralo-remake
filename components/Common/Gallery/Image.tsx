@@ -1,5 +1,4 @@
-import useGallery from "@contexts/GalleryContext";
-import { useNavigation } from "@react-navigation/native";
+import useGallery, { RESIZE_MODE } from "@contexts/GalleryContext";
 import { useEffect, useState } from "react";
 import { Dimensions, Image } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -14,7 +13,8 @@ const windowRatio = window.width / window.height;
 
 export default function ImagePage({ url }: { url: string }) {
   const [ratio, setRatio] = useState<number>(windowRatio);
-  const [{ isHorizontal }, { setIsHorizontal }] = useGallery();
+  const [{ isHorizontal, resizeMode: resizeContext }, { setIsHorizontal }] =
+    useGallery();
 
   useEffect(() => {
     const fetchImageDimensions = async () => {
@@ -50,14 +50,42 @@ export default function ImagePage({ url }: { url: string }) {
     position: "relative",
   }));
 
+  const getWidthAndHeightOfImage = () => {
+    const source = {
+      uri: url,
+      width: window.width,
+      height: window.height,
+    };
+    let resizeMode = "contain";
+
+    switch (resizeContext) {
+      case RESIZE_MODE.FULL_HEIGHT:
+        source.width = window.height * ratio;
+        source.height = window.height;
+        break;
+      case RESIZE_MODE.FULL_WIDTH:
+        source.height = window.width / ratio;
+        break;
+      case RESIZE_MODE.COVER:
+        resizeMode = "cover";
+        break;
+      case RESIZE_MODE.FIT_BOTH:
+      default:
+        break;
+    }
+    return { source, resizeMode: resizeMode as "cover" | "contain" };
+  };
+
+  const { source, resizeMode } = getWidthAndHeightOfImage();
+
   return (
     <GestureDetector gesture={pinchGesture}>
       <Animated.View
         style={[
           animatedStyle,
           {
-            height: isHorizontal ? "100%" : undefined,
-            width: window.width,
+            height: isHorizontal ? "100%" : source.height,
+            width: isHorizontal ? source.width : "100%",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -66,8 +94,8 @@ export default function ImagePage({ url }: { url: string }) {
       >
         {isHorizontal ? (
           <Image
-            source={{ uri: url, ...window }}
-            resizeMode="contain"
+            source={{ ...source, height: window.height }}
+            resizeMode={resizeMode}
             alt={"Image"}
           />
         ) : (

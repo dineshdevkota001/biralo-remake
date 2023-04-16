@@ -16,8 +16,8 @@ type IGalleryFunction = {
 type IGalleryContext = [IGalleryValues, IGalleryFunction];
 
 export enum RESIZE_MODE {
-  FULL_HEIGHT = "full height",
-  FULL_WIDTH = "full width",
+  FULL_HEIGHT = "height",
+  FULL_WIDTH = "width",
   FIT_BOTH = "contain",
   COVER = "cover",
 }
@@ -60,7 +60,7 @@ export function GalleryContextProvider({
           { isHorizontal, resizeMode },
           { setIsHorizontal, setResizeMode },
         ],
-        [isHorizontal],
+        [isHorizontal, resizeMode],
       )}
     >
       {children}
