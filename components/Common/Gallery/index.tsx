@@ -1,40 +1,22 @@
-import ImagePage from "./Image";
 import GalleryFlatList from "./List";
 import Menu from "./Menu";
 import { CDN } from "@constants/api";
-import useGallery, { GalleryContextProvider } from "@contexts/GalleryContext";
-import { Feather } from "@expo/vector-icons";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import useBottomSheetModal, { useDynamicModal } from "@hooks/useBottomSheet";
+import { GalleryContextProvider } from "@contexts/GalleryContext";
 import useChapterControls from "@hooks/useChapterControl";
 import { QualityEnum } from "@interfaces/enum";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Dispatch, useEffect, useState } from "react";
-import {
-  Dimensions,
-  SafeAreaView,
-  StyleProp,
-  View,
-  ViewStyle,
-} from "react-native";
+import { useEffect, useState } from "react";
+import { Dimensions, SafeAreaView } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import {
-  Button,
-  IconButton,
-  IconButtonProps,
-  Text,
-  TouchableRipple,
-  useTheme,
-} from "react-native-paper";
+import { Button, useTheme } from "react-native-paper";
 import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type GalleryProps = {
   imageUrls: string[];
@@ -68,6 +50,7 @@ export default function Gallery() {
   const animatedStyle = useAnimatedStyle(
     () => ({
       top: yValue.value,
+      opacity: 1 - yValue.value / window.height,
     }),
     [],
   );

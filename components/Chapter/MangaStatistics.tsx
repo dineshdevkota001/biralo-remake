@@ -27,9 +27,12 @@ function RatingHistoGram({
     <View
       style={{
         flex: 1,
-        padding: 8,
         display: "flex",
         flexDirection: "row",
+        backgroundColor: colors.surface,
+        borderRadius: 16,
+        padding: 12,
+        marginHorizontal: 8,
       }}
     >
       <View>
@@ -124,16 +127,7 @@ function DisplayMangaStatistics({
         {rating?.bayesian?.toFixed(2) || 0}
       </Chip>
       {rating ? (
-        <BottomSheetModal
-          {...props}
-          snapPoints={["50%"]}
-          style={{ marginBottom: 50 }}
-          backdropComponent={({ ...props }) => {
-            return (
-              <BottomSheetBackdrop {...props} animatedIndex={{ value: 1 }} />
-            );
-          }}
-        >
+        <BottomSheetModal {...props} snapPoints={["50%"]}>
           <RatingHistoGram {...rating} />
         </BottomSheetModal>
       ) : null}

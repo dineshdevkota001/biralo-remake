@@ -1,13 +1,29 @@
 import {
   BottomSheetBackdrop,
+  BottomSheetFooter,
+  BottomSheetFooterProps,
   BottomSheetModalProps,
   useBottomSheetDynamicSnapPoints,
 } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { RefObject, useMemo, useRef } from "react";
 import { ViewProps } from "react-native";
-import { useTheme } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+function Footer(props: BottomSheetFooterProps) {
+  const { bottom } = useSafeAreaInsets();
+  return (
+    <BottomSheetFooter
+      {...props}
+      bottomInset={bottom}
+      style={{
+        position: "relative",
+        height: bottom,
+      }}
+    />
+  );
+}
 
 export default function useBottomSheetModal(props?: {
   shouldRenderBackdrop?: boolean;
@@ -17,7 +33,6 @@ export default function useBottomSheetModal(props?: {
   },
   { handleOpen: () => void; handleClose: () => void },
 ] {
-
   const { shouldRenderBackdrop } = props ?? {};
   const { colors } = useTheme();
   const ref = useRef<BottomSheetModalMethods>(null);
@@ -37,7 +52,12 @@ export default function useBottomSheetModal(props?: {
       animateOnMount: true,
       snapPoints,
       index: 0,
-      backgroundStyle: { backgroundColor: colors.surface },
+      backgroundStyle: {
+        backgroundColor: colors.surfaceVariant,
+        borderColor: colors.elevation.level5,
+        borderLeftWidth: 2,
+        borderRightWidth: 2,
+      },
       handleStyle: {
         backgroundColor: colors.surfaceVariant,
         borderColor: colors.elevation.level5,
@@ -49,10 +69,12 @@ export default function useBottomSheetModal(props?: {
       handleIndicatorStyle: {
         backgroundColor: colors.onSurface,
       },
-      bottomInset: bottom,
-      backdropComponent: shouldRenderBackdrop ? 
-        (props) => <BottomSheetBackdrop {...props} animatedIndex={{ value: 1 }} />
+      backdropComponent: shouldRenderBackdrop
+        ? (props) => (
+            <BottomSheetBackdrop {...props} animatedIndex={{ value: 1 }} />
+          )
         : null,
+      footerComponent: Footer,
     },
     { handleOpen, handleClose },
   ];
