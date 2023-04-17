@@ -8,6 +8,7 @@ import {
 import { StackHeaderProps } from "@react-navigation/stack";
 import Gallery from "@screens/Common/Gallery";
 import ChapterList from "@screens/Home/MangaDetails";
+import { getTitle } from "@utils/getLocalizedString";
 import { StatusBar } from "react-native";
 import { useColorScheme } from "react-native";
 import {
@@ -53,6 +54,9 @@ function RootNavigation() {
       <Stack.Screen
         name="Chapter List"
         component={ChapterList}
+        options={({ route }) => ({
+          title: getTitle(route.params.manga.attributes.title),
+        })}
         sharedElements={(route) => {
           const { id } = route.params;
           return [`${id}.cover`];
