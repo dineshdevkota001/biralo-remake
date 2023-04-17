@@ -8,7 +8,7 @@ import { getNextPageParam, queryFn } from "api";
 import { groupBy } from "lodash";
 import { SectionList, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
-import { Surface, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ChapterList({
