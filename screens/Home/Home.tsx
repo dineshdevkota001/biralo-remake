@@ -4,14 +4,11 @@ import Thumbnail, {
   ThumbnailSkeleton,
 } from "@components/Home/ThumbnailRowStyle";
 import { MANGA } from "@constants/api/routes";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import useBottomSheetModal from "@hooks/useBottomSheet";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import getFlattenedList from "@utils/getFlattenedList";
 import { getNextPageParam, queryFn } from "api";
 import { FlatList, View } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
-import { FAB, Text } from "react-native-paper";
 
 export default function Home() {
   const { data, isLoading, isRefetching, refetch, fetchNextPage } =

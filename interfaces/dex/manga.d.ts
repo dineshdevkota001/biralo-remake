@@ -1,23 +1,29 @@
 namespace Manga {
+  type ObjectType = Dex.ObjectType.MANGA;
+
   interface Request {
-    title?: LocalizedString;
-    altTitles?: Array<LocalizedString>;
-    description?: LocalizedString;
+    limit?: number;
+    offset?: number;
+    title?: string;
     authors?: Array<string>;
     artists?: Array<string>;
-    links?: { [key: string]: string };
-    originalLanguage?: string;
-    lastVolume?: string;
-    lastChapter?: string;
-    publicationDemographic?: PublicationDemographic;
+    year?: string;
+    includedTags: Array<string>;
+    includedTagsMode: "AND" |  "OR";
+    excludedTags: Array<strings>;
+    excludedTagsMode: "AND" |  "OR";
     status?: Status;
-    year?: number;
-    contentRating?: ContentRating;
-    chapterNumbersResetOnNewVolume?: boolean;
-    tags?: Array<string>;
-    primaryCover?: string;
-    version?: number;
-    includes?: "cover_art"[];
+    originalLanguage?: Array<string>;
+    excludedOriginalLanguage?: Array<string>;
+    availableTranslatedLanguage?: Array<string>;
+    contentRating?: ContentRating[];
+    publicationDemographic?: PublicationDemographic[];
+    // date
+    createdAtSince?: string;
+    createdAtSince?: string;
+
+    // includes
+    includes: "manga" | "cover_art" | "author" | "artist" | "tag";
   }
   type Create = Request;
   type Edit = Request;
@@ -56,16 +62,4 @@ namespace Manga {
     Object<"cover_art", Cover.Attributes>[]
   >;
   type ListResponse = Response.Collection<Type>;
-}
-
-namespace Cover {
-  interface Attributes {
-    volume?: string;
-    fileName?: string;
-    description?: string;
-    locale?: string;
-    version?: number;
-    createdAt?: string;
-    updatedAt?: string;
-  }
 }
