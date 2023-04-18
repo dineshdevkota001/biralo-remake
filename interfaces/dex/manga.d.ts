@@ -1,5 +1,5 @@
 namespace Manga {
-  type ObjectType = Dex.ObjectType.MANGA;
+  type ObjectType = "manga";
 
   interface Request {
     limit?: number;
@@ -9,29 +9,23 @@ namespace Manga {
     artists?: Array<string>;
     year?: string;
     includedTags: Array<string>;
-    includedTagsMode: "AND" |  "OR";
+    includedTagsMode: Dex.TagMode;
     excludedTags: Array<strings>;
-    excludedTagsMode: "AND" |  "OR";
-    status?: Status;
+    excludedTagsMode: Dex.TagMode;
+    status?: Dex.Status;
     originalLanguage?: Array<string>;
     excludedOriginalLanguage?: Array<string>;
     availableTranslatedLanguage?: Array<string>;
-    contentRating?: ContentRating[];
-    publicationDemographic?: PublicationDemographic[];
+    contentRating?: Dex.ContentRating[];
+    publicationDemographic?: Dex.PublicationDemographic[];
     // date
     createdAtSince?: string;
-    createdAtSince?: string;
-
+    updatedAtSince?: string;
     // includes
-    includes: "manga" | "cover_art" | "author" | "artist" | "tag";
+    includes: Array<"manga" | "cover_art" | "author" | "artist" | "tag">;
   }
   type Create = Request;
   type Edit = Request;
-
-  type PublicationDemographic = "shounen" | "shoujo" | "josei" | "seinen";
-  type Status = "completed" | "ongoing" | "cancelled" | "hiatus";
-  type ContentRating = "safe" | "suggestive" | "erotica" | "pornographic";
-  type State = "draft" | "submitted" | "published" | "rejected";
 
   interface Attributes {
     title?: LocalizedString;
@@ -42,24 +36,24 @@ namespace Manga {
     originalLanguage?: string;
     lastVolume?: string;
     lastChapter?: string;
-    publicationDemographic?: PublicationDemographic;
-    status?: Status;
+    publicationDemographic?: Dex.PublicationDemographic;
+    status?: Dex.Status;
     year?: number;
-    contentRating?: ContentRating;
+    contentRating?: Dex.ContentRating;
     chapterNumbersResetOnNewVolume?: boolean;
     availableTranslatedLanguages?: Array;
     latestUploadedChapter?: string;
     tags?: Array<Tag.Type>;
-    state?: State;
+    // state?: State;
     version?: number;
     createdAt?: string;
     updatedAt?: string;
   }
 
   type Type = Object<
-    "manga",
+    ObjectType,
     Attributes,
-    Object<"cover_art", Cover.Attributes>[]
+    Array<Object<Cover.ObjectType, Cover.Attributes>>
   >;
   type ListResponse = Response.Collection<Type>;
 }

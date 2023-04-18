@@ -53,8 +53,8 @@ export function TagGroup({
           flexWrap: "wrap",
         }}
       >
-        {tags?.map(({ attributes: tag }) => (
-          <Tag {...tag} />
+        {tags?.map(({ attributes: tag, id }) => (
+          <Tag key={id} {...tag} />
         ))}
       </View>
     </View>
@@ -82,6 +82,7 @@ export function Tags({
         {Object.keys(tagGroup)?.map((group) =>
           excludeTags?.includes(group as Tag.Group) ? null : (
             <TagGroup
+              key={group}
               group={group as Tag.Group}
               tags={tagGroup?.[group]}
               hideTitle={hideTitle}
@@ -96,6 +97,7 @@ export function Tags({
       {Object.keys(tagGroup)?.map((group) =>
         includeTags.includes(group as Tag.Group) ? (
           <TagGroup
+            key={group}
             group={group as Tag.Group}
             tags={tagGroup?.[group]}
             hideTitle={hideTitle}

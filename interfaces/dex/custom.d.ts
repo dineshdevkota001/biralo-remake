@@ -2,8 +2,6 @@ type ILocalizationLanguage = "en" | "jp-RO";
 
 type LocalizedString<T = string> = Record<ILocalizationLanguage, T>;
 
-type Order = "asc" | "desc";
-
 namespace Response {
   type Result = "ok" | "error";
   interface ErrorResponse {
@@ -29,20 +27,7 @@ namespace Response {
   }
 }
 
-type ObjectType =
-  | "manga"
-  | "chapter"
-  | "cover_art"
-  | "user"
-  | "author"
-  | "custom_list"
-  | "group"
-  | "manga_relation"
-  | "mapping_id"
-  | "tag"
-  | "scanlation_group";
-
-interface Object<T extends ObjectType, U = undefined, V = undefined> {
+interface Object<T extends Dex.ObjectType, U = undefined, V = undefined> {
   id: string;
   type: T;
   attributes: U;

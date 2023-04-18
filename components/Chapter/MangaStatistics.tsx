@@ -57,6 +57,7 @@ function RatingHistoGram({
       <View style={{ flex: 1, marginRight: 4, marginLeft: 4 }}>
         {ratings.map((rating) => (
           <View
+            key={`${rating}-bar`}
             style={{
               backgroundColor: colors.primary,
               width: `${normalized?.[rating]}%`,
@@ -79,7 +80,7 @@ function RatingHistoGram({
               flexDirection: "row",
             }}
           >
-            <Text key={`${rating}-number`} style={{ color: colors.onSurface }}>
+            <Text key={`${rating}-count`} style={{ color: colors.onSurface }}>
               {distribution?.[rating]}
             </Text>
           </View>
