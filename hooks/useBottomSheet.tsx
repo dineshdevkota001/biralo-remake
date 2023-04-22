@@ -13,13 +13,14 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function Footer(props: BottomSheetFooterProps) {
   const { bottom } = useSafeAreaInsets();
+
   return (
     <BottomSheetFooter
       {...props}
-      bottomInset={bottom}
+      bottomInset={bottom || 8}
       style={{
         position: "relative",
-        height: bottom,
+        height: bottom || 8,
       }}
     />
   );
@@ -103,7 +104,7 @@ export function useDynamicModal({
     {
       onLayout: handleContentLayout,
       style: {
-        paddingBottom: bottom,
+        paddingBottom: bottom || 8,
       },
     },
   ];
