@@ -55,6 +55,7 @@ specifiers:
   prettier: ^2.8.3
   react: 18.2.0
   react-dom: 18.2.0
+  react-hook-form: ^7.43.9
   react-native: 0.71.3
   react-native-gesture-handler: ~2.9.0
   react-native-keychain: ^8.1.1
@@ -100,6 +101,7 @@ dependencies:
   lodash: 4.17.21
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-hook-form: 7.43.9_react@18.2.0
   react-native: 0.71.3_klxfafkpjmb2537xfoky62a7f4
   react-native-gesture-handler: 2.9.0_yqouayos4dnow7nnkhah4yzuzq
   react-native-keychain: 8.1.1
@@ -8892,6 +8894,15 @@ packages:
       react-dom: 18.2.0_react@18.2.0
       react-fast-compare: 3.2.1
       shallowequal: 1.1.0
+    dev: false
+
+  /react-hook-form/7.43.9_react@18.2.0:
+    resolution: {integrity: sha512-AUDN3Pz2NSeoxQ7Hs6OhQhDr6gtF9YRuutGDwPQqhSUAHJSgGl2VeY3qN19MG0SucpjgDiuMJ4iC5T5uB+eaNQ==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:
