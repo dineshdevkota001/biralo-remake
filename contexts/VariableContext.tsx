@@ -1,4 +1,11 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import {
+  FC,
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import { FieldValues, UseFormReturn, useForm } from "react-hook-form";
 
 type IVariableContext = UseFormReturn<FieldValues> & {
@@ -31,6 +38,13 @@ export function VariableProvider({
   );
 }
 
-export function WithVariables() {
-  return null;
+// This is not working
+export function WithVariables<N extends JSX.IntrinsicAttributes>(
+  Component: FC<N>,
+): FC<N> {
+  return (props) => (
+    <VariableProvider>
+      <Component {...props} />
+    </VariableProvider>
+  );
 }

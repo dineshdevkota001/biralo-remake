@@ -1,18 +1,25 @@
 import useVariables from "@contexts/VariableContext";
 import { debounce } from "lodash";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Searchbar, SearchbarProps, Text } from "react-native-paper";
 
 export default function DebouncedSearchbar(
   props: Omit<SearchbarProps, "value">,
 ) {
-  const { setSearch } = useVariables();
+  const [search, setSearch] = useState("");
+  const { setSearch: setGlobalSearch } = useVariables();
   const [value, setValueToRender] = useState("");
 
   const setDebouncedValue = useCallback(
-    debounce((v: string) => setSearch(v), 500),
+    debounce((v: string) => {
+      setSearch(v);
+    }, 500),
     [],
   );
+
+  useEffect(() => {
+    setGlobalSearch(search);
+  }, [search, setGlobalSearch]);
 
   const setValue = useCallback(
     (v?: string | null) => {

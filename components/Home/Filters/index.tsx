@@ -1,16 +1,20 @@
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import useBottomSheetModal, { useDynamicModal } from "@hooks/useBottomSheet";
-import { useRoute } from "@react-navigation/native";
-import { View } from "react-native";
-import { FAB, Text } from "react-native-paper";
+import AppliedFilters from "./AppliedFilters";
+import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
+import useBottomSheetModal from "@hooks/useBottomSheet";
+import { FAB, Text, useTheme } from "react-native-paper";
+import { TabScreen, Tabs } from "react-native-paper-tabs";
 
 export default function MangaFilter() {
+  const { colors } = useTheme();
   const [props, { handleOpen }] = useBottomSheetModal({
     shouldRenderBackdrop: true,
   });
-  const [dynamicProps, childrenProps] = useDynamicModal({
-    snapPoints: ["CONTENT_HEIGHT"],
-  });
+  const tabContainerStyle = {
+    flex: 1,
+    backgroundColor: colors.surface,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+  };
 
   return (
     <>
@@ -23,10 +27,35 @@ export default function MangaFilter() {
         }}
         onPress={handleOpen}
       />
-      <BottomSheetModal {...props} {...dynamicProps}>
-        <View {...childrenProps}>
-          {/* <RenderEverythingHere ></RenderEverythingHere> */}
-        </View>
+      <BottomSheetModal {...props} snapPoints={["70%"]}>
+        <BottomSheetView
+          style={{
+            marginHorizontal: 8,
+            backgroundColor: colors.surface,
+            borderRadius: 16,
+            flex: 1,
+            overflow: "hidden",
+          }}
+        >
+          <Tabs
+            style={{
+              backgroundColor: colors.surface,
+            }}
+            iconPosition="top"
+            uppercase={false}
+            mode="scrollable"
+          >
+            <TabScreen label="Applied" icon="tag">
+              <AppliedFilters />
+            </TabScreen>
+            <TabScreen label="Filters" icon="github">
+              <Text>Screen 2</Text>
+            </TabScreen>
+            <TabScreen label="AApplied Filters" icon="github">
+              <Text>Screen 3</Text>
+            </TabScreen>
+          </Tabs>
+        </BottomSheetView>
       </BottomSheetModal>
     </>
   );

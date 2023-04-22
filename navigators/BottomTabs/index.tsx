@@ -1,5 +1,6 @@
 import DebouncedSearchbar from "@components/Common/Input/DebouncedSearchbar";
 import Icon from "@components/Core/Icon";
+import { WithVariables } from "@contexts/VariableContext";
 import {
   BottomTabHeaderProps,
   createBottomTabNavigator,
@@ -25,10 +26,13 @@ export function MaterialYouHeader({ options, route }: BottomTabHeaderProps) {
 
   if (showSearch)
     return (
-      <Appbar.Header>
+      <Appbar.Header elevated>
         <DebouncedSearchbar
-          autoFocus
-          style={{ marginHorizontal: 8, marginBottom: 8, flex: 1 }}
+          style={{
+            marginHorizontal: 8,
+            marginVertical: 8,
+            flex: 1,
+          }}
           onBlur={() => setShowSearch(false)}
           icon="arrow-left"
           onIconPress={() => setShowSearch(false)}
@@ -64,7 +68,7 @@ export default function BottomTabs() {
     >
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={WithVariables(Home)}
         options={{
           headerRightContainerStyle: {},
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
