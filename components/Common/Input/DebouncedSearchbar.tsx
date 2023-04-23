@@ -7,7 +7,7 @@ export default function DebouncedSearchbar(
   props: Omit<SearchbarProps, "value">,
 ) {
   const [search, setSearch] = useState("");
-  const { setSearch: setGlobalSearch } = useVariables();
+  const { search: globalSearch, setSearch: setGlobalSearch } = useVariables();
   const [value, setValueToRender] = useState("");
 
   const setDebouncedValue = useCallback(

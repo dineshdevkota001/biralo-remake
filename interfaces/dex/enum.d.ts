@@ -1,4 +1,4 @@
-namespace Dex {
+declare namespace Dex {
   type ObjectType =
     | "manga"
     | "chapter"

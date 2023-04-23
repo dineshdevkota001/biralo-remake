@@ -1,11 +1,6 @@
-import {
-  FC,
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import DebouncedSearchbar from "@components/Common/Input/DebouncedSearchbar";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { FC, createContext, useContext, useMemo, useState } from "react";
 import { FieldValues, UseFormReturn, useForm } from "react-hook-form";
 
 type IVariableContext = UseFormReturn<FieldValues> & {
@@ -38,13 +33,17 @@ export function VariableProvider({
   );
 }
 
-// This is not working
 export function WithVariables<N extends JSX.IntrinsicAttributes>(
   Component: FC<N>,
+  renderSearchbar?: boolean,
+  formParams?: Parameters<typeof useForm>[0],
 ): FC<N> {
   return (props) => (
-    <VariableProvider>
-      <Component {...props} />
+    <VariableProvider {...formParams}>
+      <BottomSheetModalProvider>
+        {renderSearchbar ? <DebouncedSearchbar /> : null}
+        <Component {...props} />
+      </BottomSheetModalProvider>
     </VariableProvider>
   );
 }

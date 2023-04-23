@@ -1,26 +1,29 @@
 import useVariables from "@contexts/VariableContext";
-import { ScrollView } from "react-native-gesture-handler";
+import { capitalize } from "lodash";
+import { useWatch } from "react-hook-form";
+import { View } from "react-native";
 import { Text } from "react-native-paper";
 
 export default function AppliedFilters() {
-  const { search, getValues } = useVariables();
-  const values = getValues?.();
+  const { search, control } = useVariables();
+  const values = useWatch({ control });
 
   return (
-    <ScrollView
-      style={{
-        flex: 1,
-        padding: 8,
-      }}
-    >
-      <Text
-        style={{
-          height: 200,
-        }}
-      >
-        {search || "None"}
-        {JSON.stringify(values)}
-      </Text>
-    </ScrollView>
+    <>
+      <View>
+        <Text>Search: {search || "None"}</Text>
+        {Object.keys(values)?.map((key) => {
+          const value = values?.[key];
+          return (
+            <Text>
+              {capitalize(key)}:{" "}
+              {Array.isArray(value)
+                ? value?.length
+                : (value || value?.length) ?? 0}
+            </Text>
+          );
+        })}
+      </View>
+    </>
   );
 }

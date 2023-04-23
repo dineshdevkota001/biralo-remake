@@ -7,4 +7,5 @@ namespace Tag {
   }
   type Group = "content" | "format" | "genre" | "theme";
   type Type = Object<"tag", Attributes>;
+  type ListResponse = Response.Collection<Type>;
 }

@@ -68,7 +68,7 @@ export default function BottomTabs() {
     >
       <Tab.Screen
         name="Home"
-        component={WithVariables(Home)}
+        component={Home}
         options={{
           headerRightContainerStyle: {},
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,

@@ -1,5 +1,4 @@
 import Duplicate from "@components/Core/Duplicate";
-import MangaFilter from "@components/Home/Filters";
 import Thumbnail, {
   ThumbnailSkeleton,
 } from "@components/Home/ThumbnailRowStyle";
@@ -41,7 +40,7 @@ export default function Home() {
         }
         onEndReached={() => fetchNextPage()}
       />
-      <MangaFilter />
+      {/* <MangaFilter /> */}
     </View>
   );
 }

@@ -1,4 +1,5 @@
 import Navigation from "./navigators";
+import { VariableProvider } from "@contexts/VariableContext";
 import { FontAwesome } from "@expo/vector-icons";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
@@ -37,16 +38,18 @@ export default function App() {
   );
 
   return (
-    <SafeAreaProvider>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <PaperProvider theme={paperTheme}>
-          <QueryProvider>
-            <BottomSheetModalProvider>
-              <Navigation />
-            </BottomSheetModalProvider>
-          </QueryProvider>
-        </PaperProvider>
-      </GestureHandlerRootView>
-    </SafeAreaProvider>
+    <VariableProvider>
+      <SafeAreaProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <PaperProvider theme={paperTheme}>
+            <QueryProvider>
+              <BottomSheetModalProvider>
+                <Navigation />
+              </BottomSheetModalProvider>
+            </QueryProvider>
+          </PaperProvider>
+        </GestureHandlerRootView>
+      </SafeAreaProvider>
+    </VariableProvider>
   );
 }

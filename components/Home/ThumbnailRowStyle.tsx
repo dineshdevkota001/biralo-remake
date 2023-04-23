@@ -65,7 +65,12 @@ export function ThumbnailSkeleton() {
   const { colors } = useTheme();
   return (
     <Card
-      style={{ backgroundColor: colors.surfaceVariant, margin: 8 }}
+      style={{
+        backgroundColor: colors.surfaceVariant,
+        height: 200,
+        flex: 1,
+        margin: 8,
+      }}
       children={[null]}
     />
   );

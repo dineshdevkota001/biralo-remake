@@ -1,20 +1,45 @@
 import AppliedFilters from "./AppliedFilters";
+import FormatFilter from "./FormatFilter";
+import TagsFilter from "./TagsFilter";
 import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
 import useBottomSheetModal from "@hooks/useBottomSheet";
-import { FAB, Text, useTheme } from "react-native-paper";
+import { ScrollViewProps } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { FAB, useTheme } from "react-native-paper";
 import { TabScreen, Tabs } from "react-native-paper-tabs";
+import { TabScreenProps } from "react-native-paper-tabs/lib/typescript/TabScreen";
+
+function FilterTab({
+  label,
+  icon,
+  children,
+  style,
+  contentContainerStyle,
+}: TabScreenProps &
+  IHaveChildren &
+  Pick<ScrollViewProps, "style" | "contentContainerStyle">) {
+  return (
+    <TabScreen label={label} icon={icon}>
+      <ScrollView
+        style={[
+          {
+            flex: 1,
+            padding: 8,
+          },
+          style,
+        ]}
+        contentContainerStyle={contentContainerStyle}
+        children={children}
+      />
+    </TabScreen>
+  );
+}
 
 export default function MangaFilter() {
   const { colors } = useTheme();
   const [props, { handleOpen }] = useBottomSheetModal({
     shouldRenderBackdrop: true,
   });
-  const tabContainerStyle = {
-    flex: 1,
-    backgroundColor: colors.surface,
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
-  };
 
   return (
     <>
@@ -45,15 +70,31 @@ export default function MangaFilter() {
             uppercase={false}
             mode="scrollable"
           >
-            <TabScreen label="Applied" icon="tag">
+            <FilterTab label="Applied" icon="filter-check">
               <AppliedFilters />
-            </TabScreen>
-            <TabScreen label="Filters" icon="github">
-              <Text>Screen 2</Text>
-            </TabScreen>
-            <TabScreen label="AApplied Filters" icon="github">
-              <Text>Screen 3</Text>
-            </TabScreen>
+            </FilterTab>
+            <FilterTab
+              contentContainerStyle={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
+              label="Status"
+              icon="account-group"
+            >
+              <FormatFilter />
+            </FilterTab>
+            <FilterTab
+              label="Tags"
+              icon="tag"
+              contentContainerStyle={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
+            >
+              <TagsFilter />
+            </FilterTab>
           </Tabs>
         </BottomSheetView>
       </BottomSheetModal>

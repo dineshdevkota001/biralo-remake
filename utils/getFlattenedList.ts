@@ -1,5 +1,7 @@
-import { InfiniteData } from '@tanstack/react-query'
-import { flatten } from 'lodash'
+import { InfiniteData } from "@tanstack/react-query";
+import { flatten } from "lodash";
 
-export default <T>(data?: InfiniteData<{ data: T[] }>) =>
-  data ? flatten(data?.pages?.map(({ data: page }) => page)) : []
+export default <T>(data?: InfiniteData<{ data: T[] }>) => {
+  if (data) return flatten(data?.pages?.map(({ data: page }) => page));
+  return [];
+};
