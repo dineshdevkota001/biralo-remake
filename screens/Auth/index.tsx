@@ -1,10 +1,11 @@
+import TextInput from "@components/Common/Input/Controlled/TextInput";
 import { useForm } from "react-hook-form";
 import { ScrollView } from "react-native";
-import { Button, TextInput, useTheme } from "react-native-paper";
+import { Button, useTheme } from "react-native-paper";
 
 export default function Profile() {
   const { colors } = useTheme();
-  const { control, register } = useForm({
+  const { control } = useForm({
     defaultValues: {
       username: "",
       password: "",
@@ -27,8 +28,19 @@ export default function Profile() {
         gap: 16,
       }}
     >
-      <TextInput label="Username" autoFocus keyboardType="email-address" />
-      <TextInput label="Password" textContentType="password" />
+      <TextInput
+        control={control}
+        name="username"
+        label="Username"
+        autoFocus
+        keyboardType="email-address"
+      />
+      <TextInput
+        control={control}
+        name="password"
+        label="Password"
+        textContentType="password"
+      />
       <Button mode="contained-tonal">Log In</Button>
     </ScrollView>
   );
