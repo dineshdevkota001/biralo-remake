@@ -1,7 +1,9 @@
 import Icon from "@components/Core/Icon";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { ObjectType } from "@interfaces/dex/enum";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { getTitle } from "@utils/getLocalizedString";
+import getRelationOfType from "@utils/getRelationshipOfType";
 import { formatDistance } from "date-fns";
 import { ComponentProps } from "react";
 import { View } from "react-native";
@@ -63,7 +65,10 @@ export default function Thumbnail({
     <Card
       style={{ margin: 4 }}
       onPress={() =>
-        navigation.navigate("Gallery", { chapterId: id, mangaId: manga.id })
+        navigation.navigate("Gallery", {
+          chapterId: id,
+          mangaId: getRelationOfType(relationships, ObjectType.MANGA)?.id ?? "",
+        })
       }
     >
       <Card.Title

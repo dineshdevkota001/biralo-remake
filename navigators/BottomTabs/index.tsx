@@ -1,65 +1,55 @@
-import DebouncedSearchbar from "@components/Common/Input/DebouncedSearchbar";
 import Icon from "@components/Core/Icon";
-import { WithVariables } from "@contexts/VariableContext";
 import {
   BottomTabHeaderProps,
   createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
 import { getHeaderTitle } from "@react-navigation/elements";
-import { useTheme } from "@react-navigation/native";
 import Login from "@screens/Auth";
 import Home from "@screens/Home/Home";
-import { useState } from "react";
-import { Appbar } from "react-native-paper";
+import { Appbar, useTheme } from "react-native-paper";
 
-function TabBarIcon(props: {
+function TabBarIcon({
+  focused,
+  ...props
+}: {
   name: React.ComponentProps<typeof Icon>["name"];
   color: string;
+  focused?: boolean;
 }) {
-  return <Icon size={28} style={{ marginBottom: -3 }} {...props} />;
+  const { colors } = useTheme();
+  return (
+    <Icon
+      selectable
+      size={24}
+      style={[
+        { marginBottom: -3 },
+        focused
+          ? {
+              backgroundColor: colors.primaryContainer,
+              paddingHorizontal: 12,
+              paddingVertical: 4,
+              borderRadius: 14,
+              overflow: "hidden",
+            }
+          : {},
+      ]}
+      {...props}
+    />
+  );
 }
 
 export function MaterialYouHeader({ options, route }: BottomTabHeaderProps) {
   const title = getHeaderTitle(options, route.name);
-
-  const [showSearch, setShowSearch] = useState(false);
-
-  if (showSearch)
-    return (
-      <Appbar.Header elevated>
-        <DebouncedSearchbar
-          style={{
-            marginHorizontal: 8,
-            marginVertical: 8,
-            flex: 1,
-          }}
-          onBlur={() => setShowSearch(false)}
-          icon="arrow-left"
-          onIconPress={() => setShowSearch(false)}
-        />
-      </Appbar.Header>
-    );
-
   return (
-    <>
-      <Appbar.Header>
-        <Appbar.Content title={title} />
-        {options.headerRightContainerStyle ? (
-          <Appbar.Action
-            icon="search-web"
-            onPress={() => setShowSearch((x) => !x)}
-          />
-        ) : null}
-      </Appbar.Header>
-    </>
+    <Appbar.Header>
+      <Appbar.Content title={title} />
+    </Appbar.Header>
   );
 }
 
 const Tab = createBottomTabNavigator<IRootBottomTabsParams>();
 
 export default function BottomTabs() {
-  const theme = useTheme();
-
   return (
     <Tab.Navigator
       screenOptions={{
@@ -70,16 +60,17 @@ export default function BottomTabs() {
         name="Home"
         component={Home}
         options={{
-          headerRightContainerStyle: {},
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon focused={focused} name="home" color={color} />
+          ),
         }}
       />
       <Tab.Screen
         name="Login"
         component={Login}
         options={{
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="face-man" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name="face-man" color={color} focused={focused} />
           ),
           headerTitle: "Mangadex Login",
         }}

@@ -1,42 +1,35 @@
-// import Thumbnail, { ThumbnailSkeleton } from "@components/Chapter/Thumbnail";
 import Duplicate from "@components/Core/Duplicate";
 import Thumbnail, {
   ThumbnailSkeleton,
 } from "@components/Home/ThumbnailRowStyle";
-import { CHAPTER, MANGA } from "@constants/api/routes";
-import { ObjectType } from "@interfaces/dex/enum";
+import { MANGA } from "@constants/api/routes";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import getFlattenedList from "@utils/getFlattenedList";
-import getRelationOfType from "@utils/getRelationshipOfType";
 import { getNextPageParam, queryFn } from "api";
 import { FlatList } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 
 export default function Home() {
-  const { data, error, isLoading, isRefetching, refetch, fetchNextPage } =
+  const { data, isLoading, isRefetching, refetch, fetchNextPage } =
     useInfiniteQuery<
-      [string, Chapter.Request],
+      [string, Manga.Request],
       Response.ErrorResponse,
-      Chapter.ListResponse
-    >([CHAPTER, { limit: 10, includes: ["manga"] } as Manga.Request], queryFn, {
+      Manga.ListResponse
+    >([MANGA, { limit: 10, includes: ["cover_art"] }], queryFn, {
       getNextPageParam,
     });
 
   const mangas = getFlattenedList(data);
-  console.log(mangas);
   const noOfMangas = mangas?.length;
   const total = data?.pages?.[0]?.total;
-
-  console.log(mangas?.[0]?.relationships);
 
   return (
     <FlatList
       data={mangas}
-      renderItem={(props) => (
-        <Thumbnail
-          item={getRelationOfType(props.item.relationships, ObjectType.MANGA)}
-        />
-      )}
+      renderItem={(props) => <Thumbnail {...props} />}
+      refreshControl={
+        <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+      }
       keyExtractor={(item) => item.id}
       onEndReachedThreshold={0.8}
       ListFooterComponent={

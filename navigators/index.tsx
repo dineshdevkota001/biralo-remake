@@ -1,6 +1,6 @@
 import BottomTabs from "./BottomTabs";
 import { getHeaderTitle } from "@react-navigation/elements";
-import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
@@ -18,6 +18,7 @@ import {
   useTheme,
 } from "react-native-paper";
 import { Appbar } from "react-native-paper";
+import { useAppTheme } from "react-native-paper/lib/typescript/src/core/theming";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 
 export function MaterialYouHeader({
@@ -80,29 +81,12 @@ export default function Navigation() {
   const { LightTheme, DarkTheme } = adaptNavigationTheme({
     reactNavigationLight: NavigationDefaultTheme,
     reactNavigationDark: NavigationDarkTheme,
+    materialDark: theme,
+    materialLight: theme,
   });
 
-  const CombinedLightTheme = {
-    ...LightTheme,
-    ...MD3LightTheme,
-    colors: {
-      ...LightTheme.colors,
-      ...MD3LightTheme.colors,
-    },
-  };
-  const CombinedDarkTheme = {
-    ...DarkTheme,
-    ...MD3DarkTheme,
-    colors: {
-      ...DarkTheme.colors,
-      ...MD3DarkTheme.colors,
-    },
-  };
-
   return (
-    <NavigationContainer
-      theme={mode === "dark" ? CombinedDarkTheme : CombinedLightTheme}
-    >
+    <NavigationContainer theme={mode === "dark" ? DarkTheme : LightTheme}>
       <StatusBar
         barStyle={mode === "dark" ? "light-content" : "dark-content"}
       />
