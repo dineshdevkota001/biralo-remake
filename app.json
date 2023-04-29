@@ -1,6 +1,7 @@
 {
   "id": 1,
   "expo": {
+    "scheme": "localhost",
     "userInterfaceStyle": "automatic",
     "ios": {
       "userInterfaceStyle": "automatic"

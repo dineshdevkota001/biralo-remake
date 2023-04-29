@@ -1,22 +1,22 @@
-import Icon from "@components/Core/Icon";
+import Icon from '@components/Core/Icon'
 import {
   BottomTabHeaderProps,
-  createBottomTabNavigator,
-} from "@react-navigation/bottom-tabs";
-import { getHeaderTitle } from "@react-navigation/elements";
-import Login from "@screens/Auth";
-import Home from "@screens/Home/Home";
-import { Appbar, useTheme } from "react-native-paper";
+  createBottomTabNavigator
+} from '@react-navigation/bottom-tabs'
+import { getHeaderTitle } from '@react-navigation/elements'
+import Home from '@screens/Home/Home'
+import Mangalist from '@screens/Home/Latest'
+import { Appbar, useTheme } from 'react-native-paper'
 
 function TabBarIcon({
   focused,
   ...props
 }: {
-  name: React.ComponentProps<typeof Icon>["name"];
-  color: string;
-  focused?: boolean;
+  name: React.ComponentProps<typeof Icon>['name']
+  color: string
+  focused?: boolean
 }) {
-  const { colors } = useTheme();
+  const { colors } = useTheme()
   return (
     <Icon
       selectable
@@ -29,52 +29,52 @@ function TabBarIcon({
               paddingHorizontal: 12,
               paddingVertical: 4,
               borderRadius: 14,
-              overflow: "hidden",
+              overflow: 'hidden'
             }
-          : {},
+          : {}
       ]}
       {...props}
     />
-  );
+  )
 }
 
 export function MaterialYouHeader({ options, route }: BottomTabHeaderProps) {
-  const title = getHeaderTitle(options, route.name);
+  const title = getHeaderTitle(options, route.name)
   return (
     <Appbar.Header>
       <Appbar.Content title={title} />
     </Appbar.Header>
-  );
+  )
 }
 
-const Tab = createBottomTabNavigator<IRootBottomTabsParams>();
+const Tab = createBottomTabNavigator<IRootBottomTabsParams>()
 
 export default function BottomTabs() {
   return (
     <Tab.Navigator
       screenOptions={{
-        header: MaterialYouHeader,
+        header: MaterialYouHeader
       }}
     >
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon focused={focused} name="home" color={color} />
-          ),
+          )
         }}
       />
       <Tab.Screen
-        name="Login"
-        component={Login}
+        name="Latest"
+        component={Mangalist}
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name="face-man" color={color} focused={focused} />
-          ),
-          headerTitle: "Mangadex Login",
+            <TabBarIcon focused={focused} name="flash" color={color} />
+          )
         }}
       />
     </Tab.Navigator>
-  );
+  )
 }

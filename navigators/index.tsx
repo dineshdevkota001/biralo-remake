@@ -1,96 +1,98 @@
-import BottomTabs from "./BottomTabs";
-import { getHeaderTitle } from "@react-navigation/elements";
-import { NavigationContainer } from "@react-navigation/native";
+import BottomTabs from './BottomTabs'
+import { getHeaderTitle } from '@react-navigation/elements'
+import { NavigationContainer } from '@react-navigation/native'
 import {
   DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme,
-} from "@react-navigation/native";
-import { StackHeaderProps } from "@react-navigation/stack";
-import Gallery from "@screens/Common/Gallery";
-import ChapterList from "@screens/Home/MangaDetails";
-import { getTitle } from "@utils/getLocalizedString";
-import { StatusBar } from "react-native";
-import { useColorScheme } from "react-native";
-import {
-  MD3DarkTheme,
-  MD3LightTheme,
-  adaptNavigationTheme,
-  useTheme,
-} from "react-native-paper";
-import { Appbar } from "react-native-paper";
-import { useAppTheme } from "react-native-paper/lib/typescript/src/core/theming";
-import { createSharedElementStackNavigator } from "react-navigation-shared-element";
+  DefaultTheme as NavigationDefaultTheme
+} from '@react-navigation/native'
+import { StackHeaderProps } from '@react-navigation/stack'
+import Gallery from '@screens/Common/Gallery'
+import ChapterList from '@screens/Home/MangaDetails'
+import { getTitle } from '@utils/getLocalizedString'
+import { StatusBar } from 'react-native'
+import { useColorScheme } from 'react-native'
+import { adaptNavigationTheme, useTheme } from 'react-native-paper'
+import { Appbar } from 'react-native-paper'
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element'
+import Login from '@screens/Auth/index.local'
 
 export function MaterialYouHeader({
   options,
   route,
   navigation,
-  back,
+  back
 }: StackHeaderProps) {
-  const title = getHeaderTitle(options, route.name);
+  const title = getHeaderTitle(options, route.name)
   return (
     <Appbar.Header>
       {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
       <Appbar.Content title={title} />
     </Appbar.Header>
-  );
+  )
 }
 
-const Stack = createSharedElementStackNavigator<IRootStackParams>();
+const Stack = createSharedElementStackNavigator<IRootStackParams>()
 
 function RootNavigation() {
   return (
     <Stack.Navigator
       screenOptions={{
-        header: MaterialYouHeader,
+        header: MaterialYouHeader
       }}
     >
       <Stack.Screen
         name="Bottom Tabs"
         component={BottomTabs}
         options={{
-          headerShown: false,
+          headerShown: false
         }}
       />
       <Stack.Screen
         name="Chapter List"
         component={ChapterList}
         options={({ route }) => ({
-          title: getTitle(route.params.manga.attributes.title),
+          title: getTitle(route.params.manga.attributes.title)
         })}
-        sharedElements={(route) => {
-          const { id } = route.params;
-          return [`${id}.cover`];
+        sharedElements={route => {
+          const { id } = route.params
+          return [`${id}.cover`]
         }}
       />
       <Stack.Screen
         name="Gallery"
         component={Gallery}
         options={{
-          headerShown: false,
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Login}
+        options={{
+          headerTitle: 'Mangadex Login'
         }}
       />
     </Stack.Navigator>
-  );
+  )
 }
 
 export default function Navigation() {
-  const mode = useColorScheme();
-  const theme = useTheme();
+  const mode = useColorScheme()
+  const theme = useTheme()
 
   const { LightTheme, DarkTheme } = adaptNavigationTheme({
     reactNavigationLight: NavigationDefaultTheme,
     reactNavigationDark: NavigationDarkTheme,
     materialDark: theme,
-    materialLight: theme,
-  });
+    materialLight: theme
+  })
 
   return (
-    <NavigationContainer theme={mode === "dark" ? DarkTheme : LightTheme}>
+    <NavigationContainer theme={mode === 'dark' ? DarkTheme : LightTheme}>
       <StatusBar
-        barStyle={mode === "dark" ? "light-content" : "dark-content"}
+        barStyle={mode === 'dark' ? 'light-content' : 'dark-content'}
       />
       <RootNavigation />
     </NavigationContainer>
-  );
+  )
 }

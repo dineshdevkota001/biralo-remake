@@ -1,11 +1,11 @@
-import { capitalize } from "lodash";
-import { ComponentProps } from "react";
-import { Control, Controller, FieldValues, Path } from "react-hook-form";
+import { capitalize } from 'lodash'
+import { ComponentProps } from 'react'
+import { Control, Controller, FieldValues, Path } from 'react-hook-form'
 import {
   ActivityIndicator,
   TextInput,
-  TextInputProps,
-} from "react-native-paper";
+  TextInputProps
+} from 'react-native-paper'
 
 export default function TextInput2({
   control,
@@ -21,22 +21,22 @@ export default function TextInput2({
   value,
   ...props
 }: TextInputProps & {
-  control: Control<any>;
-  name: Path<any>;
+  control: Control<any>
+  name: Path<any>
   renderProps?: (
-    x: Parameters<ComponentProps<typeof Controller>["render"]>[0],
-  ) => TextInputProps;
+    x: Parameters<ComponentProps<typeof Controller>['render']>[0]
+  ) => TextInputProps
 }) {
   return (
     <Controller
       control={control}
       name={name}
-      render={(renderProp) => {
+      render={renderProp => {
         const {
           field: { onChange, name, onBlur: onFieldBlur, value: fieldVlaue },
           fieldState: { error: fieldError, isTouched },
-          formState: { isSubmitting, isValidating },
-        } = renderProp;
+          formState: { isSubmitting, isValidating }
+        } = renderProp
 
         return (
           <TextInput
@@ -45,19 +45,19 @@ export default function TextInput2({
             right={isValidating ? <ActivityIndicator /> : right}
             error={error || (fieldError && isTouched)}
             disabled={disabled || isSubmitting}
-            onChangeText={(e) => {
-              onChange(e);
-              onChangeText?.(e);
+            onChangeText={e => {
+              onChange(e)
+              onChangeText?.(e)
             }}
-            onBlur={(e) => {
-              onFieldBlur();
-              onBlur?.(e);
+            onBlur={e => {
+              onFieldBlur()
+              onBlur?.(e)
             }}
             value={value || fieldVlaue}
             {...renderProps?.(renderProp)}
           />
-        );
+        )
       }}
     />
-  );
+  )
 }

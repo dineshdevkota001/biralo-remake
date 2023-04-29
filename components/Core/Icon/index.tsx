@@ -1,7 +1,7 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ComponentProps } from "react";
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { ComponentProps } from 'react'
 
-export type IconProps = ComponentProps<typeof MaterialCommunityIcons>;
+export type IconProps = ComponentProps<typeof MaterialCommunityIcons>
 
 export default function Icon(props: IconProps) {
   return (
@@ -10,9 +10,9 @@ export default function Icon(props: IconProps) {
       style={[
         props.style,
         {
-          fontSize: props.size,
-        },
+          fontSize: props.size
+        }
       ]}
     />
-  );
+  )
 }

@@ -1,3 +1,3 @@
-import Gallery from "@components/Common/Gallery";
+import Gallery from '@components/Common/Gallery'
 
-export default Gallery;
+export default Gallery

@@ -3,46 +3,46 @@ import {
   BottomSheetFooter,
   BottomSheetFooterProps,
   BottomSheetModalProps,
-  useBottomSheetDynamicSnapPoints,
-} from "@gorhom/bottom-sheet";
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
-import { RefObject, useMemo, useRef } from "react";
-import { ViewProps } from "react-native";
-import { Text, useTheme } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+  useBottomSheetDynamicSnapPoints
+} from '@gorhom/bottom-sheet'
+import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types'
+import { RefObject, useMemo, useRef } from 'react'
+import { ViewProps } from 'react-native'
+import { Text, useTheme } from 'react-native-paper'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 function Footer(props: BottomSheetFooterProps) {
-  const { bottom } = useSafeAreaInsets();
+  const { bottom } = useSafeAreaInsets()
 
   return (
     <BottomSheetFooter
       {...props}
       bottomInset={bottom || 8}
       style={{
-        position: "relative",
-        height: bottom || 8,
+        position: 'relative',
+        height: bottom || 8
       }}
     />
-  );
+  )
 }
 
 export default function useBottomSheetModal(props?: {
-  shouldRenderBackdrop?: boolean;
+  shouldRenderBackdrop?: boolean
 }): [
-  Omit<BottomSheetModalProps, "ref" | "children"> & {
-    ref: RefObject<BottomSheetModalMethods>;
+  Omit<BottomSheetModalProps, 'ref' | 'children'> & {
+    ref: RefObject<BottomSheetModalMethods>
   },
-  { handleOpen: () => void; handleClose: () => void },
+  { handleOpen: () => void; handleClose: () => void }
 ] {
-  const { shouldRenderBackdrop } = props ?? {};
-  const { colors } = useTheme();
-  const ref = useRef<BottomSheetModalMethods>(null);
-  const { bottom } = useSafeAreaInsets();
+  const { shouldRenderBackdrop } = props ?? {}
+  const { colors } = useTheme()
+  const ref = useRef<BottomSheetModalMethods>(null)
+  const { bottom } = useSafeAreaInsets()
 
-  const handleOpen = () => ref.current?.present();
-  const handleClose = () => ref.current?.dismiss();
+  const handleOpen = () => ref.current?.present()
+  const handleClose = () => ref.current?.dismiss()
 
-  const snapPoints = useMemo(() => [bottom + 20, "70%"], []);
+  const snapPoints = useMemo(() => [bottom + 20, '70%'], [])
 
   return [
     {
@@ -57,7 +57,7 @@ export default function useBottomSheetModal(props?: {
         backgroundColor: colors.surfaceVariant,
         borderColor: colors.elevation.level5,
         borderLeftWidth: 2,
-        borderRightWidth: 2,
+        borderRightWidth: 2
       },
       handleStyle: {
         backgroundColor: colors.surfaceVariant,
@@ -65,47 +65,46 @@ export default function useBottomSheetModal(props?: {
         borderWidth: 2,
         borderBottomWidth: 0,
         borderTopLeftRadius: 16,
-        borderTopRightRadius: 16,
+        borderTopRightRadius: 16
       },
       handleIndicatorStyle: {
-        backgroundColor: colors.onSurface,
+        backgroundColor: colors.onSurface
       },
       backdropComponent: shouldRenderBackdrop
-        ? (props) => (
+        ? props => (
             <BottomSheetBackdrop {...props} animatedIndex={{ value: 1 }} />
           )
         : null,
-      footerComponent: Footer,
+      footerComponent: Footer
     },
-    { handleOpen, handleClose },
-  ];
+    { handleOpen, handleClose }
+  ]
 }
 
 export function useDynamicModal({
-  snapPoints,
-}: { snapPoints: (string | number)[] }): [
-  Omit<BottomSheetModalProps, "children" | "isOpen">,
-  ViewProps,
-] {
-  const { bottom } = useSafeAreaInsets();
+  snapPoints
+}: {
+  snapPoints: (string | number)[]
+}): [Omit<BottomSheetModalProps, 'children' | 'isOpen'>, ViewProps] {
+  const { bottom } = useSafeAreaInsets()
   const {
     animatedHandleHeight,
     animatedSnapPoints,
     animatedContentHeight,
-    handleContentLayout,
-  } = useBottomSheetDynamicSnapPoints(snapPoints);
+    handleContentLayout
+  } = useBottomSheetDynamicSnapPoints(snapPoints)
 
   return [
     {
       snapPoints: animatedSnapPoints,
       handleHeight: animatedHandleHeight,
-      contentHeight: animatedContentHeight,
+      contentHeight: animatedContentHeight
     },
     {
       onLayout: handleContentLayout,
       style: {
-        paddingBottom: bottom || 8,
-      },
-    },
-  ];
+        paddingBottom: bottom || 8
+      }
+    }
+  ]
 }

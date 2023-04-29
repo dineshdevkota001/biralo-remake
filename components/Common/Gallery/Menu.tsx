@@ -1,92 +1,92 @@
-import useGallery, { RESIZE_MODE } from "@contexts/GalleryContext";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import useBottomSheetModal, { useDynamicModal } from "@hooks/useBottomSheet";
-import useChapterControls from "@hooks/useChapterControl";
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import { View } from "react-native";
+import useGallery, { RESIZE_MODE } from '@contexts/GalleryContext'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import useBottomSheetModal, { useDynamicModal } from '@hooks/useBottomSheet'
+import useChapterControls from '@hooks/useChapterControl'
+import { useNavigation } from '@react-navigation/native'
+import { useEffect, useState } from 'react'
+import { View } from 'react-native'
 import {
   IconButton,
   IconButtonProps,
   Surface,
   Text,
-  useTheme,
-} from "react-native-paper";
+  useTheme
+} from 'react-native-paper'
 
 function MenuIcon(props: IconButtonProps) {
-  const { colors } = useTheme();
+  const { colors } = useTheme()
   return (
     <IconButton
       iconColor={colors.onSurface}
       {...props}
       selected
       style={{
-        flex: 1 / 5,
+        flex: 1 / 5
       }}
     />
-  );
+  )
 }
 
 function GroupedSetting({
   title,
-  children,
+  children
 }: { title: string } & IHaveChildren) {
-  const { colors } = useTheme();
+  const { colors } = useTheme()
   return (
     <View
       style={{
         flex: 1,
-        minWidth: "90%",
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "space-between",
+        minWidth: '90%',
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
         backgroundColor: colors.surfaceVariant,
         borderRadius: 16,
         marginTop: 4,
-        marginBottom: 4,
+        marginBottom: 4
       }}
     >
-      <Text variant="labelLarge" style={{ width: "100%", textAlign: "center" }}>
+      <Text variant="labelLarge" style={{ width: '100%', textAlign: 'center' }}>
         {title}
       </Text>
       {children}
     </View>
-  );
+  )
 }
 
 export default function Menu({ title }: { title: string }) {
-  const navigation = useNavigation();
-  const [props, { handleOpen, handleClose }] = useBottomSheetModal();
+  const navigation = useNavigation()
+  const [props, { handleOpen, handleClose }] = useBottomSheetModal()
   const [dynamicProps, dynamicChildrenProps] = useDynamicModal({
-    snapPoints: [32, "CONTENT_HEIGHT"],
-  });
+    snapPoints: [32, 'CONTENT_HEIGHT']
+  })
 
   const [{ isHorizontal, resizeMode }, { setIsHorizontal, setResizeMode }] =
-    useGallery();
+    useGallery()
 
-  const [isExtraMenuOpen, setIsExtraMenuOpen] = useState(false);
+  const [isExtraMenuOpen, setIsExtraMenuOpen] = useState(false)
 
-  const { goPrev, goNext, hasPrev, hasNext } = useChapterControls();
+  const { goPrev, goNext, hasPrev, hasNext } = useChapterControls()
 
-  useEffect(() => handleOpen(), []);
+  useEffect(() => handleOpen(), [])
 
   const menuFunctionWrapper = (callback: () => void) => {
     return () => {
-      handleClose();
-      callback();
-    };
-  };
+      handleClose()
+      callback()
+    }
+  }
 
   const setResizeFactory = (mode: RESIZE_MODE) => {
     return {
       selected: resizeMode === mode,
       disabled: mode === resizeMode,
       onPress: () => {
-        setResizeMode(mode);
-      },
-    };
-  };
+        setResizeMode(mode)
+      }
+    }
+  }
 
   return (
     <BottomSheetModal
@@ -100,20 +100,20 @@ export default function Menu({ title }: { title: string }) {
           style={[
             dynamicChildrenProps?.style,
             {
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
               borderRadius: 16,
               marginHorizontal: 8,
               paddingHorizontal: 16,
               paddingBottom: 16,
-              paddingTop: 8,
-            },
+              paddingTop: 8
+            }
           ]}
         >
           <Text
-            style={{ minWidth: "90%", flex: 1, textAlign: "center" }}
+            style={{ minWidth: '90%', flex: 1, textAlign: 'center' }}
             variant="titleMedium"
           >
             {title}
@@ -121,7 +121,7 @@ export default function Menu({ title }: { title: string }) {
           <MenuIcon
             icon="file-image"
             onPress={() => {
-              setIsExtraMenuOpen((p) => !p);
+              setIsExtraMenuOpen(p => !p)
             }}
           />
           <MenuIcon
@@ -164,8 +164,8 @@ export default function Menu({ title }: { title: string }) {
                   selected={!isHorizontal}
                   disabled={!isHorizontal}
                   onPress={() => {
-                    setIsHorizontal(false);
-                    setResizeMode(RESIZE_MODE.FULL_WIDTH);
+                    setIsHorizontal(false)
+                    setResizeMode(RESIZE_MODE.FULL_WIDTH)
                   }}
                 />
                 <MenuIcon
@@ -173,8 +173,8 @@ export default function Menu({ title }: { title: string }) {
                   selected={isHorizontal}
                   disabled={isHorizontal}
                   onPress={() => {
-                    setIsHorizontal(true);
-                    setResizeMode(RESIZE_MODE.FIT_BOTH);
+                    setIsHorizontal(true)
+                    setResizeMode(RESIZE_MODE.FIT_BOTH)
                   }}
                 />
               </GroupedSetting>
@@ -183,5 +183,5 @@ export default function Menu({ title }: { title: string }) {
         </Surface>
       </View>
     </BottomSheetModal>
-  );
+  )
 }

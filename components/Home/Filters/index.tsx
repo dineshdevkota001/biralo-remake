@@ -1,70 +1,72 @@
-import AppliedFilters from "./AppliedFilters";
-import FormatFilter from "./FormatFilter";
-import TagsFilter from "./TagsFilter";
-import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
-import useBottomSheetModal from "@hooks/useBottomSheet";
-import { ScrollViewProps } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import { FAB, useTheme } from "react-native-paper";
-import { TabScreen, Tabs } from "react-native-paper-tabs";
-import { TabScreenProps } from "react-native-paper-tabs/lib/typescript/TabScreen";
+import AppliedFilters from './AppliedFilters'
+import FormatFilter from './FormatFilter'
+import TagsFilter from './TagsFilter'
+import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
+import useBottomSheetModal from '@hooks/useBottomSheet'
+import { useNavigation } from '@react-navigation/native'
+import { ScrollViewProps } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
+import { Searchbar, useTheme } from 'react-native-paper'
+import { TabScreen, Tabs } from 'react-native-paper-tabs'
+import { TabScreenProps } from 'react-native-paper-tabs/lib/typescript/TabScreen'
 
 function FilterTab({
   label,
   icon,
   children,
   style,
-  contentContainerStyle,
+  contentContainerStyle
 }: TabScreenProps &
   IHaveChildren &
-  Pick<ScrollViewProps, "style" | "contentContainerStyle">) {
+  Pick<ScrollViewProps, 'style' | 'contentContainerStyle'>) {
   return (
     <TabScreen label={label} icon={icon}>
       <ScrollView
         style={[
           {
             flex: 1,
-            padding: 8,
+            padding: 8
           },
-          style,
+          style
         ]}
         contentContainerStyle={contentContainerStyle}
         children={children}
       />
     </TabScreen>
-  );
+  )
 }
 
 export default function MangaFilter() {
-  const { colors } = useTheme();
+  const { colors } = useTheme()
+  const navigation = useNavigation()
   const [props, { handleOpen }] = useBottomSheetModal({
-    shouldRenderBackdrop: true,
-  });
+    shouldRenderBackdrop: true
+  })
 
   return (
     <>
-      <FAB
-        icon="filter"
-        style={{
-          position: "absolute",
-          bottom: 16,
-          right: 16,
+      <Searchbar
+        value=""
+        icon="face-man"
+        traileringIcon="filter-variant"
+        onIconPress={() => {
+          navigation.navigate('Profile')
         }}
-        onPress={handleOpen}
+        onTraileringIconPress={handleOpen}
       />
-      <BottomSheetModal {...props} snapPoints={["70%"]}>
+      <BottomSheetModal {...props} snapPoints={['70%']}>
         <BottomSheetView
           style={{
             marginHorizontal: 8,
             backgroundColor: colors.surface,
             borderRadius: 16,
             flex: 1,
-            overflow: "hidden",
+            overflow: 'hidden'
           }}
         >
           <Tabs
             style={{
-              backgroundColor: colors.surface,
+              backgroundColor: colors.surface
             }}
             iconPosition="top"
             uppercase={false}
@@ -75,9 +77,9 @@ export default function MangaFilter() {
             </FilterTab>
             <FilterTab
               contentContainerStyle={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 8
               }}
               label="Status"
               icon="account-group"
@@ -88,9 +90,9 @@ export default function MangaFilter() {
               label="Tags"
               icon="tag"
               contentContainerStyle={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 8
               }}
             >
               <TagsFilter />
@@ -99,5 +101,5 @@ export default function MangaFilter() {
         </BottomSheetView>
       </BottomSheetModal>
     </>
-  );
+  )
 }

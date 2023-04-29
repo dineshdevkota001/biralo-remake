@@ -1,17 +1,17 @@
-import { getTitle } from "@utils/getLocalizedString";
-import { capitalize, groupBy } from "lodash";
-import { View } from "react-native";
-import { Chip, Text, useTheme } from "react-native-paper";
+import { getTitle } from '@utils/getLocalizedString'
+import { capitalize, groupBy } from 'lodash'
+import { View } from 'react-native'
+import { Chip, Text, useTheme } from 'react-native-paper'
 
 export default function Tag({ name, group }: Tag.Attributes) {
-  const { colors } = useTheme();
+  const { colors } = useTheme()
 
   const groupToColorMap: Record<Tag.Group, string> = {
     format: colors.primaryContainer,
     content: colors.errorContainer,
     genre: colors.secondaryContainer,
-    theme: colors.tertiaryContainer,
-  };
+    theme: colors.tertiaryContainer
+  }
 
   return (
     <Chip
@@ -19,26 +19,30 @@ export default function Tag({ name, group }: Tag.Attributes) {
         margin: 1,
         backgroundColor: group
           ? groupToColorMap?.[group] || colors.primary
-          : colors.primary,
+          : colors.primary
       }}
       textStyle={{
         fontSize: 12,
         marginTop: 0,
-        marginBottom: 0,
+        marginBottom: 0
       }}
       compact
     >
       {getTitle(name)}
     </Chip>
-  );
+  )
 }
 
 export function TagGroup({
   group,
   tags,
-  hideTitle,
-}: { group: Tag.Group; tags: Tag.Type[]; hideTitle?: boolean }) {
-  const { colors } = useTheme();
+  hideTitle
+}: {
+  group: Tag.Group
+  tags: Tag.Type[]
+  hideTitle?: boolean
+}) {
+  const { colors } = useTheme()
   return (
     <View style={{ marginBottom: 4, marginTop: 4 }}>
       {hideTitle ? null : (
@@ -48,9 +52,9 @@ export function TagGroup({
       )}
       <View
         style={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap'
         }}
       >
         {tags?.map(({ attributes: tag, id }) => (
@@ -58,28 +62,28 @@ export function TagGroup({
         ))}
       </View>
     </View>
-  );
+  )
 }
 
 export function Tags({
   tags,
   includeTags,
   excludeTags,
-  hideTitle,
+  hideTitle
 }: {
-  tags?: Tag.Type[];
-  includeTags?: Tag.Group[];
-  excludeTags?: Tag.Group[];
-  hideTitle?: boolean;
+  tags?: Tag.Type[]
+  includeTags?: Tag.Group[]
+  excludeTags?: Tag.Group[]
+  hideTitle?: boolean
 }) {
-  if (!tags) return null;
+  if (!tags) return null
 
-  const tagGroup = groupBy(tags, "attributes.group");
+  const tagGroup = groupBy(tags, 'attributes.group')
 
   if (!includeTags?.length)
     return (
       <>
-        {Object.keys(tagGroup)?.map((group) =>
+        {Object.keys(tagGroup)?.map(group =>
           excludeTags?.includes(group as Tag.Group) ? null : (
             <TagGroup
               key={group}
@@ -87,14 +91,14 @@ export function Tags({
               tags={tagGroup?.[group]}
               hideTitle={hideTitle}
             />
-          ),
+          )
         )}
       </>
-    );
+    )
 
   return (
     <>
-      {Object.keys(tagGroup)?.map((group) =>
+      {Object.keys(tagGroup)?.map(group =>
         includeTags.includes(group as Tag.Group) ? (
           <TagGroup
             key={group}
@@ -102,8 +106,8 @@ export function Tags({
             tags={tagGroup?.[group]}
             hideTitle={hideTitle}
           />
-        ) : null,
+        ) : null
       )}
     </>
-  );
+  )
 }

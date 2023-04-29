@@ -1,26 +1,26 @@
-import { debounce } from "lodash";
-import { useCallback, useState } from "react";
+import { debounce } from 'lodash'
+import { useCallback, useState } from 'react'
 
 export default function useDebouncedInput(
   callback: (v: string) => void,
-  defaultValue?: string | (() => string),
+  defaultValue?: string | (() => string)
 ) {
-  const [valueToRender, setValueToRender] = useState(defaultValue ?? "");
+  const [valueToRender, setValueToRender] = useState(defaultValue ?? '')
 
   const setDebouncedValue = useCallback(
     (v: string) => {
-      debounce(() => callback(v), 500);
+      debounce(() => callback(v), 500)
     },
-    [callback],
-  );
+    [callback]
+  )
 
   const setValue = useCallback(
     (v?: string | null) => {
-      setValueToRender(v || "");
-      setDebouncedValue(v || "");
+      setValueToRender(v || '')
+      setDebouncedValue(v || '')
     },
-    [setDebouncedValue],
-  );
+    [setDebouncedValue]
+  )
 
-  return { value: valueToRender, setValue };
+  return { value: valueToRender, setValue }
 }

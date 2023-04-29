@@ -1,25 +1,25 @@
-import { FilterChip, Section, formArrayHelpers } from "./commmon";
-import useVariables from "@contexts/VariableContext";
-import { ContentRating } from "@interfaces/dex/enum";
-import { PublicationDemographic } from "@interfaces/dex/enum";
-import { capitalize } from "lodash";
-import { Controller } from "react-hook-form";
+import { FilterChip, Section, formArrayHelpers } from './commmon'
+import useVariables from '@contexts/VariableContext'
+import { ContentRating } from '@interfaces/dex/enum'
+import { PublicationDemographic } from '@interfaces/dex/enum'
+import { capitalize } from 'lodash'
+import { Controller } from 'react-hook-form'
 
 const formatFilters = [
   {
-    name: "publicationDemographics",
-    title: "Demographics",
-    values: PublicationDemographic,
+    name: 'publicationDemographic',
+    title: 'Demographics',
+    values: PublicationDemographic
   },
   {
-    name: "contentRating",
-    title: "Content Rating",
-    values: ContentRating,
-  },
-];
+    name: 'contentRating',
+    title: 'Content Rating',
+    values: ContentRating
+  }
+]
 
 export default function FormatFilter() {
-  const { control } = useVariables();
+  const { control } = useVariables()
 
   return (
     <>
@@ -30,27 +30,27 @@ export default function FormatFilter() {
           render={({ field: { value, onChange } }) => (
             <Section title={title}>
               {value?.length ? null : <FilterChip selected>Any</FilterChip>}
-              {Object.values(values).map((tag) => {
+              {Object.values(values).map(tag => {
                 const { isPresent, getToggledArray } = formArrayHelpers(
                   value,
-                  tag,
-                );
+                  tag
+                )
 
                 return (
                   <FilterChip
                     selected={isPresent}
                     onPress={() => {
-                      onChange(getToggledArray());
+                      onChange(getToggledArray())
                     }}
                   >
-                    {capitalize(tag.split("_").join(" "))}
+                    {capitalize(tag.split('_').join(' '))}
                   </FilterChip>
-                );
+                )
               })}
             </Section>
           )}
         />
       ))}
     </>
-  );
+  )
 }

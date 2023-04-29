@@ -1,3 +1,3 @@
-import Home from "./Manga";
+import Home from './Home'
 
-export default { Home };
+export default { Home }

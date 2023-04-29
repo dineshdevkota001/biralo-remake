@@ -1,33 +1,33 @@
-import Icon from "@components/Core/Icon";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { ObjectType } from "@interfaces/dex/enum";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { getTitle } from "@utils/getLocalizedString";
-import getRelationOfType from "@utils/getRelationshipOfType";
-import { formatDistance } from "date-fns";
-import { ComponentProps } from "react";
-import { View } from "react-native";
-import { Card, Text, useTheme } from "react-native-paper";
+import Icon from '@components/Core/Icon'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { ObjectType } from '@interfaces/dex/enum'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { getTitle } from '@utils/getLocalizedString'
+import getRelationOfType from '@utils/getRelationshipOfType'
+import { formatDistance } from 'date-fns'
+import { ComponentProps } from 'react'
+import { View } from 'react-native'
+import { Card, Text, useTheme } from 'react-native-paper'
 
-type IconProps = ComponentProps<typeof MaterialCommunityIcons>;
+type IconProps = ComponentProps<typeof MaterialCommunityIcons>
 
 function Detail({
   iconName,
   children,
-  iconColor,
+  iconColor
 }: IHaveChildren & {
-  iconName: IconProps["name"];
-  iconColor?: IconProps["color"];
+  iconName: IconProps['name']
+  iconColor?: IconProps['color']
 }) {
-  const { colors } = useTheme();
+  const { colors } = useTheme()
 
   return (
     <View
       style={{
-        width: "50%",
+        width: '50%',
         marginBottom: 4,
-        display: "flex",
-        flexDirection: "row",
+        display: 'flex',
+        flexDirection: 'row'
       }}
     >
       <Icon
@@ -37,37 +37,37 @@ function Detail({
       />
       <Text style={{ color: iconColor ?? colors.onSurface }}> {children}</Text>
     </View>
-  );
+  )
 }
 
 export default function Thumbnail({
   attributes,
   id,
-  relationships,
+  relationships
 }: Chapter.Type) {
-  const { colors } = useTheme();
-  const { title, chapter, pages, createdAt, translatedLanguage } = attributes;
-  const route = useRoute<IRootStackScreenProps<"Chapter List">["route"]>();
+  const { colors } = useTheme()
+  const { title, chapter, pages, createdAt, translatedLanguage } = attributes
+  const route = useRoute<IRootStackScreenProps<'Chapter List'>['route']>()
   const navigation =
-    useNavigation<IRootStackScreenProps<"Chapter List">["navigation"]>();
+    useNavigation<IRootStackScreenProps<'Chapter List'>['navigation']>()
 
-  const { manga } = route.params ?? {};
+  const { manga } = route.params ?? {}
 
   const { scanlation_group: scanlationGroup, user } = relationships.reduce(
     (acc, curr) => {
-      if (curr.type) acc[curr.type] = curr.attributes;
-      return acc;
+      if (curr.type) acc[curr.type] = curr.attributes
+      return acc
     },
-    Object.create(null),
-  );
+    Object.create(null)
+  )
 
   return (
     <Card
       style={{ margin: 4 }}
       onPress={() =>
-        navigation.navigate("Gallery", {
+        navigation.navigate('Gallery', {
           chapterId: id,
-          mangaId: getRelationOfType(relationships, ObjectType.MANGA)?.id ?? "",
+          mangaId: getRelationOfType(relationships, ObjectType.MANGA)?.id ?? ''
         })
       }
     >
@@ -76,8 +76,8 @@ export default function Thumbnail({
       />
       <Card.Content
         style={{
-          flexDirection: "row",
-          flexWrap: "wrap",
+          flexDirection: 'row',
+          flexWrap: 'wrap'
         }}
       >
         {scanlationGroup ? (
@@ -88,7 +88,7 @@ export default function Thumbnail({
         {user ? (
           <Detail
             iconColor={
-              user.roles.includes("ROLE_STAFF") ? colors.primary : undefined
+              user.roles.includes('ROLE_STAFF') ? colors.primary : undefined
             }
             iconName="guy-fawkes-mask"
           >
@@ -100,19 +100,19 @@ export default function Thumbnail({
         {createdAt ? (
           <Detail iconName="calendar">
             {formatDistance(new Date(createdAt), new Date(), {
-              addSuffix: true,
+              addSuffix: true
             })}
           </Detail>
         ) : null}
       </Card.Content>
     </Card>
-  );
+  )
 }
 
 export function ThumbnailSkeleton() {
   return (
-    <Card style={{ marginBottom: 8, height: 148, width: "100%" }}>
+    <Card style={{ marginBottom: 8, height: 148, width: '100%' }}>
       <Card.Content>{null}</Card.Content>
     </Card>
-  );
+  )
 }

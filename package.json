@@ -14,6 +14,7 @@
   "dependencies": {
     "@expo/metro-runtime": "^1.1.0",
     "@expo/vector-icons": "^13.0.0",
+    "@expo/webpack-config": "^18.0.4",
     "@gorhom/bottom-sheet": "^4.4.5",
     "@pchmn/expo-material3-theme": "^1.0.1",
     "@react-navigation/bottom-tabs": "^6.5.7",
@@ -27,6 +28,7 @@
     "axios-auth-refresh": "^3.3.6",
     "date-fns": "^2.29.3",
     "expo": "~48.0.6",
+    "expo-auth-session": "^4.0.3",
     "expo-dev-client": "~2.2.1",
     "expo-font": "~11.1.1",
     "expo-linking": "~4.0.1",
@@ -85,7 +87,6 @@
     "prettier": "^2.8.3",
     "react-native-svg": "^13.4.0",
     "react-test-renderer": "18.2.0",
-    "rome": "^12.0.0",
     "tsconfig-paths": "^4.1.2",
     "typescript": "^4.9.4"
   },

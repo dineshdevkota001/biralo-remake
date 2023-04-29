@@ -1,29 +1,29 @@
-import { QualityEnum } from "@interfaces/enum";
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { QualityEnum } from '@interfaces/enum'
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 declare global {
   type IRootStackParams = {
-    "Bottom Tabs": undefined;
-    Gallery: { chapterId: string; quality?: QualityEnum; mangaId: string };
-    "Chapter List": {
-      id: string;
-      manga: Manga.Type;
-    };
-    Test: undefined;
-  };
+    'Bottom Tabs': undefined
+    Gallery: { chapterId: string; quality?: QualityEnum; mangaId: string }
+    'Chapter List': {
+      id: string
+      manga: Manga.Type
+    }
+    Profile: undefined
+  }
   type IRootBottomTabsParams = {
-    Home: undefined;
-    Login: undefined;
-  };
+    Home: undefined
+    Latest: undefined
+  }
   type IRootStackScreenProps<Screen extends keyof IRootStackParams> =
-    NativeStackScreenProps<IRootStackParams, Screen>;
+    NativeStackScreenProps<IRootStackParams, Screen>
   type IRootBottomTabsScreenProps<Screen extends keyof IRootBottomTabsParams> =
     CompositeScreenProps<
       BottomTabScreenProps<IRootBottomTabsParams, Screen>,
       NativeStackScreenProps<IRootStackParams>
-    >;
+    >
   namespace ReactNavigation {
-    type RootParamList = IRootStackParams;
+    type RootParamList = IRootStackParams
   }
 }
