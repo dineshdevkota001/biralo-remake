@@ -18,6 +18,7 @@ export async function queryFn({ queryKey, pageParam }: QueryFunctionContext) {
   } catch (e) {
     console.log(e)
   }
+  return {}
 }
 
 export const getNextPageParam: GetNextPageParamFunction = lastPage => {

@@ -6,12 +6,12 @@ import { View } from 'react-native'
 import { Card, useTheme } from 'react-native-paper'
 import { SharedElement } from 'react-navigation-shared-element'
 
-interface IThumbnailProps {
+interface IThumbnailProps extends Partial<IHaveChildren> {
   index: number
   item: Manga.Type
 }
 
-export default function Thumbnail({ index, item }: IThumbnailProps) {
+export default function Thumbnail({ index, item, children }: IThumbnailProps) {
   const { id, attributes, relationships } = item
   const { title, tags } = attributes
   const navigation = useNavigation<IRootBottomTabsScreenProps<'Home'>>()
@@ -27,9 +27,7 @@ export default function Thumbnail({ index, item }: IThumbnailProps) {
         flexDirection: 'row',
         alignItems: 'flex-start'
       }}
-      onPress={() =>
-        navigation.navigate('Chapter List', { id: id, manga: item })
-      }
+      onPress={() => navigation.navigate('Chapter List', { id, manga: item })}
     >
       <SharedElement id={`${id}.cover`}>
         <Card.Cover
@@ -57,6 +55,7 @@ export default function Thumbnail({ index, item }: IThumbnailProps) {
           <Tags tags={tags} includeTags={['theme', 'genre']} />
         </Card.Content>
       </View>
+      {children}
     </Card>
   )
 }
@@ -71,7 +70,10 @@ export function ThumbnailSkeleton() {
         flex: 1,
         margin: 8
       }}
-      children={[null]}
-    />
+    >
+      {
+        //
+      }
+    </Card>
   )
 }
