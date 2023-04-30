@@ -1,3 +1,3 @@
-import Home from './Home'
+import MangaList from './MangaList'
 
-export default { Home }
+export default { Home: MangaList }

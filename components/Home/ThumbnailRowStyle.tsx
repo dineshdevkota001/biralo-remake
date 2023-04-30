@@ -1,6 +1,6 @@
 import { Tags } from '@components/Tag'
 import useCoverArt from '@hooks/useCoverArt'
-import { TagGroupEnum } from '@interfaces/mangadex'
+import { TagGroupEnum } from '@interfaces/enum'
 import { useNavigation } from '@react-navigation/native'
 import { getTitle } from '@utils/getLocalizedString'
 import { View } from 'react-native'

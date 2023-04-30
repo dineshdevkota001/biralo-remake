@@ -1,4 +1,4 @@
-import { TagGroupEnum } from '@interfaces/mangadex'
+import { TagGroupEnum } from '@interfaces/enum'
 import { getTitle } from '@utils/getLocalizedString'
 import { capitalize, groupBy } from 'lodash'
 import { View } from 'react-native'

@@ -2,10 +2,19 @@ import {
   GetNextPageParamFunction,
   QueryFunctionContext
 } from '@tanstack/react-query'
-import axios from 'utils/axios'
+import axios from '@utils/axios'
 
-export async function queryFn({ queryKey, pageParam }: QueryFunctionContext) {
+export function wrapError<T>(callback: () => T) {
   try {
+    return callback()
+  } catch (e) {
+    console.warn((e as Error)?.message)
+  }
+  return null
+}
+
+export function generalQueryFn({ queryKey, pageParam }: QueryFunctionContext) {
+  return wrapError(async () => {
     const [location, params] = queryKey as [string, any]
     const res = await axios.get(location as string, {
       params: {
@@ -15,13 +24,10 @@ export async function queryFn({ queryKey, pageParam }: QueryFunctionContext) {
     })
 
     return res.data
-  } catch (e) {
-    console.log(e)
-  }
-  return {}
+  })
 }
 
-export const getNextPageParam: GetNextPageParamFunction = lastPage => {
+export const generalNextPageParam: GetNextPageParamFunction = lastPage => {
   return (
     (lastPage as { offset: number })?.offset ??
     0 + ((lastPage as { limit?: number })?.limit ?? 10)

@@ -1,6 +1,6 @@
 import Icon from '@components/Core/Icon'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { TypeEnum } from '@interfaces/mangadex'
+import { TypeEnum } from '@interfaces/enum'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { getTitle } from '@utils/getLocalizedString'
 import getRelationOfType from '@utils/getRelationshipOfType'

@@ -1,8 +1,5 @@
 import { QualityEnum } from '@interfaces/enum'
-import {
-  CoverQualityEnum,
-  LocalizationLanguageEnum
-} from '@interfaces/mangadex'
+import { CoverQualityEnum, LocalizationLanguageEnum } from '@interfaces/enum'
 import {
   createContext,
   useCallback,
@@ -16,6 +13,7 @@ interface IConfigContext {
   quality: QualityEnum
   language: LocalizationLanguageEnum
   coverQuality: CoverQualityEnum
+  pageSize: number
 }
 
 interface IConfigurationContext {
@@ -30,7 +28,8 @@ export const ConfigurationContext = createContext<IConfigurationContext>({
   config: {
     quality: QualityEnum.DATA_SAVER,
     language: LocalizationLanguageEnum.EN,
-    coverQuality: CoverQualityEnum.LOW
+    coverQuality: CoverQualityEnum.LOW,
+    pageSize: 10
   },
   setConfig: () => undefined
 })
@@ -75,7 +74,8 @@ export function ConfigurationProvider({
           config: {
             quality: (config?.quality as QualityEnum) ?? QualityEnum.DATA_SAVER,
             language: LocalizationLanguageEnum.EN,
-            coverQuality: CoverQualityEnum.LOW
+            coverQuality: CoverQualityEnum.LOW,
+            pageSize: 10
           },
           setConfig
         }),

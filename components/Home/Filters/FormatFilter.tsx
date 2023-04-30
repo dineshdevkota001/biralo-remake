@@ -1,7 +1,4 @@
-import {
-  PublicationDemographicEnum,
-  ContentRatingEnum
-} from '@interfaces/mangadex'
+import { PublicationDemographicEnum, ContentRatingEnum } from '@interfaces/enum'
 import { capitalize } from 'lodash'
 import { Controller, useFormContext } from 'react-hook-form'
 import { FilterChip, Section, formArrayHelpers } from './commmon'

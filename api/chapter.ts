@@ -1,18 +1,18 @@
-import { MANGA } from '@constants/api/routes'
-import { TypeEnum } from '@interfaces/mangadex'
+import { CHAPTER, MANGA } from '@constants/api/routes'
+import { TypeEnum } from '@interfaces/enum'
 import { QueryFunctionContext } from '@tanstack/react-query'
 import axios from '@utils/axios'
 import getRelationOfType from '@utils/getRelationshipOfType'
 import { AxiosResponse } from 'axios'
 
-export default async function latestChapters({
+export default async function chapters({
   queryKey,
   pageParam
-}: QueryFunctionContext) {
+}: QueryFunctionContext<[string, IChapterRequest]>) {
   try {
-    const [location, params] = queryKey as [string, IChapterRequest]
+    const [, params] = queryKey
     const res = await axios.get<unknown, AxiosResponse<IChapterCollection>>(
-      location as string,
+      CHAPTER,
       {
         params: {
           offset: pageParam ?? 0,

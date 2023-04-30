@@ -6,7 +6,7 @@ import {
 } from '@react-navigation/native'
 import { StackHeaderProps } from '@react-navigation/stack'
 import Gallery from '@screens/Common/Gallery'
-import ChapterList from '@screens/Home/MangaDetails'
+import ChapterList from '@screens/Manga/MangaFeed'
 import { getTitle } from '@utils/getLocalizedString'
 import { useColorScheme, StatusBar } from 'react-native'
 import { adaptNavigationTheme, useTheme, Appbar } from 'react-native-paper'

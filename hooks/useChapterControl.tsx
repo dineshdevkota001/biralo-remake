@@ -1,4 +1,4 @@
-import { queryFn } from '@api/manga'
+import { generalQueryFn } from '@api/common'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { flatten } from 'lodash'
@@ -31,7 +31,7 @@ export default function useChapterControls() {
       result: Response.Result
       volumes: Record<string, IVolume>
     }
-  >([`/manga/${mangaId}/aggregate`, { groups: [] }], queryFn)
+  >([`/manga/${mangaId}/aggregate`, { groups: [] }], generalQueryFn)
 
   const { nextChapter, previousChapter, currentChapter } = useMemo(() => {
     if (!chapters) return {}

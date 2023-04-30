@@ -11,7 +11,7 @@ export default function Profile() {
   const { colors } = useTheme()
   const discovery = useAutoDiscovery(AUTH_REALM)
 
-  const [_, __, prompt] = useAuthRequest(
+  const [, , prompt] = useAuthRequest(
     {
       clientId: OAUTH_CLIENT_ID,
       redirectUri: makeRedirectUri(),

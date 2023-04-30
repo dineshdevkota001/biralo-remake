@@ -1,4 +1,4 @@
-import { queryFn } from '@api/manga'
+import { generalQueryFn } from '@api/common'
 import { MANGA_TAGS } from '@constants/api/routes'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize, groupBy } from 'lodash'
@@ -10,7 +10,7 @@ import { FilterChip, Section, formArrayHelpers } from './commmon'
 export default function TagsFilter() {
   const { data } = useQuery<[string], IResponseError, ITagCollection>(
     [MANGA_TAGS],
-    queryFn
+    generalQueryFn
   )
   const { colors } = useTheme()
   const { control } = useFormContext<IMangaRequest>()

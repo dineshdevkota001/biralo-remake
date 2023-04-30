@@ -1,4 +1,4 @@
-import { queryFn } from '@api/manga'
+import { generalQueryFn } from '@api/common'
 import Icon from '@components/Core/Icon'
 import { MANGA_STATISTICS } from '@constants/api/routes'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
@@ -167,7 +167,7 @@ export default function MangaStatistics() {
   const mangaId = params.manga.id
   const { data } = useQuery<QueryKey, IResponseError, IMangaStatsResponse>(
     [MANGA_STATISTICS(mangaId)],
-    queryFn
+    generalQueryFn
   )
 
   return <DisplayMangaStatistics {...data?.statistics?.[mangaId]} />

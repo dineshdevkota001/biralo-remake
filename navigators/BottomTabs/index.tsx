@@ -1,5 +1,5 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import Home from '@screens/Home/Home'
+import MangaList from '@screens/Manga/MangaList'
 import Mangalist from '@screens/Home/Latest'
 
 const Tab = createMaterialBottomTabNavigator<IRootBottomTabsParams>()
@@ -9,7 +9,7 @@ export default function BottomTabs() {
     <Tab.Navigator>
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={MangaList}
         options={{
           tabBarIcon: 'home'
         }}

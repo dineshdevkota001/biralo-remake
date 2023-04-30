@@ -3,17 +3,14 @@ import MangaFilter from '@components/Home/Filters'
 import Thumbnail, {
   ThumbnailSkeleton
 } from '@components/Home/ThumbnailRowStyle'
-import { MANGA } from '@constants/api/routes'
-import { useInfiniteQuery } from '@tanstack/react-query'
-import getFlattenedList from '@utils/getFlattenedList'
-import { getNextPageParam, queryFn } from 'api'
 import { identity, pickBy } from 'lodash'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { FlatList } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import useManga from '@hooks/api/manga'
 
-export default function Home() {
+export default function MangaList() {
   const form = useForm<IMangaRequest>({
     defaultValues: {}
   })
@@ -22,19 +19,17 @@ export default function Home() {
     identity
   )
 
-  const { data, isLoading, isRefetching, refetch, fetchNextPage } =
-    useInfiniteQuery<[string, IMangaRequest], IResponseError, IMangaCollection>(
-      [MANGA, { limit: 10, includes: ['cover_art'], ...variables }],
-      queryFn,
-      {
-        getNextPageParam
-      }
-    )
-
-  const mangas = getFlattenedList(data)
-  const noOfMangas = mangas?.length
-  const total = data?.pages?.[0]?.total
-  const hasMore = noOfMangas < (total ?? 0)
+  const {
+    data: mangas,
+    pageInfo,
+    isLoading,
+    isRefetching,
+    refetch,
+    fetchNextPage
+  } = useManga({
+    variables
+  })
+  const { hasNextPage } = pageInfo
 
   return (
     <FormProvider {...form}>
@@ -50,13 +45,13 @@ export default function Home() {
           keyExtractor={item => item?.id ?? ''}
           onEndReachedThreshold={0.8}
           ListFooterComponent={
-            hasMore || isLoading ? (
+            hasNextPage || isLoading ? (
               <Duplicate Component={ThumbnailSkeleton} />
             ) : null
           }
           stickyHeaderIndices={[0]}
           ListHeaderComponent={<MangaFilter />}
-          onEndReached={() => (hasMore ? fetchNextPage : null)}
+          onEndReached={() => (hasNextPage ? fetchNextPage : null)}
         />
       </SafeAreaView>
     </FormProvider>

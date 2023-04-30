@@ -1,4 +1,4 @@
-import { queryFn } from '@api/manga'
+import { generalQueryFn } from '@api/common'
 import {
   UseQueryOptions,
   useQuery as useReactQuery
@@ -21,7 +21,7 @@ export default function useQuery<
 }) {
   return useReactQuery<ResponseType, ErrorType, unknown, [string, RequestType]>(
     [route, variables],
-    queryFn,
+    generalQueryFn,
     options
   )
 }
