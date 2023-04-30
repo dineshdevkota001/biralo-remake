@@ -154,7 +154,7 @@ declare global {
     volume?: string
     chapter?: string
     pages?: number
-    translatedLanguage?: string
+    translatedLanguage?: LocalizationLanguageEnum
     uploader?: string
     externalUrl?: string
     version?: number

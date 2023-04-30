@@ -6,6 +6,7 @@ import axios from '@utils/axios'
 import getRelationOfType from '@utils/getRelationshipOfType'
 import { AxiosResponse } from 'axios'
 import useConfiguration from '@contexts/ConfigurationContext'
+import { generalNextPageParam } from '@api/common'
 
 async function chapters({
   queryKey,
@@ -74,12 +75,7 @@ export default function useChapters(
 ) {
   const { variables } = props ?? {}
   const queryRes = useInfiniteQuery([CHAPTER, variables ?? {}], chapters, {
-    getNextPageParam(lastPage) {
-      return (
-        (lastPage as { offset: number })?.offset ??
-        0 + ((lastPage as { limit?: number })?.limit ?? 30)
-      )
-    }
+    getNextPageParam: generalNextPageParam
   })
 
   const data = getFlattenedList(queryRes?.data)

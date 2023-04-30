@@ -1,8 +1,9 @@
+import Flag from '@components/Common/Flag'
 import Icon from '@components/Core/Icon'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import useChapterThumbnail from '@hooks/components/useChapterThumbnail'
 import { formatDistance } from 'date-fns'
-import { ComponentProps } from 'react'
+import { ComponentProps, useCallback } from 'react'
 import { View } from 'react-native'
 import { Card, Text, useTheme } from 'react-native-paper'
 
@@ -11,9 +12,11 @@ type IconProps = ComponentProps<typeof MaterialCommunityIcons>
 function Detail({
   iconName,
   children,
-  iconColor
+  iconColor,
+  icon
 }: IHaveChildren & {
-  iconName: IconProps['name']
+  iconName?: IconProps['name']
+  icon?: JSX.Element
   iconColor?: IconProps['color']
 }) {
   const { colors } = useTheme()
@@ -27,11 +30,14 @@ function Detail({
         flexDirection: 'row'
       }}
     >
-      <Icon
-        name={iconName}
-        color={iconColor ?? colors.onSurfaceVariant}
-        size={16}
-      />
+      {iconName ? (
+        <Icon
+          name={iconName}
+          color={iconColor ?? colors.onSurfaceVariant}
+          size={16}
+        />
+      ) : null}
+      {icon}
       <Text style={{ color: iconColor ?? colors.onSurface }}> {children}</Text>
     </View>
   )
@@ -52,10 +58,14 @@ export default function ChapterType1Thumbnail({
     scanlationGroup,
     user
   } = useChapterThumbnail({ item })
+  const right = useCallback(
+    () => <Flag isoCode={translatedLanguage} />,
+    [translatedLanguage]
+  )
 
   return (
     <Card style={{ margin: 4 }} onPress={handleGallery}>
-      <Card.Title title={`Ch. ${chapter ?? 0} ${title ?? ''}`} />
+      <Card.Title title={`Ch. ${chapter ?? 0} ${title ?? ''}`} right={right} />
       <Card.Content
         style={{
           flexDirection: 'row',
@@ -77,7 +87,6 @@ export default function ChapterType1Thumbnail({
             {user.username}
           </Detail>
         ) : null}
-        <Detail iconName="translate"> {translatedLanguage}</Detail>
         <Detail iconName="file"> {pages}</Detail>
         {readableAt ? (
           <Detail iconName="calendar">

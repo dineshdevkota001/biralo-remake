@@ -60,6 +60,7 @@ specifiers:
   react-dom: 18.2.0
   react-hook-form: ^7.43.9
   react-native: 0.71.7
+  react-native-country-flag: ^1.1.9
   react-native-gesture-handler: ~2.9.0
   react-native-keychain: ^8.1.1
   react-native-pager-view: 6.1.2
@@ -111,6 +112,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-hook-form: 7.43.9_react@18.2.0
   react-native: 0.71.7_klxfafkpjmb2537xfoky62a7f4
+  react-native-country-flag: 1.1.9
   react-native-gesture-handler: 2.9.0_sen2ivbtrxhzzk6vdoh233h3yi
   react-native-keychain: 8.1.1
   react-native-pager-view: 6.1.2_sen2ivbtrxhzzk6vdoh233h3yi
@@ -10505,6 +10507,10 @@ packages:
     transitivePeerDependencies:
       - '@babel/preset-env'
       - supports-color
+
+  /react-native-country-flag/1.1.9:
+    resolution: {integrity: sha512-oNeNrx7qf04v75uhqUd9JbqHjAFaH8pSGjoXTincqkSPtwgikH5i+qScBXQUDpuH0SwXgsmgMzecphqeR4015w==}
+    dev: false
 
   /react-native-gesture-handler/2.9.0_sen2ivbtrxhzzk6vdoh233h3yi:
     resolution: {integrity: sha512-a0BcH3Qb1tgVqUutc6d3VuWQkI1AM3+fJx8dkxzZs9t06qA27QgURYFoklpabuWpsUTzuKRpxleykp25E8m7tg==}

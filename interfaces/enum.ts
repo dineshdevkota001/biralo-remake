@@ -98,8 +98,23 @@ export enum TagGroupEnum {
 
 export enum LocalizationLanguageEnum {
   EN = 'en',
-  JP_RO = 'jp-RO'
+  JP_RO = 'jp-RO',
+  PT = 'pt',
+  PT_BR = 'pt-br',
+  UK = 'uk',
+  IT = 'it',
+  PL = 'pl',
+  RU = 'ru',
+  FR = 'fr',
+  ZH = 'zh',
+  ZH_HK = 'zh-hk',
+  ES = 'es',
+  ES_LA = 'es-la',
+  JA_RO = 'ja-ro',
+  KO_RO = 'ko-ro',
+  ZH_RO = 'zh-ro'
 }
+
 export enum CoverQualityEnum {
   LOW = 256,
   HIGH = 512

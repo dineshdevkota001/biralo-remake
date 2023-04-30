@@ -28,14 +28,16 @@ export async function generalQueryFn({
 
     return res.data
   } catch (e) {
-    console.warn((e as Error)?.message)
+    console.warn(queryKey[0], (e as Error)?.message)
   }
   return null
 }
 
-export const generalNextPageParam: GetNextPageParamFunction = lastPage => {
-  return (
-    (lastPage as { offset: number })?.offset ??
-    0 + ((lastPage as { limit?: number })?.limit ?? 10)
-  )
+export function generalNextPageParam<
+  T extends {
+    limit?: number
+    offset?: number
+  }
+>(lastPage: Parameters<GetNextPageParamFunction<T>>[0] | null | undefined) {
+  return (lastPage?.offset ?? 0) + (lastPage?.limit ?? 10)
 }

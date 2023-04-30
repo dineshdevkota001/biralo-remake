@@ -6,6 +6,7 @@ import { FlatList } from 'react-native'
 import { useLatestChapters } from '@hooks/api/chapter'
 import ChapterCompactThumbnail from '@components/Chapter/Thumbnail/Compact'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { Text } from 'react-native-paper'
 
 export default function RecentChapters() {
   const {
@@ -22,9 +23,18 @@ export default function RecentChapters() {
         renderItem={({ item }) =>
           item ? (
             <MangaRow1Thumbnail {...item}>
-              {item.chapters?.map(chapter => (
+              {item.chapters?.slice(0, 3).map(chapter => (
                 <ChapterCompactThumbnail key={chapter.id} {...chapter} />
               ))}
+              {item.chapters?.length && item.chapters?.length > 3 ? (
+                <Text
+                  style={{
+                    padding: 4
+                  }}
+                >
+                  + {item.chapters.length - 3} more{' '}
+                </Text>
+              ) : null}
             </MangaRow1Thumbnail>
           ) : null
         }

@@ -6,14 +6,7 @@ const Tab = createMaterialBottomTabNavigator<IRootBottomTabsParams>()
 
 export default function BottomTabs() {
   return (
-    <Tab.Navigator
-      shifting
-      barStyle={
-        {
-          // backgroundColor: 'red'
-        }
-      }
-    >
+    <Tab.Navigator shifting>
       <Tab.Screen
         name="Home"
         component={MangaList}
