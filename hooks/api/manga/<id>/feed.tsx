@@ -1,5 +1,6 @@
 import { generalNextPageParam } from '@api/common'
 import { MANGA_FEED } from '@constants/api/routes'
+import useConfiguration from '@contexts/ConfigurationContext'
 import { OrderEnum, TypeEnum } from '@interfaces/enum'
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query'
 import axios from '@utils/axios'
@@ -20,7 +21,7 @@ export async function mangaFeed({
 
     return res.data
   } catch (e) {
-    console.log((e as Error)?.message)
+    console.log('Manga Chapter list', (e as Error)?.message)
   }
   return null
 }
@@ -32,12 +33,13 @@ export default function useMangaFeed({
   id: string
   variables?: IChapterRequest
 }) {
+  const { config } = useConfiguration()
   const queryRes = useInfiniteQuery(
     [
       MANGA_FEED(id),
       {
         ...variables,
-        limit: 10,
+        limit: 3 * config.pageSize,
         translatedLanguage: ['en'],
         order: {
           volume: OrderEnum.DESC,

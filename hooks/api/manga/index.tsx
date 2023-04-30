@@ -1,5 +1,6 @@
 import { generalNextPageParam } from '@api/common'
 import { MANGA } from '@constants/api/routes'
+import useConfiguration from '@contexts/ConfigurationContext'
 import { TypeEnum } from '@interfaces/enum'
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query'
 import axios from '@utils/axios'
@@ -20,18 +21,20 @@ async function manga({
 
     return res.data
   } catch (e) {
-    console.warn((e as Error)?.message)
+    console.warn('Manga List', (e as Error)?.message)
   }
   return undefined
 }
 
 export default function useManga(props?: { variables: IMangaRequest }) {
   const { variables } = props ?? {}
+  const { config } = useConfiguration()
   const queryRes = useInfiniteQuery(
     [
       MANGA,
       {
         ...variables,
+        limit: config.pageSize,
         includes: [TypeEnum.COVER_ART, ...(variables?.includes ?? [])]
       }
     ],

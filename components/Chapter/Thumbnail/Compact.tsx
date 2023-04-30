@@ -1,5 +1,4 @@
 import useChapterThumbnail from '@hooks/components/useChapterThumbnail'
-import { View } from 'react-native'
 import { Text, TouchableRipple } from 'react-native-paper'
 
 export default function ChapterCompactThumbnail({
@@ -11,7 +10,9 @@ export default function ChapterCompactThumbnail({
   return (
     <TouchableRipple
       style={{
-        flex: 1
+        flex: 1,
+        padding: 4,
+        paddingHorizontal: 8
       }}
       onPress={handleGallery}
     >

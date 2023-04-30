@@ -1,4 +1,3 @@
-import { generalNextPageParam } from '@api/common'
 import getFlattenedList from '@utils/getFlattenedList'
 import { CHAPTER, MANGA } from '@constants/api/routes'
 import { OrderEnum, TypeEnum } from '@interfaces/enum'
@@ -6,6 +5,7 @@ import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query'
 import axios from '@utils/axios'
 import getRelationOfType from '@utils/getRelationshipOfType'
 import { AxiosResponse } from 'axios'
+import useConfiguration from '@contexts/ConfigurationContext'
 
 async function chapters({
   queryKey,
@@ -60,7 +60,7 @@ async function chapters({
       data: mangaWithChapters
     }
   } catch (e) {
-    console.log('latest', e)
+    console.log('chapters or manga', e)
   }
   return null
 }
@@ -97,10 +97,11 @@ export default function useChapters(
 }
 
 export function useLatestChapters(props?: { variables: IChapterRequest }) {
+  const { config } = useConfiguration()
   return useChapters({
     ...props,
     variables: {
-      limit: 30,
+      limit: 3 * config.pageSize,
       order: {
         readableAt: OrderEnum.DESC
       },

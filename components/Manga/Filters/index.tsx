@@ -3,15 +3,18 @@ import useBottomSheetModal from '@hooks/useBottomSheet'
 import { useNavigation } from '@react-navigation/native'
 import { ScrollViewProps } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { Appbar, Searchbar, useTheme } from 'react-native-paper'
+import { Appbar, Searchbar, Text, useTheme } from 'react-native-paper'
 import { TabScreen, Tabs } from 'react-native-paper-tabs'
 import { TabScreenProps } from 'react-native-paper-tabs/lib/typescript/TabScreen'
+import { useCallback, useState } from 'react'
+import { debounce } from 'lodash'
 import {
   useForm,
   useFormContext,
   useWatch,
   FormProvider
 } from 'react-hook-form'
+import useDebouncedInput from '@hooks/useDebouncedInput'
 import AppliedFilters from './AppliedFilters'
 import FormatFilter from './FormatFilter'
 import TagsFilter from './TagsFilter'
@@ -52,7 +55,8 @@ export default function MangaFilter() {
     shouldRenderBackdrop: true
   })
 
-  const { control, reset } = useFormContext<IMangaRequest>()
+  const { control, reset, setValue, getValues } =
+    useFormContext<IMangaRequest>()
   const defaultValues = useWatch({ control })
 
   const onSubmit = (value: IMangaRequest) => {
@@ -63,11 +67,17 @@ export default function MangaFilter() {
     defaultValues
   })
 
+  const { value, setValue: handleChangeText } = useDebouncedInput(v => {
+    setValue('title', v)
+  })
+
   return (
     <Appbar mode="small">
+      <Text>{getValues('title')}</Text>
       <Searchbar
-        value=""
+        value={value}
         icon="face-man"
+        onChangeText={handleChangeText}
         style={{
           margin: 4,
           flex: 1
