@@ -6,7 +6,7 @@ interface IDuplicateProps {
 }
 export default function Duplicate({
   Component,
-  times = 6,
+  times = 2,
   row
 }: IDuplicateProps & { row?: boolean }) {
   return (

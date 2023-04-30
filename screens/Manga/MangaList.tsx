@@ -1,8 +1,8 @@
 import Duplicate from '@components/Core/Duplicate'
-import MangaFilter from '@components/Home/Filters'
-import Thumbnail, {
-  ThumbnailSkeleton
-} from '@components/Home/ThumbnailRowStyle'
+import MangaFilter from '@components/Manga/Filters'
+import MangaRow1Thumbnail, {
+  MangaRow1Skeleton
+} from '@components/Manga/Thumbnails/Row-1'
 import { identity, pickBy } from 'lodash'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { FlatList } from 'react-native'
@@ -34,10 +34,11 @@ export default function MangaList() {
   return (
     <FormProvider {...form}>
       <SafeAreaView edges={['top']}>
+        <MangaFilter />
         <FlatList
           data={mangas}
-          renderItem={props =>
-            props.item ? <Thumbnail {...props} item={props.item} /> : null
+          renderItem={({ item }) =>
+            item ? <MangaRow1Thumbnail {...item} /> : null
           }
           refreshControl={
             <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
@@ -46,11 +47,9 @@ export default function MangaList() {
           onEndReachedThreshold={0.8}
           ListFooterComponent={
             hasNextPage || isLoading ? (
-              <Duplicate Component={ThumbnailSkeleton} />
+              <Duplicate Component={MangaRow1Skeleton} />
             ) : null
           }
-          stickyHeaderIndices={[0]}
-          ListHeaderComponent={<MangaFilter />}
           onEndReached={() => (hasNextPage ? fetchNextPage : null)}
         />
       </SafeAreaView>

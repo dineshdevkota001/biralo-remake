@@ -1,10 +1,11 @@
 import Duplicate from '@components/Core/Duplicate'
-import Thumbnail, {
-  ThumbnailSkeleton
-} from '@components/Home/ThumbnailRowStyle'
+import MangaRow1Thumbnail, {
+  MangaRow1Skeleton
+} from '@components/Manga/Thumbnails/Row-1'
 import { FlatList } from 'react-native'
-import { Text } from 'react-native-paper'
 import { useLatestChapters } from '@hooks/api/chapter'
+import ChapterCompactThumbnail from '@components/Chapter/Thumbnail/Compact'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function RecentChapters() {
   const {
@@ -15,29 +16,32 @@ export default function RecentChapters() {
   } = useLatestChapters()
 
   return (
-    <FlatList
-      data={mangas}
-      renderItem={props =>
-        props.item ? (
-          <Thumbnail {...props} item={props.item}>
-            <Text
-              style={{
-                padding: 4
-              }}
-            >
-              {props.item.chapters.length}
-            </Text>
-          </Thumbnail>
-        ) : null
-      }
-      keyExtractor={item => `${item?.id}${item?.chapters?.[0]?.id}` ?? ''}
-      onEndReachedThreshold={0.8}
-      ListFooterComponent={
-        pageInfo?.hasNextPage || isLoading ? (
-          <Duplicate Component={ThumbnailSkeleton} />
-        ) : null
-      }
-      onEndReached={() => fetchNextPage()}
-    />
+    <SafeAreaView edges={['top']}>
+      <FlatList
+        data={mangas}
+        renderItem={({ item }) =>
+          item ? (
+            <MangaRow1Thumbnail {...item}>
+              {item.chapters?.map(chapter => (
+                <ChapterCompactThumbnail key={chapter.id} {...chapter} />
+              ))}
+            </MangaRow1Thumbnail>
+          ) : null
+        }
+        keyExtractor={(item, index) =>
+          `${item?.id}${item?.chapters?.[0]?.id}${index}` || ''
+        }
+        onEndReachedThreshold={0.8}
+        ListFooterComponent={
+          pageInfo?.hasNextPage || isLoading ? (
+            <Duplicate
+              Component={MangaRow1Skeleton}
+              times={isLoading ? 6 : undefined}
+            />
+          ) : null
+        }
+        onEndReached={() => fetchNextPage()}
+      />
+    </SafeAreaView>
   )
 }

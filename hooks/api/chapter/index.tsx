@@ -17,7 +17,7 @@ async function chapters({
       CHAPTER,
       {
         params: {
-          offset: 3 * (pageParam ?? 0),
+          offset: pageParam ?? 0,
           ...(params ?? {})
         }
       }
@@ -60,7 +60,7 @@ async function chapters({
       data: mangaWithChapters
     }
   } catch (e) {
-    console.log(e)
+    console.log('latest', e)
   }
   return null
 }
@@ -74,7 +74,12 @@ export default function useChapters(
 ) {
   const { variables } = props ?? {}
   const queryRes = useInfiniteQuery([CHAPTER, variables ?? {}], chapters, {
-    getNextPageParam: generalNextPageParam
+    getNextPageParam(lastPage) {
+      return (
+        (lastPage as { offset: number })?.offset ??
+        0 + ((lastPage as { limit?: number })?.limit ?? 30)
+      )
+    }
   })
 
   const data = getFlattenedList(queryRes?.data)
@@ -95,6 +100,7 @@ export function useLatestChapters(props?: { variables: IChapterRequest }) {
   return useChapters({
     ...props,
     variables: {
+      limit: 30,
       order: {
         readableAt: OrderEnum.DESC
       },

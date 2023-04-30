@@ -169,6 +169,12 @@ declare global {
     group?: TagGroupEnum
     version?: number
   }
+  interface IScanlationGroupAttributes {
+    name?: string
+  }
+  interface IUserAttributes {
+    name: string
+  }
   // #endregion
   // #region Relations
   type IGeneralRelation<T> = Pick<T, 'id' | 'type' | 'attributes'> & {
@@ -178,7 +184,9 @@ declare global {
     IGeneralRelation<IManga> | IGeneralRelation<ICover>
   >
   type IChapterRelationships = Array<
-    IGeneralRelation<TypeEnum.MANGA, IMangaAttributes>
+    | IGeneralRelation<TypeEnum.MANGA, IMangaAttributes>
+    | IGeneralRelation<TypeEnum.SCANLATION_GROUP, IMangaAttributes>
+    | IGeneralRelation<TypeEnum.USER, IMangaAttributes>
   >
   // #endregion
   // #region Type

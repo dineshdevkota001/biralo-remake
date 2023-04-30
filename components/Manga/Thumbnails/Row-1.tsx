@@ -7,13 +7,13 @@ import { View } from 'react-native'
 import { Card, useTheme } from 'react-native-paper'
 import { SharedElement } from 'react-navigation-shared-element'
 
-interface IThumbnailProps extends Partial<IHaveChildren> {
-  item: IManga
-}
-
-export default function Thumbnail({ item, children }: IThumbnailProps) {
+export default function MangaRow1Thumbnail({
+  children,
+  ...item
+}: IMangaThumbnailProps) {
   const { id, attributes, relationships } = item
-  const { title, tags } = attributes
+  const { title, tags } = attributes ?? {}
+
   const navigation = useNavigation<IRootBottomTabsScreenProps<'Home'>>()
   const { url } = useCoverArt(id, relationships)
 
@@ -22,48 +22,51 @@ export default function Thumbnail({ item, children }: IThumbnailProps) {
       style={{
         margin: 8
       }}
-      contentStyle={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'flex-start'
-      }}
       onPress={() => navigation.navigate('Chapter List', { id, manga: item })}
     >
-      <SharedElement id={`${id}.cover`}>
-        <Card.Cover
-          source={{
-            uri: url
-          }}
-          style={{
-            width: 120
-          }}
-        />
-      </SharedElement>
       <View
         style={{
-          flex: 1,
           display: 'flex',
-          alignSelf: 'flex-start'
+          flexDirection: 'row',
+          alignItems: 'flex-start'
         }}
       >
-        <Card.Title title={getTitle(title)} titleNumberOfLines={2} />
-        <Card.Content
+        <SharedElement id={`${id}.cover`}>
+          <Card.Cover
+            source={{
+              uri: url
+            }}
+            style={{
+              width: 120
+            }}
+          />
+        </SharedElement>
+        <View
           style={{
-            flex: 1
+            flex: 1,
+            display: 'flex',
+            alignSelf: 'flex-start'
           }}
         >
-          <Tags
-            tags={tags}
-            includeTags={[TagGroupEnum.THEME, TagGroupEnum.GENRE]}
-          />
-        </Card.Content>
+          <Card.Title title={getTitle(title)} titleNumberOfLines={2} />
+          <Card.Content
+            style={{
+              flex: 1
+            }}
+          >
+            <Tags
+              tags={tags}
+              includeTags={[TagGroupEnum.THEME, TagGroupEnum.GENRE]}
+            />
+          </Card.Content>
+        </View>
       </View>
       {children}
     </Card>
   )
 }
 
-export function ThumbnailSkeleton() {
+export function MangaRow1Skeleton() {
   const { colors } = useTheme()
   return (
     <Card

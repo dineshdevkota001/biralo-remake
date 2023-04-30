@@ -6,12 +6,13 @@ import { Card, useTheme } from 'react-native-paper'
 import { SharedElement } from 'react-navigation-shared-element'
 import { TagGroupEnum } from '@interfaces/enum'
 
-interface IThumbnailProps {
-  item: IManga
-}
-
-export default function Thumbnail({ item }: IThumbnailProps) {
-  const { id, attributes, relationships } = item
+export default function MangaColumn1Thumbnail({
+  children,
+  id,
+  attributes,
+  relationships,
+  type
+}: IMangaThumbnailProps) {
   const { title, tags } = attributes
   const navigation = useNavigation<IRootBottomTabsScreenProps<'Home'>>()
   const { url } = useCoverArt(id, relationships)
@@ -21,7 +22,12 @@ export default function Thumbnail({ item }: IThumbnailProps) {
       style={{
         margin: 4
       }}
-      onPress={() => navigation.navigate('Chapter List', { id, manga: item })}
+      onPress={() =>
+        navigation.navigate('Chapter List', {
+          id,
+          manga: { id, attributes, relationships, type }
+        })
+      }
     >
       <SharedElement id={`${id}.cover`}>
         <Card.Cover
@@ -36,11 +42,12 @@ export default function Thumbnail({ item }: IThumbnailProps) {
       <Card.Content>
         <Tags tags={tags} hideTitle includeTags={[TagGroupEnum.THEME]} />
       </Card.Content>
+      {children}
     </Card>
   )
 }
 
-export function ThumbnailSkeleton() {
+export function MangaColumn1Skeleton() {
   const { colors } = useTheme()
   return (
     <Card style={{ backgroundColor: colors.surfaceVariant, margin: 8 }}>

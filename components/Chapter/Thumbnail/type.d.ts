@@ -1,0 +1,1 @@
+type IChapterThumbnailProps = IChapter & IHaveChildren

@@ -1,9 +1,6 @@
 import Icon from '@components/Core/Icon'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { TypeEnum } from '@interfaces/enum'
-import { useNavigation, useRoute } from '@react-navigation/native'
-import { getTitle } from '@utils/getLocalizedString'
-import getRelationOfType from '@utils/getRelationshipOfType'
+import useChapterThumbnail from '@hooks/components/useChapterThumbnail'
 import { formatDistance } from 'date-fns'
 import { ComponentProps } from 'react'
 import { View } from 'react-native'
@@ -40,38 +37,25 @@ function Detail({
   )
 }
 
-export default function Thumbnail({ attributes, id, relationships }: IChapter) {
+export default function ChapterType1Thumbnail({
+  children,
+  ...item
+}: IChapterThumbnailProps) {
   const { colors } = useTheme()
-  const { title, chapter, pages, createdAt, translatedLanguage } = attributes
-  const route = useRoute<IRootStackScreenProps<'Chapter List'>['route']>()
-  const navigation =
-    useNavigation<IRootStackScreenProps<'Chapter List'>['navigation']>()
-
-  const { manga } = route.params ?? {}
-
-  const { scanlation_group: scanlationGroup, user } = relationships.reduce(
-    (acc, curr) => {
-      if (curr.type) acc[curr.type] = curr.attributes
-      return acc
-    },
-    Object.create(null)
-  )
+  const {
+    title,
+    chapter,
+    pages,
+    readableAt,
+    translatedLanguage,
+    handleGallery,
+    scanlationGroup,
+    user
+  } = useChapterThumbnail({ item })
 
   return (
-    <Card
-      style={{ margin: 4 }}
-      onPress={() =>
-        navigation.navigate('Gallery', {
-          chapterId: id,
-          mangaId:
-            (getRelationOfType(relationships, TypeEnum.MANGA) as IManga)?.id ??
-            ''
-        })
-      }
-    >
-      <Card.Title
-        title={`Ch. ${chapter} ${title ?? getTitle(manga.attributes.title)}`}
-      />
+    <Card style={{ margin: 4 }} onPress={handleGallery}>
+      <Card.Title title={`Ch. ${chapter ?? 0} ${title ?? ''}`} />
       <Card.Content
         style={{
           flexDirection: 'row',
@@ -95,19 +79,20 @@ export default function Thumbnail({ attributes, id, relationships }: IChapter) {
         ) : null}
         <Detail iconName="translate"> {translatedLanguage}</Detail>
         <Detail iconName="file"> {pages}</Detail>
-        {createdAt ? (
+        {readableAt ? (
           <Detail iconName="calendar">
-            {formatDistance(new Date(createdAt), new Date(), {
+            {formatDistance(new Date(readableAt), new Date(), {
               addSuffix: true
             })}
           </Detail>
         ) : null}
       </Card.Content>
+      {children}
     </Card>
   )
 }
 
-export function ThumbnailSkeleton() {
+export function ChapterType1Skeleton() {
   return (
     <Card style={{ marginBottom: 8, height: 148, width: '100%' }}>
       <Card.Content>{null}</Card.Content>

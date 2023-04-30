@@ -1,5 +1,5 @@
 type IHaveChildren = {
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 type QueryKey<T = undefined> = [string, T]

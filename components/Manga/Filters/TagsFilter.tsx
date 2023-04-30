@@ -57,6 +57,7 @@ export default function TagsFilter() {
       </View>
       {formatFilters?.map(({ title, values }) => (
         <Controller
+          key={title}
           control={control}
           name="includedTags"
           render={({ field: { value: include, onChange: changeIncluded } }) => (
@@ -71,12 +72,20 @@ export default function TagsFilter() {
                     const {
                       isPresent: included,
                       getToggledArray: toggleInclude
-                    } = formArrayHelpers(include, tag, id => id === tag.id)
+                    } = formArrayHelpers(
+                      include ?? [],
+                      tag,
+                      id => id === tag.id
+                    )
 
                     const {
                       isPresent: excluded,
                       getToggledArray: toggleExcluded
-                    } = formArrayHelpers(exclude, tag, id => id === tag.id)
+                    } = formArrayHelpers(
+                      exclude ?? [],
+                      tag,
+                      id => id === tag.id
+                    )
 
                     let icon: 'plus' | 'minus' | undefined
 

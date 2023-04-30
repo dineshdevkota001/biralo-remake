@@ -1,5 +1,7 @@
 import MangaHeader from '@components/Chapter/MangaHeader'
-import Thumbnail, { ThumbnailSkeleton } from '@components/Chapter/Thumbnail'
+import ChapterType1Thumbnail, {
+  ChapterType1Skeleton
+} from '@components/Chapter/Thumbnail/Type-1'
 import Duplicate from '@components/Core/Duplicate'
 import { groupBy } from 'lodash'
 import { SectionList } from 'react-native'
@@ -52,7 +54,9 @@ export default function ChapterList({
           </Text>
         </Surface>
       )}
-      renderItem={({ item }) => (item ? <Thumbnail {...item} /> : null)}
+      renderItem={({ item }) =>
+        item ? <ChapterType1Thumbnail {...item} /> : null
+      }
       refreshControl={
         <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
       }
@@ -60,7 +64,7 @@ export default function ChapterList({
       onEndReachedThreshold={0.8}
       ListFooterComponent={
         hasNextPage || isLoading ? (
-          <Duplicate Component={ThumbnailSkeleton} times={4} />
+          <Duplicate Component={ChapterType1Skeleton} />
         ) : null
       }
       onEndReached={() => {

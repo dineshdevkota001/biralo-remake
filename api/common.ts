@@ -13,8 +13,11 @@ export function wrapError<T>(callback: () => T) {
   return null
 }
 
-export function generalQueryFn({ queryKey, pageParam }: QueryFunctionContext) {
-  return wrapError(async () => {
+export async function generalQueryFn({
+  queryKey,
+  pageParam
+}: QueryFunctionContext) {
+  try {
     const [location, params] = queryKey as [string, any]
     const res = await axios.get(location as string, {
       params: {
@@ -24,7 +27,10 @@ export function generalQueryFn({ queryKey, pageParam }: QueryFunctionContext) {
     })
 
     return res.data
-  })
+  } catch (e) {
+    console.warn((e as Error)?.message)
+  }
+  return null
 }
 
 export const generalNextPageParam: GetNextPageParamFunction = lastPage => {
