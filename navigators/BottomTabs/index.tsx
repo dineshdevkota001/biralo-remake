@@ -1,78 +1,24 @@
-import Icon from '@components/Core/Icon'
-import {
-  BottomTabHeaderProps,
-  createBottomTabNavigator
-} from '@react-navigation/bottom-tabs'
-import { getHeaderTitle } from '@react-navigation/elements'
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import Home from '@screens/Home/Home'
 import Mangalist from '@screens/Home/Latest'
-import { Appbar, useTheme } from 'react-native-paper'
 
-function TabBarIcon({
-  focused,
-  ...props
-}: {
-  name: React.ComponentProps<typeof Icon>['name']
-  color: string
-  focused?: boolean
-}) {
-  const { colors } = useTheme()
-  return (
-    <Icon
-      selectable
-      size={24}
-      style={[
-        { marginBottom: -3 },
-        focused
-          ? {
-              backgroundColor: colors.primaryContainer,
-              paddingHorizontal: 12,
-              paddingVertical: 4,
-              borderRadius: 14,
-              overflow: 'hidden'
-            }
-          : {}
-      ]}
-      {...props}
-    />
-  )
-}
-
-export function MaterialYouHeader({ options, route }: BottomTabHeaderProps) {
-  const title = getHeaderTitle(options, route.name)
-  return (
-    <Appbar.Header>
-      <Appbar.Content title={title} />
-    </Appbar.Header>
-  )
-}
-
-const Tab = createBottomTabNavigator<IRootBottomTabsParams>()
+const Tab = createMaterialBottomTabNavigator<IRootBottomTabsParams>()
 
 export default function BottomTabs() {
   return (
-    <Tab.Navigator
-      screenOptions={{
-        header: MaterialYouHeader
-      }}
-    >
+    <Tab.Navigator>
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
-          headerShown: false,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon focused={focused} name="home" color={color} />
-          )
+          tabBarIcon: 'home'
         }}
       />
       <Tab.Screen
         name="Latest"
         component={Mangalist}
         options={{
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon focused={focused} name="flash" color={color} />
-          )
+          tabBarIcon: 'flash'
         }}
       />
     </Tab.Navigator>

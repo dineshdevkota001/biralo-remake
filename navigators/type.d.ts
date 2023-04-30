@@ -8,7 +8,7 @@ declare global {
     Gallery: { chapterId: string; quality?: QualityEnum; mangaId: string }
     'Chapter List': {
       id: string
-      manga: Manga.Type
+      manga: IManga
     }
     Profile: undefined
   }

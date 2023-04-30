@@ -8,7 +8,7 @@ import {
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types'
 import { RefObject, useMemo, useRef } from 'react'
 import { ViewProps } from 'react-native'
-import { Text, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 function Footer(props: BottomSheetFooterProps) {
@@ -42,7 +42,7 @@ export default function useBottomSheetModal(props?: {
   const handleOpen = () => ref.current?.present()
   const handleClose = () => ref.current?.dismiss()
 
-  const snapPoints = useMemo(() => [bottom + 20, '70%'], [])
+  const snapPoints = useMemo(() => [bottom + 20, '70%'], [bottom])
 
   return [
     {
@@ -71,8 +71,11 @@ export default function useBottomSheetModal(props?: {
         backgroundColor: colors.onSurface
       },
       backdropComponent: shouldRenderBackdrop
-        ? props => (
-            <BottomSheetBackdrop {...props} animatedIndex={{ value: 1 }} />
+        ? backdropProps => (
+            <BottomSheetBackdrop
+              {...backdropProps}
+              animatedIndex={{ value: 1 }}
+            />
           )
         : null,
       footerComponent: Footer

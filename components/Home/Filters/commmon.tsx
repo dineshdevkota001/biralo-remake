@@ -1,46 +1,61 @@
 import { View } from 'react-native'
 import { Chip, ChipProps, Text, useTheme } from 'react-native-paper'
 
-export function FilterChip(props: ChipProps & { icon?: 'plus' | 'minus' }) {
+export function FilterChip({
+  icon,
+  style,
+  textStyle,
+  ...props
+}: ChipProps & { icon?: 'plus' | 'minus' }) {
   const { colors } = useTheme()
-  if (props.icon === 'plus')
+  if (icon === 'plus')
     return (
       <Chip
         {...props}
+        icon={icon}
         style={[
           {
             backgroundColor: colors.primaryContainer
           },
-          props.style
+          style
         ]}
         textStyle={[
           {
             color: colors.onPrimaryContainer
           },
-          props.textStyle
+          textStyle
         ]}
       />
     )
 
-  if (props.icon === 'minus')
+  if (icon === 'minus')
     return (
       <Chip
         {...props}
+        icon={icon}
         style={[
           {
             backgroundColor: colors.errorContainer
           },
-          props.style
+          style
         ]}
         textStyle={[
           {
             color: colors.onErrorContainer
           },
-          props.textStyle
+          textStyle
         ]}
       />
     )
-  return <Chip mode={props.selected ? 'flat' : 'outlined'} {...props} />
+  return (
+    <Chip
+      mode={props.selected ? 'flat' : 'outlined'}
+      {...props}
+      icon={icon}
+      textStyle={textStyle}
+      style={style}
+    />
+  )
 }
 
 export function Section({
@@ -78,7 +93,6 @@ export function formArrayHelpers(
   someFunction = (x: string) => x === (typeof tag === 'string' ? tag : tag.id)
 ) {
   const isPresent = arr?.some(someFunction)
-  if (isPresent) console.log(arr, isPresent, tag)
 
   const getInsertedArray = () => {
     if (isPresent) return arr

@@ -21,8 +21,8 @@ export default function TextInput2({
   value,
   ...props
 }: TextInputProps & {
-  control: Control<any>
-  name: Path<any>
+  control: Control<FieldValues>
+  name: Path<FieldValues>
   renderProps?: (
     x: Parameters<ComponentProps<typeof Controller>['render']>[0]
   ) => TextInputProps
@@ -33,7 +33,7 @@ export default function TextInput2({
       name={name}
       render={renderProp => {
         const {
-          field: { onChange, name, onBlur: onFieldBlur, value: fieldVlaue },
+          field: { onChange, onBlur: onFieldBlur, value: fieldVlaue },
           fieldState: { error: fieldError, isTouched },
           formState: { isSubmitting, isValidating }
         } = renderProp

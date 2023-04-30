@@ -1,20 +1,18 @@
-import BottomTabs from './BottomTabs'
 import { getHeaderTitle } from '@react-navigation/elements'
-import { NavigationContainer } from '@react-navigation/native'
 import {
   DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme
+  DefaultTheme as NavigationDefaultTheme,
+  NavigationContainer
 } from '@react-navigation/native'
 import { StackHeaderProps } from '@react-navigation/stack'
 import Gallery from '@screens/Common/Gallery'
 import ChapterList from '@screens/Home/MangaDetails'
 import { getTitle } from '@utils/getLocalizedString'
-import { StatusBar } from 'react-native'
-import { useColorScheme } from 'react-native'
-import { adaptNavigationTheme, useTheme } from 'react-native-paper'
-import { Appbar } from 'react-native-paper'
+import { useColorScheme, StatusBar } from 'react-native'
+import { adaptNavigationTheme, useTheme, Appbar } from 'react-native-paper'
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element'
-import Login from '@screens/Auth/index.local'
+import { Profile } from '@screens/Profile'
+import BottomTabs from './BottomTabs'
 
 export function MaterialYouHeader({
   options,
@@ -67,9 +65,9 @@ function RootNavigation() {
       />
       <Stack.Screen
         name="Profile"
-        component={Login}
+        component={Profile}
         options={{
-          headerTitle: 'Mangadex Login'
+          headerTitle: 'Settings'
         }}
       />
     </Stack.Navigator>

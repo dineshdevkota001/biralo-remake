@@ -1,4 +1,3 @@
-import MangaStatistics from './MangaStatistics'
 import { Tags } from '@components/Tag'
 import useCoverArt from '@hooks/useCoverArt'
 import { useRoute } from '@react-navigation/native'
@@ -6,6 +5,7 @@ import { getString, getTitle } from '@utils/getLocalizedString'
 import { View } from 'react-native'
 import { Card, Surface, Text } from 'react-native-paper'
 import { SharedElement } from 'react-navigation-shared-element'
+import MangaStatistics from './MangaStatistics'
 
 export default function MangaHeader() {
   const {

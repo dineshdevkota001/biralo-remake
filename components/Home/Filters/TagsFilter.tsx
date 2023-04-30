@@ -1,21 +1,19 @@
-import { FilterChip, Section, formArrayHelpers } from './commmon'
 import { queryFn } from '@api/manga'
 import { MANGA_TAGS } from '@constants/api/routes'
-import useVariables from '@contexts/VariableContext'
-import { TagMode } from '@interfaces/dex/enum'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize, groupBy } from 'lodash'
-import { Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import { View } from 'react-native'
-import { Chip, Switch, Text, useTheme } from 'react-native-paper'
+import { Switch, Text, useTheme } from 'react-native-paper'
+import { FilterChip, Section, formArrayHelpers } from './commmon'
 
 export default function TagsFilter() {
-  const { data } = useQuery<[string], Response.ErrorResponse, Tag.ListResponse>(
+  const { data } = useQuery<[string], IResponseError, ITagCollection>(
     [MANGA_TAGS],
     queryFn
   )
   const { colors } = useTheme()
-  const { control } = useVariables()
+  const { control } = useFormContext<IMangaRequest>()
 
   if (!data) return null
 
@@ -41,7 +39,7 @@ export default function TagsFilter() {
         <Text variant="labelLarge" style={{ color: colors.onSurfaceVariant }}>
           Include only if all + tags match
         </Text>
-        <Switch value={true} />
+        <Switch value />
       </View>
       <View
         style={{
@@ -55,16 +53,16 @@ export default function TagsFilter() {
         <Text variant="labelLarge" style={{ color: colors.onSurfaceVariant }}>
           Exclude only if all + tags match
         </Text>
-        <Switch value={true} />
+        <Switch value />
       </View>
       {formatFilters?.map(({ title, values }) => (
         <Controller
           control={control}
-          name="includeTags"
+          name="includedTags"
           render={({ field: { value: include, onChange: changeIncluded } }) => (
             <Controller
               control={control}
-              name="excludeTags"
+              name="excludedTags"
               render={({
                 field: { value: exclude, onChange: changeExcluded }
               }) => (
@@ -90,12 +88,10 @@ export default function TagsFilter() {
                         icon={icon}
                         onPress={() => {
                           if (!excluded) {
-                            console.log('changing included')
                             changeIncluded(toggleInclude())
                           }
                           if (included || excluded) {
                             changeExcluded(toggleExcluded())
-                            console.log('changing excluded')
                           }
                         }}
                       >

@@ -1,6 +1,3 @@
-import AppliedFilters from './AppliedFilters'
-import FormatFilter from './FormatFilter'
-import TagsFilter from './TagsFilter'
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
 import useBottomSheetModal from '@hooks/useBottomSheet'
 import { useNavigation } from '@react-navigation/native'
@@ -9,6 +6,9 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { Searchbar, useTheme } from 'react-native-paper'
 import { TabScreen, Tabs } from 'react-native-paper-tabs'
 import { TabScreenProps } from 'react-native-paper-tabs/lib/typescript/TabScreen'
+import AppliedFilters from './AppliedFilters'
+import FormatFilter from './FormatFilter'
+import TagsFilter from './TagsFilter'
 
 function FilterTab({
   label,
@@ -30,15 +30,18 @@ function FilterTab({
           style
         ]}
         contentContainerStyle={contentContainerStyle}
-        children={children}
-      />
+      >
+        {children}
+      </ScrollView>
     </TabScreen>
   )
 }
 
 export default function MangaFilter() {
   const { colors } = useTheme()
-  const navigation = useNavigation()
+  const { navigate } =
+    useNavigation<IRootBottomTabsScreenProps<'Home'>['navigation']>()
+
   const [props, { handleOpen }] = useBottomSheetModal({
     shouldRenderBackdrop: true
   })
@@ -49,9 +52,7 @@ export default function MangaFilter() {
         value=""
         icon="face-man"
         traileringIcon="filter-variant"
-        onIconPress={() => {
-          navigation.navigate('Profile')
-        }}
+        onIconPress={() => navigate('Profile')}
         onTraileringIconPress={handleOpen}
       />
       <BottomSheetModal {...props} snapPoints={['70%']}>

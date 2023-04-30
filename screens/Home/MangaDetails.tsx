@@ -6,7 +6,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import getFlattenedList from '@utils/getFlattenedList'
 import { getNextPageParam, queryFn } from 'api'
 import { groupBy } from 'lodash'
-import { SectionList, View } from 'react-native'
+import { SectionList } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
 import { Surface, Text } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -18,9 +18,9 @@ export default function ChapterList({
   const { bottom } = useSafeAreaInsets()
   const { data, isRefetching, isLoading, refetch, fetchNextPage } =
     useInfiniteQuery<
-      QueryKey<Chapter.Request>,
-      Response.ErrorResponse,
-      Chapter.ListResponse
+      QueryKey<IChapterRequest>,
+      IResponseError,
+      IChapterCollection
     >(
       [
         MANGA_FEED(mangaId),
@@ -32,7 +32,7 @@ export default function ChapterList({
             chapter: 'desc'
           },
           includes: ['scanlation_group', 'user']
-        } as Chapter.Request
+        } as IChapterRequest
       ],
       queryFn,
       {
@@ -79,11 +79,11 @@ export default function ChapterList({
           </Text>
         </Surface>
       )}
-      renderItem={({ item }) => <Thumbnail {...item} />}
+      renderItem={({ item }) => (item ? <Thumbnail {...item} /> : null)}
       refreshControl={
         <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
       }
-      keyExtractor={item => item.id}
+      keyExtractor={item => item?.id ?? ''}
       onEndReachedThreshold={0.8}
       ListFooterComponent={
         (totalChapters && noOfChapters && noOfChapters < totalChapters) ||

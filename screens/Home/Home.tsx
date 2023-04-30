@@ -4,38 +4,32 @@ import Thumbnail, {
   ThumbnailSkeleton
 } from '@components/Home/ThumbnailRowStyle'
 import { MANGA } from '@constants/api/routes'
-import useVariables, { useVariable } from '@contexts/VariableContext'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import getFlattenedList from '@utils/getFlattenedList'
 import { getNextPageParam, queryFn } from 'api'
 import { identity, pickBy } from 'lodash'
-import {
-  FormProvider,
-  useForm,
-  useFormContext,
-  useWatch
-} from 'react-hook-form'
+import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { FlatList } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Home() {
-  const form = useForm<Manga.Request>({
+  const form = useForm<IMangaRequest>({
     defaultValues: {}
   })
-  const variables = pickBy<Manga.Request>(
+  const variables = pickBy<IMangaRequest>(
     useWatch({ control: form.control }),
     identity
   )
 
   const { data, isLoading, isRefetching, refetch, fetchNextPage } =
-    useInfiniteQuery<
-      [string, Manga.Request],
-      Response.ErrorResponse,
-      Manga.ListResponse
-    >([MANGA, { limit: 10, includes: ['cover_art'], ...variables }], queryFn, {
-      getNextPageParam
-    })
+    useInfiniteQuery<[string, IMangaRequest], IResponseError, IMangaCollection>(
+      [MANGA, { limit: 10, includes: ['cover_art'], ...variables }],
+      queryFn,
+      {
+        getNextPageParam
+      }
+    )
 
   const mangas = getFlattenedList(data)
   const noOfMangas = mangas?.length
@@ -47,11 +41,13 @@ export default function Home() {
       <SafeAreaView edges={['top']}>
         <FlatList
           data={mangas}
-          renderItem={props => (props.item ? <Thumbnail {...props} /> : null)}
+          renderItem={props =>
+            props.item ? <Thumbnail {...props} item={props.item} /> : null
+          }
           refreshControl={
             <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
           }
-          keyExtractor={item => item?.id}
+          keyExtractor={item => item?.id ?? ''}
           onEndReachedThreshold={0.8}
           ListFooterComponent={
             hasMore || isLoading ? (

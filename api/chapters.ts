@@ -1,5 +1,5 @@
 import { MANGA } from '@constants/api/routes'
-import { ObjectType } from '@interfaces/dex/enum'
+import { TypeEnum } from '@interfaces/mangadex'
 import { QueryFunctionContext } from '@tanstack/react-query'
 import axios from '@utils/axios'
 import getRelationOfType from '@utils/getRelationshipOfType'
@@ -10,8 +10,8 @@ export default async function latestChapters({
   pageParam
 }: QueryFunctionContext) {
   try {
-    const [location, params] = queryKey as [string, any]
-    const res = await axios.get<unknown, AxiosResponse<Chapter.ListResponse>>(
+    const [location, params] = queryKey as [string, IChapterRequest]
+    const res = await axios.get<unknown, AxiosResponse<IChapterCollection>>(
       location as string,
       {
         params: {
@@ -23,23 +23,25 @@ export default async function latestChapters({
 
     const chapterList = res.data?.data
 
-    const mangaIdToChapters: Record<string, Chapter.Type[]> =
-      chapterList.reduce((acc, curr) => {
-        const mangaId = getRelationOfType(
-          curr.relationships,
-          ObjectType.MANGA
+    const mangaIdToChapters: Record<string, IChapter[]> = chapterList.reduce(
+      (acc, curr) => {
+        const mangaId = (
+          getRelationOfType(
+            curr.relationships,
+            TypeEnum.MANGA
+          ) as IGeneralRelation<IManga>
         )?.id
 
         if (mangaId && acc?.[mangaId]) acc[mangaId].push(curr)
         else if (mangaId) acc[mangaId] = [curr]
         return acc
-      }, Object.create(null))
-
-    // const mangaIdToChapters = groupBy(chapterList, '')
+      },
+      Object.create(null)
+    )
 
     const mangas = await axios.get<
-      Manga.Request,
-      AxiosResponse<Manga.ListResponse>
+      IMangaRequest,
+      AxiosResponse<IMangaCollection>
     >(MANGA, {
       params: {
         ids: Object.keys(mangaIdToChapters),

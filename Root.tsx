@@ -1,4 +1,4 @@
-import { VariableProvider } from '@contexts/VariableContext'
+import { ConfigurationProvider } from '@contexts/ConfigurationContext'
 import { FontAwesome } from '@expo/vector-icons'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme'
@@ -38,7 +38,7 @@ export default function App() {
   )
 
   return (
-    <VariableProvider>
+    <ConfigurationProvider>
       <SafeAreaProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <PaperProvider theme={paperTheme}>
@@ -50,6 +50,6 @@ export default function App() {
           </PaperProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>
-    </VariableProvider>
+    </ConfigurationProvider>
   )
 }

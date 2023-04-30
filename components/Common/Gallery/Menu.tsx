@@ -69,7 +69,7 @@ export default function Menu({ title }: { title: string }) {
 
   const { goPrev, goNext, hasPrev, hasNext } = useChapterControls()
 
-  useEffect(() => handleOpen(), [])
+  useEffect(() => handleOpen(), [handleOpen])
 
   const menuFunctionWrapper = (callback: () => void) => {
     return () => {

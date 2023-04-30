@@ -1,5 +1,6 @@
 import { Tags } from '@components/Tag'
 import useCoverArt from '@hooks/useCoverArt'
+import { TagGroupEnum } from '@interfaces/mangadex'
 import { useNavigation } from '@react-navigation/native'
 import { getTitle } from '@utils/getLocalizedString'
 import { View } from 'react-native'
@@ -7,11 +8,10 @@ import { Card, useTheme } from 'react-native-paper'
 import { SharedElement } from 'react-navigation-shared-element'
 
 interface IThumbnailProps extends Partial<IHaveChildren> {
-  index: number
-  item: Manga.Type
+  item: IManga
 }
 
-export default function Thumbnail({ index, item, children }: IThumbnailProps) {
+export default function Thumbnail({ item, children }: IThumbnailProps) {
   const { id, attributes, relationships } = item
   const { title, tags } = attributes
   const navigation = useNavigation<IRootBottomTabsScreenProps<'Home'>>()
@@ -52,7 +52,10 @@ export default function Thumbnail({ index, item, children }: IThumbnailProps) {
             flex: 1
           }}
         >
-          <Tags tags={tags} includeTags={['theme', 'genre']} />
+          <Tags
+            tags={tags}
+            includeTags={[TagGroupEnum.THEME, TagGroupEnum.GENRE]}
+          />
         </Card.Content>
       </View>
       {children}

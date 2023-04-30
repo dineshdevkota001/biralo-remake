@@ -4,13 +4,13 @@ import { useNavigation } from '@react-navigation/native'
 import { getTitle } from '@utils/getLocalizedString'
 import { Card, useTheme } from 'react-native-paper'
 import { SharedElement } from 'react-navigation-shared-element'
+import { TagGroupEnum } from '@interfaces/mangadex'
 
 interface IThumbnailProps {
-  index: number
-  item: Manga.Type
+  item: IManga
 }
 
-export default function Thumbnail({ index, item }: IThumbnailProps) {
+export default function Thumbnail({ item }: IThumbnailProps) {
   const { id, attributes, relationships } = item
   const { title, tags } = attributes
   const navigation = useNavigation<IRootBottomTabsScreenProps<'Home'>>()
@@ -21,9 +21,7 @@ export default function Thumbnail({ index, item }: IThumbnailProps) {
       style={{
         margin: 4
       }}
-      onPress={() =>
-        navigation.navigate('Chapter List', { id: id, manga: item })
-      }
+      onPress={() => navigation.navigate('Chapter List', { id, manga: item })}
     >
       <SharedElement id={`${id}.cover`}>
         <Card.Cover
@@ -36,7 +34,7 @@ export default function Thumbnail({ index, item }: IThumbnailProps) {
       </SharedElement>
       <Card.Title title={getTitle(title)} />
       <Card.Content>
-        <Tags tags={tags} hideTitle includeTags={['theme']} />
+        <Tags tags={tags} hideTitle includeTags={[TagGroupEnum.THEME]} />
       </Card.Content>
     </Card>
   )
@@ -45,9 +43,10 @@ export default function Thumbnail({ index, item }: IThumbnailProps) {
 export function ThumbnailSkeleton() {
   const { colors } = useTheme()
   return (
-    <Card
-      style={{ backgroundColor: colors.surfaceVariant, margin: 8 }}
-      children={[null]}
-    />
+    <Card style={{ backgroundColor: colors.surfaceVariant, margin: 8 }}>
+      {
+        //
+      }
+    </Card>
   )
 }

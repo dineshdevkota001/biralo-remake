@@ -1,6 +1,6 @@
 import Icon from '@components/Core/Icon'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { ObjectType } from '@interfaces/dex/enum'
+import { TypeEnum } from '@interfaces/mangadex'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { getTitle } from '@utils/getLocalizedString'
 import getRelationOfType from '@utils/getRelationshipOfType'
@@ -40,11 +40,7 @@ function Detail({
   )
 }
 
-export default function Thumbnail({
-  attributes,
-  id,
-  relationships
-}: Chapter.Type) {
+export default function Thumbnail({ attributes, id, relationships }: IChapter) {
   const { colors } = useTheme()
   const { title, chapter, pages, createdAt, translatedLanguage } = attributes
   const route = useRoute<IRootStackScreenProps<'Chapter List'>['route']>()
@@ -67,7 +63,9 @@ export default function Thumbnail({
       onPress={() =>
         navigation.navigate('Gallery', {
           chapterId: id,
-          mangaId: getRelationOfType(relationships, ObjectType.MANGA)?.id ?? ''
+          mangaId:
+            (getRelationOfType(relationships, TypeEnum.MANGA) as IManga)?.id ??
+            ''
         })
       }
     >

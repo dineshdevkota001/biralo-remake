@@ -1,12 +1,13 @@
+import { TagGroupEnum } from '@interfaces/mangadex'
 import { getTitle } from '@utils/getLocalizedString'
 import { capitalize, groupBy } from 'lodash'
 import { View } from 'react-native'
 import { Chip, Text, useTheme } from 'react-native-paper'
 
-export default function Tag({ name, group }: Tag.Attributes) {
+export default function Tag({ name, group }: ITagAttributes) {
   const { colors } = useTheme()
 
-  const groupToColorMap: Record<Tag.Group, string> = {
+  const groupToColorMap: Record<TagGroupEnum, string> = {
     format: colors.primaryContainer,
     content: colors.errorContainer,
     genre: colors.secondaryContainer,
@@ -38,8 +39,8 @@ export function TagGroup({
   tags,
   hideTitle
 }: {
-  group: Tag.Group
-  tags: Tag.Type[]
+  group: TagGroupEnum
+  tags: ITag[]
   hideTitle?: boolean
 }) {
   const { colors } = useTheme()
@@ -71,9 +72,9 @@ export function Tags({
   excludeTags,
   hideTitle
 }: {
-  tags?: Tag.Type[]
-  includeTags?: Tag.Group[]
-  excludeTags?: Tag.Group[]
+  tags?: ITag[]
+  includeTags?: TagGroupEnum[]
+  excludeTags?: TagGroupEnum[]
   hideTitle?: boolean
 }) {
   if (!tags) return null
@@ -82,12 +83,13 @@ export function Tags({
 
   if (!includeTags?.length)
     return (
+      // eslint-disable-next-line react/jsx-no-useless-fragment
       <>
         {Object.keys(tagGroup)?.map(group =>
-          excludeTags?.includes(group as Tag.Group) ? null : (
+          excludeTags?.includes(group as TagGroupEnum) ? null : (
             <TagGroup
               key={group}
-              group={group as Tag.Group}
+              group={group as TagGroupEnum}
               tags={tagGroup?.[group]}
               hideTitle={hideTitle}
             />
@@ -97,12 +99,13 @@ export function Tags({
     )
 
   return (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
       {Object.keys(tagGroup)?.map(group =>
-        includeTags.includes(group as Tag.Group) ? (
+        includeTags.includes(group as TagGroupEnum) ? (
           <TagGroup
             key={group}
-            group={group as Tag.Group}
+            group={group as TagGroupEnum}
             tags={tagGroup?.[group]}
             hideTitle={hideTitle}
           />

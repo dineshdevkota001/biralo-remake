@@ -1,27 +1,29 @@
-import { FilterChip, Section, formArrayHelpers } from './commmon'
-import useVariables from '@contexts/VariableContext'
-import { ContentRating } from '@interfaces/dex/enum'
-import { PublicationDemographic } from '@interfaces/dex/enum'
+import {
+  PublicationDemographicEnum,
+  ContentRatingEnum
+} from '@interfaces/mangadex'
 import { capitalize } from 'lodash'
-import { Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
+import { FilterChip, Section, formArrayHelpers } from './commmon'
 
 const formatFilters = [
   {
     name: 'publicationDemographic',
     title: 'Demographics',
-    values: PublicationDemographic
+    values: PublicationDemographicEnum
   },
   {
     name: 'contentRating',
     title: 'Content Rating',
-    values: ContentRating
+    values: ContentRatingEnum
   }
 ]
 
 export default function FormatFilter() {
-  const { control } = useVariables()
+  const { control } = useFormContext()
 
   return (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
       {formatFilters?.map(({ name, title, values }) => (
         <Controller

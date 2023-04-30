@@ -1,18 +1,30 @@
 import { queryFn } from '@api/manga'
 import Icon from '@components/Core/Icon'
 import { MANGA_STATISTICS } from '@constants/api/routes'
-import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import useBottomSheetModal from '@hooks/useBottomSheet'
 import { useRoute } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { StyleSheet, View } from 'react-native'
 import { Chip, Text, useTheme } from 'react-native-paper'
 
-type IDistributionKey = keyof Statistics.Rating['distribution']
+const styles = StyleSheet.create({
+  chip: {
+    margin: 4
+  },
+  antiChip: {
+    margin: -4
+  },
+  chipTitle: {
+    fontSize: 10,
+    marginTop: 0,
+    marginBottom: 0
+  }
+})
+
+type IDistributionKey = keyof IRating['distribution']
 const ratings: Array<IDistributionKey> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-function RatingHistoGram({
-  distribution
-}: Pick<Statistics.Rating, 'distribution'>) {
+function RatingHistoGram({ distribution }: Pick<IRating, 'distribution'>) {
   const { colors } = useTheme()
   const max = Object.values(distribution).reduce((m, c) => (c > m ? c : m), 0)
   const normalized = Object.keys(distribution).reduce((acc, curr) => {
@@ -47,9 +59,12 @@ function RatingHistoGram({
             }}
           >
             <Icon name="star-outline" size={16} color={colors.onSurface} />
-            <Text key={`${rating}-number`} style={{ color: colors.onSurface }}>
+            <Text
+              key={`${rating.toString()}-number`}
+              style={{ color: colors.onSurface }}
+            >
               {' '}
-              {rating}
+              {rating.toString()}
             </Text>
           </View>
         ))}
@@ -57,7 +72,7 @@ function RatingHistoGram({
       <View style={{ flex: 1, marginRight: 4, marginLeft: 4 }}>
         {ratings.map(rating => (
           <View
-            key={`${rating}-bar`}
+            key={`${rating.toString()}-bar`}
             style={{
               backgroundColor: colors.primary,
               width: `${normalized?.[rating]}%`,
@@ -80,7 +95,10 @@ function RatingHistoGram({
               flexDirection: 'row'
             }}
           >
-            <Text key={`${rating}-count`} style={{ color: colors.onSurface }}>
+            <Text
+              key={`${rating.toString()}-count`}
+              style={{ color: colors.onSurface }}
+            >
               {distribution?.[rating]}
             </Text>
           </View>
@@ -94,8 +112,8 @@ function DisplayMangaStatistics({
   follows,
   comments,
   rating
-}: Partial<Statistics.Manga>) {
-  const [props, { handleOpen, handleClose }] = useBottomSheetModal({
+}: Partial<IMangaStats>) {
+  const [props, { handleOpen }] = useBottomSheetModal({
     shouldRenderBackdrop: true
   })
 
@@ -147,25 +165,10 @@ function DisplayMangaStatistics({
 export default function MangaStatistics() {
   const { params } = useRoute<IRootStackScreenProps<'Chapter List'>['route']>()
   const mangaId = params.manga.id
-  const { data } = useQuery<
-    QueryKey,
-    Response.ErrorResponse,
-    Statistics.MangaResponse
-  >([MANGA_STATISTICS(mangaId)], queryFn)
+  const { data } = useQuery<QueryKey, IResponseError, IMangaStatsResponse>(
+    [MANGA_STATISTICS(mangaId)],
+    queryFn
+  )
 
   return <DisplayMangaStatistics {...data?.statistics?.[mangaId]} />
 }
-
-const styles = StyleSheet.create({
-  chip: {
-    margin: 4
-  },
-  antiChip: {
-    margin: -4
-  },
-  chipTitle: {
-    fontSize: 10,
-    marginTop: 0,
-    marginBottom: 0
-  }
-})

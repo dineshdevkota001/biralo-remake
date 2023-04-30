@@ -1,8 +1,8 @@
-import { ObjectType } from '@interfaces/dex/enum'
+import { TypeEnum } from '@interfaces/mangadex'
 
-export default function getRelationOfType<T, U>(
-  relationships: Object<T, U>[],
-  objectType: ObjectType
+export default function getRelationOfType<T>(
+  relationships: IGeneralRelation<T>[],
+  objectType: TypeEnum
 ) {
   return relationships?.find(({ type }) => type === objectType)
 }

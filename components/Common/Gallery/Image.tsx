@@ -31,14 +31,18 @@ export default function ImagePage({ url }: { url: string }) {
       })
     }
     fetchImageDimensions()
-  }, [setIsHorizontal, url])
+  }, [setIsHorizontal, url, setResizeMode])
 
   const scale = useSharedValue(1)
   const yValue = useSharedValue(0)
 
   const pinchGesture = Gesture.Pinch()
-    .onBegin(e => (scale.value = e.scale))
-    .onChange(e => (scale.value = e.scale))
+    .onBegin(e => {
+      scale.value = e.scale
+    })
+    .onChange(e => {
+      scale.value = e.scale
+    })
     .onEnd(() => {
       if (Math.abs(scale.value - 1) <= 0.1 || !isHorizontal)
         scale.value = withSpring(1)
@@ -101,7 +105,7 @@ export default function ImagePage({ url }: { url: string }) {
           <Image
             source={{ ...source, height: window.height }}
             resizeMode={resizeMode}
-            alt={'Image'}
+            alt="Image"
           />
         ) : (
           <Image
@@ -111,7 +115,7 @@ export default function ImagePage({ url }: { url: string }) {
               width: window.width
             }}
             resizeMode="contain"
-            alt={'Image'}
+            alt="Image"
           />
         )}
       </Animated.View>

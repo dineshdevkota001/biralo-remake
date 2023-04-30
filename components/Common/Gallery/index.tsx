@@ -1,5 +1,3 @@
-import GalleryFlatList from './List'
-import Menu from './Menu'
 import { CDN } from '@constants/api'
 import { GalleryContextProvider } from '@contexts/GalleryContext'
 import useChapterControls from '@hooks/useChapterControl'
@@ -17,10 +15,8 @@ import Animated, {
   useSharedValue,
   withSpring
 } from 'react-native-reanimated'
-
-type GalleryProps = {
-  imageUrls: string[]
-}
+import GalleryFlatList from './List'
+import Menu from './Menu'
 
 const window = Dimensions.get('window')
 const { height } = window
@@ -75,10 +71,10 @@ export default function Gallery() {
 
   useEffect(() => {
     if (currentChapter) setTitle(`Chapter ${currentChapter.chapter}`)
-  }, [])
+  }, [currentChapter])
 
   return (
-    <GalleryContextProvider value={[]}>
+    <GalleryContextProvider>
       <SafeAreaView
         style={{ position: 'relative', backgroundColor: colors.background }}
       >
