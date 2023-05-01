@@ -21,14 +21,14 @@ export async function generalQueryFn({
     const [location, params] = queryKey as [string, any]
     const res = await axios.get(location as string, {
       params: {
-        offset: pageParam ?? 0,
+        offset: pageParam,
         ...(params ?? {})
       }
     })
 
     return res.data
   } catch (e) {
-    console.warn(queryKey[0], (e as Error)?.message)
+    console.warn(queryKey[0], (e as Error)?.message, { ...e })
   }
   return null
 }

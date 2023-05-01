@@ -4,16 +4,19 @@ import { ComponentProps } from 'react'
 import { View } from 'react-native'
 import { Text } from 'react-native-paper'
 
+const from639To3166Map: Record<string, string> = {
+  [LocalizationLanguageEnum.EN]: 'us',
+  [LocalizationLanguageEnum.UK]: 'gb',
+  [LocalizationLanguageEnum.CS]: 'cz',
+  [LocalizationLanguageEnum.KK]: 'kz'
+}
+
 function flagMap(primary: string, second: string) {
   switch (primary) {
-    case LocalizationLanguageEnum.EN:
-      return 'us'
-    case LocalizationLanguageEnum.UK:
-      return 'gb'
     case LocalizationLanguageEnum.PT:
       return second || primary
     default:
-      return primary
+      return from639To3166Map?.[primary] ?? primary
   }
 }
 
@@ -54,15 +57,16 @@ export default function Flag({
       <Text
         style={{
           position: 'absolute',
-          left: 0,
+          right: 0,
           bottom: 0,
           lineHeight: size / 2,
           fontSize: size / 2,
           backgroundColor: 'white',
-          opacity: 0.7
+          paddingHorizontal: 1,
+          opacity: 0.8
         }}
       >
-        {secondary}
+        {secondary.toUpperCase()}
       </Text>
     </View>
   )

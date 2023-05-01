@@ -2,17 +2,55 @@ import { generalQueryFn } from '@api/common'
 import { MANGA_TAGS } from '@constants/api/routes'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize, groupBy } from 'lodash'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Control, Controller, Path, useFormContext } from 'react-hook-form'
 import { View } from 'react-native'
 import { Switch, Text, useTheme } from 'react-native-paper'
+import { TagModeEnum } from '@interfaces/enum'
 import { FilterChip, Section, formArrayHelpers } from './commmon'
+
+function SwitchWithTitle({
+  title,
+  control,
+  name
+}: {
+  title: string
+  control: Control<IMangaRequest>
+  name: Path<IMangaRequest>
+}) {
+  const { colors } = useTheme()
+
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { value, onChange } }) => (
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 16,
+            justifyContent: 'space-between'
+          }}
+        >
+          <Text variant="labelLarge" style={{ color: colors.onSurfaceVariant }}>
+            {title}
+          </Text>
+          <Switch
+            value={value === TagModeEnum.AND}
+            onValueChange={v => onChange(v ? TagModeEnum.AND : TagModeEnum.OR)}
+          />
+        </View>
+      )}
+    />
+  )
+}
 
 export default function TagsFilter() {
   const { data } = useQuery<[string], IResponseError, ITagCollection>(
     [MANGA_TAGS],
     generalQueryFn
   )
-  const { colors } = useTheme()
   const { control } = useFormContext<IMangaRequest>()
 
   if (!data) return null
@@ -27,34 +65,16 @@ export default function TagsFilter() {
 
   return (
     <>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 16,
-          justifyContent: 'space-between'
-        }}
-      >
-        <Text variant="labelLarge" style={{ color: colors.onSurfaceVariant }}>
-          Include only if all + tags match
-        </Text>
-        <Switch value />
-      </View>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 16,
-          justifyContent: 'space-between'
-        }}
-      >
-        <Text variant="labelLarge" style={{ color: colors.onSurfaceVariant }}>
-          Exclude only if all + tags match
-        </Text>
-        <Switch value />
-      </View>
+      <SwitchWithTitle
+        control={control}
+        name="includedTagsMode"
+        title="Include only if all + tags match"
+      />
+      <SwitchWithTitle
+        control={control}
+        name="excludedTagsMode"
+        title="Exclude only if all - tags match"
+      />
       {formatFilters?.map(({ title, values }) => (
         <Controller
           key={title}

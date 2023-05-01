@@ -33,8 +33,8 @@ export default function useManga(props?: { variables: IMangaRequest }) {
     [
       MANGA,
       {
-        ...variables,
         limit: config.pageSize,
+        ...variables,
         includes: [TypeEnum.COVER_ART, ...(variables?.includes ?? [])]
       }
     ],

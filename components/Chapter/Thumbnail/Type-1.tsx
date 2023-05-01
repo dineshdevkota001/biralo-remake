@@ -58,14 +58,27 @@ export default function ChapterType1Thumbnail({
     scanlationGroup,
     user
   } = useChapterThumbnail({ item })
+
   const right = useCallback(
     () => <Flag isoCode={translatedLanguage} />,
     [translatedLanguage]
   )
 
   return (
-    <Card style={{ margin: 4 }} onPress={handleGallery}>
-      <Card.Title title={`Ch. ${chapter ?? 0} ${title ?? ''}`} right={right} />
+    <Card style={{ margin: 4, paddingVertical: 4 }} onPress={handleGallery}>
+      <Card.Title
+        title={`${chapter ? `Ch. ${chapter}` : 'Oneshot'} ${title ?? ''}`}
+        left={right}
+        leftStyle={{
+          height: 'auto',
+          width: 'auto'
+        }}
+        style={{
+          padding: 0,
+          minHeight: 'auto',
+          alignItems: 'center'
+        }}
+      />
       <Card.Content
         style={{
           flexDirection: 'row',
@@ -89,7 +102,7 @@ export default function ChapterType1Thumbnail({
         ) : null}
         <Detail iconName="file"> {pages}</Detail>
         {readableAt ? (
-          <Detail iconName="calendar">
+          <Detail iconName="clock-outline">
             {formatDistance(new Date(readableAt), new Date(), {
               addSuffix: true
             })}

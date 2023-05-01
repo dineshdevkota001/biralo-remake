@@ -74,9 +74,23 @@ export default function useChapters(
     | undefined
 ) {
   const { variables } = props ?? {}
-  const queryRes = useInfiniteQuery([CHAPTER, variables ?? {}], chapters, {
-    getNextPageParam: generalNextPageParam
-  })
+  const queryRes = useInfiniteQuery(
+    [
+      CHAPTER,
+      {
+        ...variables,
+        includes: [
+          TypeEnum.SCANLATION_GROUP,
+          TypeEnum.USER,
+          ...(variables?.includes ?? [])
+        ]
+      } ?? {}
+    ],
+    chapters,
+    {
+      getNextPageParam: generalNextPageParam
+    }
+  )
 
   const data = getFlattenedList(queryRes?.data)
   const noOfPages = queryRes?.data?.pages?.length

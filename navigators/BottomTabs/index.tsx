@@ -8,17 +8,17 @@ export default function BottomTabs() {
   return (
     <Tab.Navigator shifting>
       <Tab.Screen
-        name="Home"
-        component={MangaList}
-        options={{
-          tabBarIcon: 'home'
-        }}
-      />
-      <Tab.Screen
         name="Latest"
         component={Mangalist}
         options={{
           tabBarIcon: 'flash'
+        }}
+      />
+      <Tab.Screen
+        name="Home"
+        component={MangaList}
+        options={{
+          tabBarIcon: 'home'
         }}
       />
     </Tab.Navigator>

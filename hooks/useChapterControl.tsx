@@ -1,9 +1,10 @@
-import { generalQueryFn } from '@api/common'
+import { ResponseResultEnum } from '@interfaces/enum'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { flatten } from 'lodash'
 
 import { useMemo } from 'react'
+import { generalQueryFn } from '@api/common'
 
 type IChapter = {
   chapter: string
@@ -25,13 +26,13 @@ export default function useChapterControls() {
   const { mangaId, chapterId } = params
 
   const { data: chapters } = useQuery<
-    [string, { groups: string[] }],
+    [string],
     unknown,
     {
-      result: Response.Result
+      result: ResponseResultEnum
       volumes: Record<string, IVolume>
     }
-  >([`/manga/${mangaId}/aggregate`, { groups: [] }], generalQueryFn)
+  >([`/manga/${mangaId}/aggregate`], generalQueryFn)
 
   const { nextChapter, previousChapter, currentChapter } = useMemo(() => {
     if (!chapters) return {}

@@ -7,10 +7,9 @@ export default function useDebouncedInput(
 ) {
   const [valueToRender, setValueToRender] = useState(defaultValue ?? '')
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const setDebouncedValue = useCallback(
-    (v: string) => {
-      debounce(() => callback(v), 500)
-    },
+    debounce((v: string) => callback(v), 500),
     [callback]
   )
 

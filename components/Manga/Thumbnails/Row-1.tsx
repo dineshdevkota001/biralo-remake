@@ -1,6 +1,4 @@
-import { Tags } from '@components/Tag'
 import useCoverArt from '@hooks/useCoverArt'
-import { TagGroupEnum } from '@interfaces/enum'
 import { useNavigation } from '@react-navigation/native'
 import { getTitle } from '@utils/getLocalizedString'
 import { View } from 'react-native'
@@ -12,7 +10,7 @@ export default function MangaRow1Thumbnail({
   ...item
 }: IMangaThumbnailProps) {
   const { id, attributes, relationships } = item
-  const { title, tags } = attributes ?? {}
+  const { title } = attributes ?? {}
 
   const navigation = useNavigation<IRootBottomTabsScreenProps<'Home'>>()
   const { url } = useCoverArt(id, relationships)
@@ -49,19 +47,9 @@ export default function MangaRow1Thumbnail({
           }}
         >
           <Card.Title title={getTitle(title)} titleNumberOfLines={2} />
-          <Card.Content
-            style={{
-              flex: 1
-            }}
-          >
-            <Tags
-              tags={tags}
-              includeTags={[TagGroupEnum.THEME, TagGroupEnum.GENRE]}
-            />
-          </Card.Content>
+          {children}
         </View>
       </View>
-      {children}
     </Card>
   )
 }

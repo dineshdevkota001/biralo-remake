@@ -13,7 +13,7 @@ export default function AppliedFilters() {
       {(Object.keys(values) as Array<keyof IMangaRequest>)?.map(key => {
         const value = values?.[key]
         return (
-          <Text>
+          <Text key={key}>
             {capitalize(key)}:{' '}
             {Array.isArray(value)
               ? value?.length

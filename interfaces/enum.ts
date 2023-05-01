@@ -112,7 +112,9 @@ export enum LocalizationLanguageEnum {
   ES_LA = 'es-la',
   JA_RO = 'ja-ro',
   KO_RO = 'ko-ro',
-  ZH_RO = 'zh-ro'
+  ZH_RO = 'zh-ro',
+  CS = 'cs',
+  KK = 'kk'
 }
 
 export enum CoverQualityEnum {

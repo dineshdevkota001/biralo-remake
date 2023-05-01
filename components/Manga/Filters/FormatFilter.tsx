@@ -26,6 +26,7 @@ export default function FormatFilter() {
         <Controller
           control={control}
           name={name}
+          key={title}
           render={({ field: { value, onChange } }) => (
             <Section title={title}>
               {value?.length ? null : <FilterChip selected>Any</FilterChip>}
