@@ -27,8 +27,7 @@ export default function App() {
   }, [loaded])
 
   const colorScheme = useColorScheme()
-  const { theme } = useMaterial3Theme()
-  // { fallbackSourceColor: '#ff6740' }
+  const { theme } = useMaterial3Theme({ fallbackSourceColor: '#ff6740' })
 
   const paperTheme = useMemo(
     () =>
