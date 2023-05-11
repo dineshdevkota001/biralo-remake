@@ -17,7 +17,7 @@ export default function AppliedFilters() {
             {capitalize(key)}:{' '}
             {Array.isArray(value)
               ? value?.length
-              : (value || value?.length) ?? 0}
+              : (value ? JSON.stringify(value) : value?.length) ?? 0}
           </Text>
         )
       })}

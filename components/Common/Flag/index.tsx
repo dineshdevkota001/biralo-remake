@@ -8,7 +8,8 @@ const from639To3166Map: Record<string, string> = {
   [LocalizationLanguageEnum.EN]: 'us',
   [LocalizationLanguageEnum.UK]: 'gb',
   [LocalizationLanguageEnum.CS]: 'cz',
-  [LocalizationLanguageEnum.KK]: 'kz'
+  [LocalizationLanguageEnum.KK]: 'kz',
+  [LocalizationLanguageEnum.ZH]: 'cn'
 }
 
 function flagMap(primary: string, second: string) {

@@ -1,23 +1,51 @@
 import { generalNextPageParam } from '@api/common'
-import { MANGA } from '@constants/api/routes'
+import {
+  MANGA,
+  MANGA_ID_STATISTICS,
+  MANGA_STATISTICS
+} from '@constants/api/routes'
 import useConfiguration from '@contexts/ConfigurationContext'
 import { TypeEnum } from '@interfaces/enum'
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query'
 import axios from '@utils/axios'
 import getFlattenedList from '@utils/getFlattenedList'
 
+type IMangaFlags = {
+  includeStats?: boolean
+}
+
+type IMangaCollectionWithStats = IResponseCollection<
+  IManga & { statistics: IMangaStats }
+>
+
 async function manga({
   queryKey,
   pageParam
-}: QueryFunctionContext<[string, IMangaRequest]>) {
+}: QueryFunctionContext<[string, IMangaRequest, IMangaFlags | undefined]>) {
   try {
-    const [, params] = queryKey
-    const res = await axios.get<IMangaCollection>(MANGA, {
+    const [, params, flags] = queryKey
+    const res = await axios.get<IMangaCollectionWithStats>(MANGA, {
       params: {
         offset: pageParam ?? 0,
         ...(params ?? {})
       }
     })
+
+    if (flags?.includeStats) {
+      const mangaIds = res.data?.data?.map(m => m?.id)
+      const statistics = await axios.get<IMangaStatsResponse>(
+        MANGA_STATISTICS,
+        {
+          params: {
+            manga: mangaIds
+          }
+        }
+      )
+
+      res.data?.data?.forEach((m, index) => {
+        res.data.data[index].statistics = statistics?.data?.statistics?.[m.id]
+      })
+    }
 
     return res.data
   } catch (e) {
@@ -26,8 +54,11 @@ async function manga({
   return undefined
 }
 
-export default function useManga(props?: { variables: IMangaRequest }) {
-  const { variables } = props ?? {}
+export default function useManga(props?: {
+  variables: IMangaRequest
+  flags?: IMangaFlags
+}) {
+  const { variables, flags } = props ?? {}
   const { config } = useConfiguration()
   const queryRes = useInfiniteQuery(
     [
@@ -36,7 +67,8 @@ export default function useManga(props?: { variables: IMangaRequest }) {
         limit: config.pageSize,
         ...variables,
         includes: [TypeEnum.COVER_ART, ...(variables?.includes ?? [])]
-      }
+      },
+      flags
     ],
     manga,
     {

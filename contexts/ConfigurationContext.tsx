@@ -1,36 +1,17 @@
-import { QualityEnum } from '@interfaces/enum'
-import { CoverQualityEnum, LocalizationLanguageEnum } from '@interfaces/enum'
 import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState
 } from 'react'
 import { useForm } from 'react-hook-form'
-
-interface IConfigContext {
-  quality: QualityEnum
-  language: LocalizationLanguageEnum
-  coverQuality: CoverQualityEnum
-  pageSize: number
-}
-
-interface IConfigurationContext {
-  config: IConfigContext
-  setConfig: (
-    key: string,
-    value: number | string | boolean | Record<string, number | string | boolean>
-  ) => void
-}
+import { useAsyncStorage } from '@react-native-async-storage/async-storage'
+import defaultConfig from '@constants/static/configuration'
 
 export const ConfigurationContext = createContext<IConfigurationContext>({
-  config: {
-    quality: QualityEnum.DATA_SAVER,
-    language: LocalizationLanguageEnum.EN,
-    coverQuality: CoverQualityEnum.LOW,
-    pageSize: 10
-  },
+  config: defaultConfig,
   setConfig: () => undefined
 })
 
@@ -38,48 +19,47 @@ export default function useConfiguration() {
   return useContext(ConfigurationContext)
 }
 
+const configKey = '@CONFIGURATIONS'
+
 export function ConfigurationProvider({
   children
 }: IHaveChildren & Parameters<typeof useForm>[0]) {
-  const [configuration, setConfiguration] = useState(
-    JSON.stringify({
-      config: QualityEnum.DATA_SAVER
-    })
-  )
-  const setConfig = useCallback(
-    (
-      key: string,
-      value:
-        | number
-        | string
-        | boolean
-        | Record<string, number | string | boolean>
-    ) => {
-      setConfiguration(config =>
-        JSON.stringify({
-          ...JSON.parse(config),
-          key: value
-        })
-      )
-    },
-    []
-  )
+  const [configuration, setConfiguration] = useState<
+    Partial<IConfigContext> | undefined
+  >()
+  const { getItem, setItem } = useAsyncStorage(configKey)
 
-  const config = JSON.parse(configuration)
+  const refreshConfig = useCallback(async () => {
+    const config = await getItem()
+    setConfiguration(config ? JSON.parse(config) : {})
+  }, [getItem])
+
+  useEffect(() => {
+    if (!configuration) refreshConfig()
+  }, [refreshConfig, configuration])
+
+  const setConfig = useCallback(
+    (change: Partial<IConfigContext>) => {
+      setConfiguration(c => {
+        const changedConfig = { ...(c ?? {}), ...change }
+        setItem(JSON.stringify(changedConfig))
+        return changedConfig
+      })
+    },
+    [setItem]
+  )
 
   return (
     <ConfigurationContext.Provider
       value={useMemo(
         () => ({
           config: {
-            quality: (config?.quality as QualityEnum) ?? QualityEnum.DATA_SAVER,
-            language: LocalizationLanguageEnum.EN,
-            coverQuality: CoverQualityEnum.LOW,
-            pageSize: 10
+            ...defaultConfig,
+            ...configuration
           },
           setConfig
         }),
-        [config, setConfig]
+        [configuration, setConfig]
       )}
     >
       {children}

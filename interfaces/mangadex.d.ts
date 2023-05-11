@@ -88,12 +88,14 @@ declare global {
       TypeEnum.TAG
     >
     order?: {
+      title?: OrderEnum
+      year?: OrderEnum
       createdAt?: OrderEnum
       updatedAt?: OrderEnum
-      publishAt?: OrderEnum
-      readableAt?: OrderEnum
-      volume?: OrderEnum
-      chapter?: OrderEnum
+      latestUploadedChapter?: OrderEnum
+      followedCount?: OrderEnum
+      relevance?: OrderEnum
+      rating?: OrderEnum
     }
   }
   interface IChapterRequest extends ICommonChapterAndMangaRequest {

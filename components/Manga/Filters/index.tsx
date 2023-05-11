@@ -1,6 +1,5 @@
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
 import useBottomSheetModal from '@hooks/useBottomSheet'
-import { useNavigation } from '@react-navigation/native'
 import { ScrollViewProps, StyleSheet } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { Appbar, Searchbar, useTheme } from 'react-native-paper'
@@ -55,15 +54,12 @@ function FilterTab({
 
 export default function MangaFilter() {
   const { colors } = useTheme()
-  const { navigate } =
-    useNavigation<IRootBottomTabsScreenProps<'Home'>['navigation']>()
 
   const [props, { handleOpen }] = useBottomSheetModal({
     shouldRenderBackdrop: true
   })
 
-  const { control, reset, setValue, getValues } =
-    useFormContext<IMangaRequest>()
+  const { control, reset, setValue } = useFormContext<IMangaRequest>()
   const defaultValues = useWatch({ control })
 
   const onSubmit = (value: IMangaRequest) => {
@@ -82,13 +78,11 @@ export default function MangaFilter() {
     <Appbar>
       <Searchbar
         value={value}
-        icon="face-man"
         onChangeText={handleChangeText}
         style={{
           flex: 1
         }}
         traileringIcon="filter-variant"
-        onIconPress={() => navigate('Profile')}
         onTraileringIconPress={handleOpen}
       />
       <BottomSheetModal

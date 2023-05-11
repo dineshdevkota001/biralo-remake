@@ -10,11 +10,11 @@ declare global {
       id: string
       manga: IManga
     }
-    Profile: undefined
   }
   type IRootBottomTabsParams = {
     Home: undefined
     Latest: undefined
+    Profile: undefined
   }
   type IRootStackScreenProps<Screen extends keyof IRootStackParams> =
     NativeStackScreenProps<IRootStackParams, Screen>

@@ -5,20 +5,18 @@ import {
   Path,
   useFormContext
 } from 'react-hook-form'
-import { View } from 'react-native'
-import { RadioButton, Text } from 'react-native-paper'
+import { Chip, ChipProps } from 'react-native-paper'
 import { OrderEnum } from '@interfaces/enum'
 
-const orderProperties: Array<{
-  name: keyof IMangaRequest['order']
-  label: string
-}> = [
+const orderProperties = [
   { name: 'createdAt', label: 'Creation Date' },
-  { name: 'updatedAt', label: 'Creation Date' },
-  { name: 'publishAt', label: 'Creation Date' },
-  { name: 'readableAt', label: 'Creation Date' },
-  { name: 'volume', label: 'Creation Date' },
-  { name: 'chapter', label: 'Creation Date' }
+  { name: 'updatedAt', label: 'Updated Date' },
+  { name: 'title', label: 'Alphabetical' },
+  { name: 'year', label: 'Publication Year' },
+  { name: 'latestUploadedChapter', label: 'Latest' },
+  { name: 'followedCount', label: 'Follows' },
+  { name: 'relevance', label: 'Relevance' },
+  { name: 'rating', label: 'Rating' }
 ]
 
 function ControlledOrderItem({
@@ -33,30 +31,35 @@ function ControlledOrderItem({
   return (
     <Controller
       control={control}
-      name={`order.${name}`}
-      render={({ field: { value, onChange } }) => (
-        <View>
-          <Text>{label}</Text>
-          {Object.values(OrderEnum).map((enumValue: string) => {
-            return (
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center'
-                }}
-              >
-                <RadioButton
-                  value={enumValue}
-                  status={value === enumValue ? 'checked' : 'unchecked'}
-                  onPress={() => onChange(value)}
-                />
-                <Text>{enumValue}</Text>
-              </View>
-            )
-          })}
-        </View>
-      )}
+      name="order"
+      render={({ field: { value: orderValue, onChange } }) => {
+        const getProps = (): Omit<ChipProps, 'children'> => {
+          const value = orderValue?.[name]
+
+          const handleChange = (v?: OrderEnum) => () => {
+            onChange({
+              [name]: v
+            })
+          }
+          if (!value)
+            return {
+              mode: 'outlined',
+              onPress: handleChange(OrderEnum.DESC)
+            }
+          if (value === OrderEnum.DESC)
+            return {
+              icon: 'arrow-down',
+              onPress: handleChange(OrderEnum.ASC)
+            }
+          if (value === OrderEnum.ASC)
+            return {
+              icon: 'arrow-up',
+              onPress: handleChange(undefined)
+            }
+          return {}
+        }
+        return <Chip {...getProps()}>{label}</Chip>
+      }}
     />
   )
 }
@@ -64,9 +67,10 @@ function ControlledOrderItem({
 export default function OrderByFilter() {
   const { control } = useFormContext()
   return (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
       {orderProperties?.map(item => (
-        <ControlledOrderItem {...item} control={control} />
+        <ControlledOrderItem {...item} control={control} key={item?.name} />
       ))}
     </>
   )

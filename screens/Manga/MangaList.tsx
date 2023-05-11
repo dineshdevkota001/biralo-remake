@@ -28,7 +28,8 @@ export default function MangaList() {
     refetch,
     fetchNextPage
   } = useManga({
-    variables
+    variables,
+    flags: { includeStats: true }
   })
   const { hasNextPage } = pageInfo
 

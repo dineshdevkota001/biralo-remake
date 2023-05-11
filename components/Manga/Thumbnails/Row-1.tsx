@@ -1,12 +1,17 @@
+import MangaStatistics, {
+  DisplayMangaStatistics
+} from '@components/Chapter/MangaStatistics'
 import useCoverArt from '@hooks/useCoverArt'
 import { useNavigation } from '@react-navigation/native'
+import formatNumber from '@utils/format/formatNumber'
 import { getTitle } from '@utils/getLocalizedString'
 import { View } from 'react-native'
-import { Card, useTheme } from 'react-native-paper'
+import { Card, Text, useTheme } from 'react-native-paper'
 import { SharedElement } from 'react-navigation-shared-element'
 
 export default function MangaRow1Thumbnail({
   children,
+  statistics,
   ...item
 }: IMangaThumbnailProps) {
   const { id, attributes, relationships } = item
@@ -47,6 +52,7 @@ export default function MangaRow1Thumbnail({
           }}
         >
           <Card.Title title={getTitle(title)} titleNumberOfLines={2} />
+          {statistics && <DisplayMangaStatistics {...statistics} />}
           {children}
         </View>
       </View>

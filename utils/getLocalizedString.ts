@@ -1,10 +1,11 @@
+import { LocalizationLanguageEnum } from '@interfaces/enum'
 import { get } from 'lodash'
 
-const defaultLanguage: ILocalizationLanguage = 'en'
-const defaultTitleLanguage: ILocalizationLanguage = 'jp-RO'
+const defaultLanguage = LocalizationLanguageEnum.EN
+const defaultTitleLanguage = LocalizationLanguageEnum.JA_RO
 
 function extractValue(
-  obj: LocalizedString,
+  obj: ILocalizedString,
   firstOption: string,
   secondOption: string
 ) {
@@ -13,12 +14,12 @@ function extractValue(
   )
 }
 
-export function getTitle(str?: LocalizedString) {
+export function getTitle(str?: ILocalizedString) {
   if (!str) return ''
   return extractValue(str, defaultTitleLanguage, defaultLanguage)
 }
 
-export function getString(str?: LocalizedString) {
+export function getString(str?: ILocalizedString) {
   if (!str) return ''
   return extractValue(str, defaultLanguage, defaultTitleLanguage)
 }

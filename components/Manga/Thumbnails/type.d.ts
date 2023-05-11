@@ -1,1 +1,2 @@
-type IMangaThumbnailProps = IManga & Partial<IHaveChildren>
+type IMangaThumbnailProps = IManga &
+  Partial<IHaveChildren> & { statistics?: IMangaStats }

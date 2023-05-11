@@ -3,6 +3,7 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import useMangaStats from '@hooks/api/statistics/manga/<id>'
 import useBottomSheetModal from '@hooks/useBottomSheet'
 import { useRoute } from '@react-navigation/native'
+import formatNumber from '@utils/format/formatNumber'
 import { StyleSheet, View } from 'react-native'
 import { Chip, Text, useTheme } from 'react-native-paper'
 
@@ -104,7 +105,7 @@ function RatingHistoGram({ distribution }: Pick<IRating, 'distribution'>) {
   )
 }
 
-function DisplayMangaStatistics({
+export function DisplayMangaStatistics({
   follows,
   comments,
   rating
@@ -130,7 +131,7 @@ function DisplayMangaStatistics({
         style={styles.chip}
         textStyle={styles.chipTitle}
       >
-        {follows || 0}
+        {follows ? formatNumber(follows) : 0}
       </Chip>
       <Chip
         icon="star-outline"
@@ -141,7 +142,7 @@ function DisplayMangaStatistics({
       >
         {rating?.bayesian?.toFixed(2) || 0}
       </Chip>
-      {rating ? (
+      {rating?.distribution ? (
         <BottomSheetModal {...props} snapPoints={['50%']}>
           <RatingHistoGram {...rating} />
         </BottomSheetModal>
@@ -152,7 +153,7 @@ function DisplayMangaStatistics({
         style={styles.chip}
         textStyle={styles.chipTitle}
       >
-        {comments?.repliesCount || 0}
+        {comments?.repliesCount ? formatNumber(comments?.repliesCount) : 0}
       </Chip>
     </View>
   )

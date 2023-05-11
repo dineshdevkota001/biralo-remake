@@ -1,17 +1,10 @@
 import { getHeaderTitle } from '@react-navigation/elements'
-import {
-  DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme,
-  NavigationContainer
-} from '@react-navigation/native'
 import { StackHeaderProps } from '@react-navigation/stack'
 import Gallery from '@screens/Common/Gallery'
 import ChapterList from '@screens/Manga/MangaFeed'
 import { getTitle } from '@utils/getLocalizedString'
-import { useColorScheme, StatusBar } from 'react-native'
-import { adaptNavigationTheme, useTheme, Appbar } from 'react-native-paper'
+import { Appbar } from 'react-native-paper'
 import { createSharedElementStackNavigator } from 'react-navigation-shared-element'
-import { Profile } from '@screens/Profile'
 import BottomTabs from './BottomTabs'
 
 export function MaterialYouHeader({
@@ -31,7 +24,7 @@ export function MaterialYouHeader({
 
 const Stack = createSharedElementStackNavigator<IRootStackParams>()
 
-function RootNavigation() {
+export default function Navigation() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -63,34 +56,6 @@ function RootNavigation() {
           headerShown: false
         }}
       />
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          headerTitle: 'Settings'
-        }}
-      />
     </Stack.Navigator>
-  )
-}
-
-export default function Navigation() {
-  const mode = useColorScheme()
-  const theme = useTheme()
-
-  const { LightTheme, DarkTheme } = adaptNavigationTheme({
-    reactNavigationLight: NavigationDefaultTheme,
-    reactNavigationDark: NavigationDarkTheme,
-    materialDark: theme,
-    materialLight: theme
-  })
-
-  return (
-    <NavigationContainer theme={mode === 'dark' ? DarkTheme : LightTheme}>
-      <StatusBar
-        barStyle={mode === 'dark' ? 'light-content' : 'dark-content'}
-      />
-      <RootNavigation />
-    </NavigationContainer>
   )
 }
