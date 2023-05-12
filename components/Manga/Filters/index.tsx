@@ -44,7 +44,7 @@ function FilterTab({
           },
           style
         ]}
-        contentContainerStyle={contentContainerStyle}
+        contentContainerStyle={[{ paddingBottom: 16 }, contentContainerStyle]}
       >
         {children}
       </ScrollView>

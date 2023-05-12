@@ -1,7 +1,8 @@
 import { PublicationDemographicEnum, ContentRatingEnum } from '@interfaces/enum'
 import { capitalize } from 'lodash'
 import { Controller, useFormContext } from 'react-hook-form'
-import { FilterChip, Section, formArrayHelpers } from './commmon'
+import PlusMinusChip from '@components/Common/Filters/PlusMinusChip'
+import { Section, formArrayHelpers } from './commmon'
 
 const formatFilters = [
   {
@@ -29,7 +30,9 @@ export default function FormatFilter() {
           key={title}
           render={({ field: { value, onChange } }) => (
             <Section title={title}>
-              {value?.length ? null : <FilterChip selected>Any</FilterChip>}
+              {value?.length ? null : (
+                <PlusMinusChip selected>Any</PlusMinusChip>
+              )}
               {Object.values(values).map(tag => {
                 const { isPresent, getToggledArray } = formArrayHelpers(
                   value,
@@ -37,14 +40,14 @@ export default function FormatFilter() {
                 )
 
                 return (
-                  <FilterChip
+                  <PlusMinusChip
                     selected={isPresent}
                     onPress={() => {
                       onChange(getToggledArray())
                     }}
                   >
                     {capitalize(tag.split('_').join(' '))}
-                  </FilterChip>
+                  </PlusMinusChip>
                 )
               })}
             </Section>

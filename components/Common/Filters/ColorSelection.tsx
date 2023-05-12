@@ -8,7 +8,7 @@ type IBaseProps = {
   isDefault?: boolean
 }
 
-export default function Base({
+export default function ColorSelection({
   isDefault,
   isSelected,
   name,

@@ -6,7 +6,8 @@ import { Control, Controller, Path, useFormContext } from 'react-hook-form'
 import { View } from 'react-native'
 import { Switch, Text, useTheme } from 'react-native-paper'
 import { TagModeEnum } from '@interfaces/enum'
-import { FilterChip, Section, formArrayHelpers } from './commmon'
+import PlusMinusChip from '@components/Common/Filters/PlusMinusChip'
+import { Section, formArrayHelpers } from './commmon'
 
 function SwitchWithTitle({
   title,
@@ -113,7 +114,7 @@ export default function TagsFilter() {
                     if (excluded) icon = 'minus'
 
                     return (
-                      <FilterChip
+                      <PlusMinusChip
                         icon={icon}
                         onPress={() => {
                           if (!excluded) {
@@ -127,7 +128,7 @@ export default function TagsFilter() {
                         {capitalize(
                           tag.attributes.name?.en?.replaceAll('_', ' ')
                         )}
-                      </FilterChip>
+                      </PlusMinusChip>
                     )
                   })}
                 </Section>

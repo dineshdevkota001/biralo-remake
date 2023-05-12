@@ -1,8 +1,8 @@
+import ColorSelection from '@components/Common/Filters/ColorSelection'
 import defaultConfig from '@constants/static/configuration'
 import useConfiguration from '@contexts/ConfigurationContext'
 import { View } from 'react-native'
 import { TouchableRipple } from 'react-native-paper'
-import Base from './base'
 
 type IColorScheme = 'dark'
 
@@ -44,7 +44,7 @@ export default function Themes() {
             onPress={() => handleThemeChange(color, colorScheme)}
             key={name}
           >
-            <Base {...{ color, name, isDefault, isSelected }} />
+            <ColorSelection {...{ color, name, isDefault, isSelected }} />
           </TouchableRipple>
         )
       })}

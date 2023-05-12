@@ -17,15 +17,9 @@ export default function Tag({ name, group }: ITagAttributes) {
   return (
     <Chip
       style={{
-        margin: 1,
         backgroundColor: group
           ? groupToColorMap?.[group] || colors.primary
           : colors.primary
-      }}
-      textStyle={{
-        fontSize: 12,
-        marginTop: 0,
-        marginBottom: 0
       }}
       compact
     >
@@ -55,7 +49,8 @@ export function TagGroup({
         style={{
           display: 'flex',
           flexDirection: 'row',
-          flexWrap: 'wrap'
+          flexWrap: 'wrap',
+          gap: 4
         }}
       >
         {tags?.map(({ attributes: tag, id }) => (
