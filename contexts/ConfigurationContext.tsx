@@ -46,7 +46,7 @@ export function ConfigurationProvider({
         return changedConfig
       })
     },
-    [setItem]
+    [setItem, setConfiguration]
   )
 
   return (

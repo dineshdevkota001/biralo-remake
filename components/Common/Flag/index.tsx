@@ -9,7 +9,8 @@ const from639To3166Map: Record<string, string> = {
   [LocalizationLanguageEnum.UK]: 'gb',
   [LocalizationLanguageEnum.CS]: 'cz',
   [LocalizationLanguageEnum.KK]: 'kz',
-  [LocalizationLanguageEnum.ZH]: 'cn'
+  [LocalizationLanguageEnum.ZH]: 'cn',
+  [LocalizationLanguageEnum.EO]: 'eun'
 }
 
 function flagMap(primary: string, second: string) {
@@ -29,6 +30,9 @@ export default function Flag({
   isoCode?: LocalizationLanguageEnum | undefined | null
 } & Partial<ComponentProps<typeof CountryFlag>>) {
   if (!isoCode) return null
+
+  if (!Object.values(LocalizationLanguageEnum).includes(isoCode))
+    console.log(isoCode)
 
   const [primary, secondary] =
     isoCode?.length <= 2 ? [isoCode, ''] : isoCode.split('-')

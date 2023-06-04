@@ -3,21 +3,28 @@ import MangaFilter from '@components/Manga/Filters'
 import MangaRow1Thumbnail, {
   MangaRow1Skeleton
 } from '@components/Manga/Thumbnails/Row-1'
-import { identity, pickBy } from 'lodash'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { FlatList } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import useManga from '@hooks/api/manga'
 import ThumbnailTags from '@components/Manga/Thumbnails/Tags'
+import useConfiguration from '@contexts/ConfigurationContext'
+import cleanObject from '@utils/cleanObject'
 
 export default function MangaList() {
+  const { config } = useConfiguration()
   const form = useForm<IMangaRequest>({
-    defaultValues: {}
+    defaultValues: {
+      excludedTags: config.excludedTags,
+      includedTags: config.includedTags,
+      availableTranslatedLanguage: config.translatedLanguage,
+      // contentRating: config.contentRating
+      originalLanguage: config.originalLanguage
+    }
   })
-  const variables = pickBy<IMangaRequest>(
-    useWatch({ control: form.control }),
-    identity
+  const variables = cleanObject<IMangaRequest>(
+    useWatch({ control: form.control })
   )
 
   const {

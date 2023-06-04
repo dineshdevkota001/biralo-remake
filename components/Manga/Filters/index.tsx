@@ -12,6 +12,7 @@ import {
   FormProvider
 } from 'react-hook-form'
 import useDebouncedInput from '@hooks/useDebouncedInput'
+import { useEffect } from 'react'
 import AppliedFilters from './AppliedFilters'
 import FormatFilter from './FormatFilter'
 import TagsFilter from './TagsFilter'
@@ -69,6 +70,11 @@ export default function MangaFilter() {
   const form = useForm<IMangaRequest>({
     defaultValues
   })
+  const { reset: localReset } = form
+  useEffect(() => {
+    // this will reset to defaultValues as said in the docs
+    localReset(defaultValues)
+  }, [localReset, defaultValues])
 
   const { value, setValue: handleChangeText } = useDebouncedInput(v => {
     setValue('title', v)

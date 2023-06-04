@@ -1,6 +1,6 @@
 import getFlattenedList from '@utils/getFlattenedList'
 import { CHAPTER, MANGA } from '@constants/api/routes'
-import { OrderEnum, TypeEnum } from '@interfaces/enum'
+import { TypeEnum } from '@interfaces/enum'
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query'
 import axios from '@utils/axios'
 import getRelationOfType from '@utils/getRelationshipOfType'
@@ -112,9 +112,6 @@ export function useLatestChapters(props?: { variables: IChapterRequest }) {
     ...props,
     variables: {
       limit: 3 * config.pageSize,
-      order: {
-        readableAt: OrderEnum.DESC
-      },
       ...props?.variables
     }
   })

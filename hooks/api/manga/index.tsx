@@ -1,9 +1,5 @@
 import { generalNextPageParam } from '@api/common'
-import {
-  MANGA,
-  MANGA_ID_STATISTICS,
-  MANGA_STATISTICS
-} from '@constants/api/routes'
+import { MANGA, MANGA_STATISTICS } from '@constants/api/routes'
 import useConfiguration from '@contexts/ConfigurationContext'
 import { TypeEnum } from '@interfaces/enum'
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query'

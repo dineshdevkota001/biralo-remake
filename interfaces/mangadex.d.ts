@@ -132,7 +132,7 @@ declare global {
     year?: number
     contentRating?: ContentRatingEnum
     chapterNumbersResetOnNewVolume?: boolean
-    availableTranslatedLanguages?: Array
+    availableTranslatedLanguages?: Array<LocalizationLanguageEnum>
     latestUploadedChapter?: string
     tags?: Array<ITag>
     state?: StateEnum
