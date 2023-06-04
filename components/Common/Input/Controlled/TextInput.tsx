@@ -7,7 +7,7 @@ import {
   TextInputProps
 } from 'react-native-paper'
 
-export default function TextInput2({
+export default function ControlledInput<T extends FieldValues>({
   control,
   name,
   renderProps,
@@ -21,8 +21,8 @@ export default function TextInput2({
   value,
   ...props
 }: TextInputProps & {
-  control: Control<FieldValues>
-  name: Path<FieldValues>
+  control: Control<T>
+  name: Path<T>
   renderProps?: (
     x: Parameters<ComponentProps<typeof Controller>['render']>[0]
   ) => TextInputProps

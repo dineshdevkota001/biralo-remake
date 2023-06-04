@@ -177,6 +177,11 @@ declare global {
   interface IUserAttributes {
     name: string
   }
+  interface IMeAttributes {
+    username: string
+    roles: string[]
+    version: number
+  }
   // #endregion
   // #region Relations
   type IGeneralRelation<T> = Pick<T, 'id' | 'type' | 'attributes'> & {
@@ -206,6 +211,7 @@ declare global {
   }
   type ICover = IObjectType<TypeEnum.COVER_ART, ICoverAttributes>
   type ITag = IObjectType<TypeEnum.TAG, ITagAttributes>
+  type IMe = IObjectType<TypeEnum.USER, IMeAttributes>
   // #endregion
   // #region Responses
   // #endregion

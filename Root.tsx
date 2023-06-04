@@ -22,6 +22,7 @@ import {
   DefaultTheme as NavigationDefaultTheme,
   NavigationContainer
 } from '@react-navigation/native'
+import { AuthProvider } from '@contexts/AuthContext'
 import Navigation from './navigators'
 
 function App() {
@@ -75,12 +76,14 @@ function App() {
 
 export default function Wrapper() {
   return (
-    <ConfigurationProvider>
-      <SafeAreaProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <App />
-        </GestureHandlerRootView>
-      </SafeAreaProvider>
-    </ConfigurationProvider>
+    <AuthProvider>
+      <ConfigurationProvider>
+        <SafeAreaProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <App />
+          </GestureHandlerRootView>
+        </SafeAreaProvider>
+      </ConfigurationProvider>
+    </AuthProvider>
   )
 }
