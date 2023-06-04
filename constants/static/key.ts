@@ -1,0 +1,2 @@
+export const SESSION_TOKEN_KEY = 'SESSION TOKEN'
+export const REFRESH_TOKEN_KEY = 'REFRESH TOKEN'

@@ -15,6 +15,7 @@ declare global {
     Home: undefined
     Latest: undefined
     Profile: undefined
+    Feed: undefined
   }
   type IRootStackScreenProps<Screen extends keyof IRootStackParams> =
     NativeStackScreenProps<IRootStackParams, Screen>
