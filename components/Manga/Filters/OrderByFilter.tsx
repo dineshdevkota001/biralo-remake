@@ -5,8 +5,8 @@ import {
   Path,
   useFormContext
 } from 'react-hook-form'
-import { Chip, ChipProps } from 'react-native-paper'
 import { OrderEnum } from '@interfaces/enum'
+import ThreewaySwitch from '@components/Common/Input/Controlled/ThreewaySwitch'
 
 const orderProperties = [
   { name: 'createdAt', label: 'Creation Date' },
@@ -33,32 +33,36 @@ function ControlledOrderItem({
       control={control}
       name="order"
       render={({ field: { value: orderValue, onChange } }) => {
-        const getProps = (): Omit<ChipProps, 'children'> => {
-          const value = orderValue?.[name]
+        let value
+        if (orderValue?.[name] === OrderEnum.DESC) value = false
+        if (orderValue?.[name] === OrderEnum.ASC) value = true
 
-          const handleChange = (v?: OrderEnum) => () => {
-            onChange({
-              [name]: v
-            })
-          }
-          if (!value)
-            return {
-              mode: 'outlined',
-              onPress: handleChange(OrderEnum.DESC)
-            }
-          if (value === OrderEnum.DESC)
-            return {
-              icon: 'arrow-down',
-              onPress: handleChange(OrderEnum.ASC)
-            }
-          if (value === OrderEnum.ASC)
-            return {
-              icon: 'arrow-up',
-              onPress: handleChange(undefined)
-            }
-          return {}
-        }
-        return <Chip {...getProps()}>{label}</Chip>
+        return (
+          <ThreewaySwitch
+            value={value}
+            label={label}
+            leftIconProps={{
+              name: 'arrow-down'
+            }}
+            rightIconProps={{
+              name: 'arrow-up'
+            }}
+            onChange={v => {
+              if (v === false)
+                onChange({
+                  [name]: OrderEnum.DESC
+                })
+              else if (v === true)
+                onChange({
+                  [name]: OrderEnum.ASC
+                })
+              else
+                onChange({
+                  [name]: undefined
+                })
+            }}
+          />
+        )
       }}
     />
   )
