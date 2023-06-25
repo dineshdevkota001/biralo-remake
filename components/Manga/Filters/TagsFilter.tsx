@@ -3,20 +3,22 @@ import { MANGA_TAGS } from '@constants/api/routes'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize, groupBy } from 'lodash'
 import { Control, Controller, Path, useFormContext } from 'react-hook-form'
-import { View } from 'react-native'
+import { View, ViewStyle } from 'react-native'
 import { Switch, Text, useTheme } from 'react-native-paper'
 import { TagModeEnum } from '@interfaces/enum'
-import PlusMinusChip from '@components/Common/Filters/PlusMinusChip'
+import ThreewaySwitch from '@components/Common/Input/Controlled/ThreewaySwitch'
 import { Section, formArrayHelpers } from './commmon'
 
 function SwitchWithTitle({
   title,
   control,
-  name
+  name,
+  direction = 'column'
 }: {
   title: string
   control: Control<IMangaRequest>
   name: Path<IMangaRequest>
+  direction?: ViewStyle['flexDirection']
 }) {
   const { colors } = useTheme()
 
@@ -28,19 +30,20 @@ function SwitchWithTitle({
         <View
           style={{
             display: 'flex',
-            flexDirection: 'row',
+            flexDirection: direction,
             alignItems: 'center',
-            gap: 16,
+            gap: 8,
+            flex: 1,
             justifyContent: 'space-between'
           }}
         >
-          <Text variant="labelLarge" style={{ color: colors.onSurfaceVariant }}>
-            {title}
-          </Text>
           <Switch
             value={value === TagModeEnum.AND}
             onValueChange={v => onChange(v ? TagModeEnum.AND : TagModeEnum.OR)}
           />
+          <Text variant="labelLarge" style={{ color: colors.onSurfaceVariant }}>
+            {title} mode : {value}
+          </Text>
         </View>
       )}
     />
@@ -66,16 +69,25 @@ export default function TagsFilter() {
 
   return (
     <>
-      <SwitchWithTitle
-        control={control}
-        name="includedTagsMode"
-        title="Include only if all + tags match"
-      />
-      <SwitchWithTitle
-        control={control}
-        name="excludedTagsMode"
-        title="Exclude only if all - tags match"
-      />
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: 32,
+          justifyContent: 'space-evenly'
+        }}
+      >
+        <SwitchWithTitle
+          control={control}
+          name="includedTagsMode"
+          title="Include"
+        />
+        <SwitchWithTitle
+          control={control}
+          name="excludedTagsMode"
+          title="Exclude"
+        />
+      </View>
       {formatFilters?.map(({ title, values }) => (
         <Controller
           key={title}
@@ -88,11 +100,19 @@ export default function TagsFilter() {
               render={({
                 field: { value: exclude, onChange: changeExcluded }
               }) => (
-                <Section title={title}>
+                <Section
+                  containerStyle={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap'
+                  }}
+                  title={title}
+                >
                   {values.map(tag => {
                     const {
                       isPresent: included,
-                      getToggledArray: toggleInclude
+                      getRemovedArray: removeInclude,
+                      getInsertedArray: insertInclude
                     } = formArrayHelpers(
                       include ?? [],
                       tag,
@@ -101,34 +121,48 @@ export default function TagsFilter() {
 
                     const {
                       isPresent: excluded,
-                      getToggledArray: toggleExcluded
+                      getRemovedArray: removeExclude,
+                      getInsertedArray: insertExclude
                     } = formArrayHelpers(
                       exclude ?? [],
                       tag,
                       id => id === tag.id
                     )
 
-                    let icon: 'plus' | 'minus' | undefined
-
-                    if (included) icon = 'plus'
-                    if (excluded) icon = 'minus'
+                    let value
+                    if (excluded) value = false
+                    else if (included) value = true
 
                     return (
-                      <PlusMinusChip
-                        icon={icon}
-                        onPress={() => {
-                          if (!excluded) {
-                            changeIncluded(toggleInclude())
-                          }
-                          if (included || excluded) {
-                            changeExcluded(toggleExcluded())
-                          }
+                      <View
+                        style={{
+                          flex: 1,
+                          minWidth: '40%',
+                          maxWidth: '50%'
                         }}
                       >
-                        {capitalize(
-                          tag.attributes.name?.en?.replaceAll('_', ' ')
-                        )}
-                      </PlusMinusChip>
+                        <ThreewaySwitch
+                          label={capitalize(
+                            tag.attributes.name?.en?.replaceAll('_', ' ')
+                          )}
+                          value={value}
+                          rightIconProps={{
+                            name: 'plus'
+                          }}
+                          leftIconProps={{
+                            name: 'minus'
+                          }}
+                          onChange={v => {
+                            if (typeof v === 'undefined')
+                              changeExcluded(removeExclude())
+                            else if (v === true) changeIncluded(insertInclude())
+                            else if (v === false) {
+                              changeExcluded(insertExclude())
+                              changeIncluded(removeInclude())
+                            }
+                          }}
+                        />
+                      </View>
                     )
                   })}
                 </Section>

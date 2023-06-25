@@ -1,20 +1,24 @@
-import { View } from 'react-native'
+import { StyleProp, View, ViewStyle } from 'react-native'
 import { Text, useTheme } from 'react-native-paper'
 
 export function Section({
   title,
-  children
-}: { title: string } & IHaveChildren) {
+  children,
+  containerStyle
+}: { title: string; containerStyle: StyleProp<ViewStyle> } & IHaveChildren) {
   const { colors } = useTheme()
   return (
     <View
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        borderColor: colors.shadow,
-        gap: 4
-      }}
+      style={[
+        {
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          borderColor: colors.shadow,
+          gap: 4
+        },
+        containerStyle
+      ]}
     >
       <Text
         variant="labelLarge"
