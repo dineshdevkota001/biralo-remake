@@ -1,7 +1,8 @@
 import { PublicationDemographicEnum, ContentRatingEnum } from '@interfaces/enum'
 import { capitalize } from 'lodash'
 import { Controller, useFormContext } from 'react-hook-form'
-import PlusMinusChip from '@components/Common/Filters/PlusMinusChip'
+import { View } from 'react-native'
+import TwowaySwitch from '@components/Common/Input/Controlled/TwoWaySwitch'
 import { Section, formArrayHelpers } from './commmon'
 
 const formatFilters = [
@@ -28,30 +29,35 @@ export default function FormatFilter() {
           control={control}
           name={name}
           key={title}
-          render={({ field: { value, onChange } }) => (
-            <Section title={title}>
-              {value?.length ? null : (
-                <PlusMinusChip selected>Any</PlusMinusChip>
-              )}
-              {Object.values(values).map(tag => {
-                const { isPresent, getToggledArray } = formArrayHelpers(
-                  value,
-                  tag
-                )
-
-                return (
-                  <PlusMinusChip
-                    selected={isPresent}
-                    onPress={() => {
-                      onChange(getToggledArray())
-                    }}
-                  >
-                    {capitalize(tag.split('_').join(' '))}
-                  </PlusMinusChip>
-                )
-              })}
-            </Section>
-          )}
+          render={({ field: { value, onChange } }) => {
+            return (
+              <Section title={title}>
+                {Object.values(values).map(tag => {
+                  const { isPresent, getToggledArray } = formArrayHelpers(
+                    value,
+                    tag
+                  )
+                  return (
+                    <View
+                      style={{
+                        flex: 1,
+                        minWidth: '40%',
+                        maxWidth: '50%'
+                      }}
+                    >
+                      <TwowaySwitch
+                        value={isPresent}
+                        onChange={() => {
+                          onChange(getToggledArray())
+                        }}
+                        label={capitalize(tag.split('_').join(' '))}
+                      />
+                    </View>
+                  )
+                })}
+              </Section>
+            )
+          }}
         />
       ))}
     </>

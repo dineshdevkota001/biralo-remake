@@ -5,7 +5,7 @@ export function Section({
   title,
   children,
   containerStyle
-}: { title: string; containerStyle: StyleProp<ViewStyle> } & IHaveChildren) {
+}: { title: string; containerStyle?: StyleProp<ViewStyle> } & IHaveChildren) {
   const { colors } = useTheme()
   return (
     <View

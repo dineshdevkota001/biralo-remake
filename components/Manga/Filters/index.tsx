@@ -13,7 +13,6 @@ import {
 } from 'react-hook-form'
 import useDebouncedInput from '@hooks/useDebouncedInput'
 import { useEffect } from 'react'
-import AppliedFilters from './AppliedFilters'
 import FormatFilter from './FormatFilter'
 import TagsFilter from './TagsFilter'
 import OrderByFilter from './OrderByFilter'
@@ -115,11 +114,11 @@ export default function MangaFilter() {
               mode="scrollable"
             >
               <FilterTab
-                label="Applied"
-                icon="filter-check"
+                label="Tags"
+                icon="tag"
                 contentContainerStyle={styles.tabScreen}
               >
-                <AppliedFilters />
+                <TagsFilter />
               </FilterTab>
               <FilterTab
                 contentContainerStyle={styles.tabScreen}
@@ -127,13 +126,6 @@ export default function MangaFilter() {
                 icon="account-group"
               >
                 <FormatFilter />
-              </FilterTab>
-              <FilterTab
-                label="Tags"
-                icon="tag"
-                contentContainerStyle={styles.tabScreen}
-              >
-                <TagsFilter />
               </FilterTab>
               <FilterTab
                 label="Order"
