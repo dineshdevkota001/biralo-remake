@@ -37,7 +37,6 @@ axios.interceptors.response.use(async v => {
     if (token) tries = 0
     else tries += 1
   }
-  console.log(token)
   return v
 })
 

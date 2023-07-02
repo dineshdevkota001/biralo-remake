@@ -1,30 +1,26 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import MangaList from '@screens/Manga/MangaList'
-import Mangalist from '@screens/Home/Latest'
-import { Settings } from '@screens/Profile'
-import useAuth from '@contexts/AuthContext'
-import LoginScreen from '@screens/Auth/LoginPage'
+import RecentChapters from '@screens/Home/Latest'
 import UserFeedScreen from '@screens/User/Feed'
+import { SEARCH } from '@constants/static/screens'
 
 const Tab = createMaterialBottomTabNavigator<IRootBottomTabsParams>()
 
 export default function BottomTabs() {
-  const { isAuthenticated } = useAuth()
-
   return (
-    <Tab.Navigator shifting>
+    <Tab.Navigator>
       <Tab.Screen
         name="Latest"
-        component={Mangalist}
+        component={RecentChapters}
         options={{
           tabBarIcon: 'flash'
         }}
       />
       <Tab.Screen
-        name="Home"
+        name={SEARCH}
         component={MangaList}
         options={{
-          tabBarIcon: 'home'
+          tabBarIcon: 'feature-search-outline'
         }}
       />
       <Tab.Screen
@@ -32,13 +28,6 @@ export default function BottomTabs() {
         component={UserFeedScreen}
         options={{
           tabBarIcon: 'newspaper-variant'
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={isAuthenticated ? Settings : LoginScreen}
-        options={{
-          tabBarIcon: 'face-man'
         }}
       />
     </Tab.Navigator>

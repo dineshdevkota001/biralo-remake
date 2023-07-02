@@ -4,16 +4,39 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@constants/*": ["./constants/*"],
-      "@navigators/*": ["./navigators/*"],
-      "@screens/*": ["./screens/*"],
-      "@utils/*": ["./utils/*"],
-      "@assets/*": ["./assets/*"],
-      "@components/*": ["./components/*"],
-      "@api/*": ["./api/*"],
-      "@hooks/*": ["./hooks/*"],
-      "@contexts/*": ["./contexts/*"],
-      "@interfaces/*": ["./interfaces/*"]
+      "@constants/*": [
+        "./constants/*"
+      ],
+      "@navigators/*": [
+        "./navigators/*"
+      ],
+      "@screens/*": [
+        "./screens/*"
+      ],
+      "@utils/*": [
+        "./utils/*"
+      ],
+      "@assets/*": [
+        "./assets/*"
+      ],
+      "@components/*": [
+        "./components/*"
+      ],
+      "@api/*": [
+        "./api/*"
+      ],
+      "@hooks/*": [
+        "./hooks/*"
+      ],
+      "@contexts/*": [
+        "./contexts/*"
+      ],
+      "@interfaces/*": [
+        "./interfaces/*"
+      ],
+      "@styles/*": [
+        "./styles/*"
+      ]
     }
   }
 }

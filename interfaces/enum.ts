@@ -117,7 +117,9 @@ export enum LocalizationLanguageEnum {
   KK = 'kk',
   ID = 'id',
   TR = 'tr',
-  EO = 'eo'
+  EO = 'eo',
+  VI = 'vi',
+  DE = 'de'
 }
 
 export enum CoverQualityEnum {

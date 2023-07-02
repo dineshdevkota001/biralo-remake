@@ -37,10 +37,10 @@ export function AuthProvider({ children }: IHaveChildren) {
 
     try {
       const { data } = await axios.get<IResponseEntity<IMe>>('/user/me')
-      console.log(data)
+
       if (data.result === ResponseResultEnum.OK) setUser(data.data)
     } catch (e) {
-      console.log('me error', e.message ?? 'Me Error')
+      console.log('me error', (e as Error)?.message ?? 'Me Error')
       setUser(null)
     }
   }, [])

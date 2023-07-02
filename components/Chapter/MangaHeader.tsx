@@ -2,12 +2,30 @@ import { Tags } from '@components/Tag'
 import useCoverArt from '@hooks/useCoverArt'
 import { useRoute } from '@react-navigation/native'
 import { getString, getTitle } from '@utils/getLocalizedString'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Card, Chip, Surface, Text, TouchableRipple } from 'react-native-paper'
 import { SharedElement } from 'react-navigation-shared-element'
 import { capitalize, flatten } from 'lodash'
 import Flag from '@components/Common/Flag'
 import MangaStatistics from './MangaStatistics'
+
+const styles = StyleSheet.create({
+  content: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 4,
+    flexWrap: 'wrap'
+  },
+  root: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start'
+  },
+  cover: {
+    width: 120
+  },
+  container: { marginBottom: 12, paddingTop: 12, paddingBottom: 12 }
+})
 
 export default function MangaHeader() {
   const {
@@ -27,26 +45,15 @@ export default function MangaHeader() {
   const { url } = useCoverArt(manga.id, manga.relationships)
 
   return (
-    <Surface
-      mode="flat"
-      style={{ marginBottom: 12, paddingTop: 12, paddingBottom: 12 }}
-    >
+    <Surface mode="flat" style={styles.container}>
       <Card.Content>
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'flex-start'
-          }}
-        >
+        <View style={styles.root}>
           <SharedElement id={`${manga.id}.cover`}>
             <Card.Cover
               source={{
                 uri: url
               }}
-              style={{
-                width: 120
-              }}
+              style={styles.cover}
             />
           </SharedElement>
           <View style={{ flex: 1, alignItems: 'flex-start' }}>
@@ -59,14 +66,7 @@ export default function MangaHeader() {
             />
             <Card.Content>
               <MangaStatistics />
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  gap: 4,
-                  flexWrap: 'wrap'
-                }}
-              >
+              <View style={styles.content}>
                 <Text variant="titleSmall" style={{ width: '100%' }}>
                   Translated In
                 </Text>
@@ -80,13 +80,7 @@ export default function MangaHeader() {
           </View>
         </View>
         <Tags tags={tags} />
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: 4
-          }}
-        >
+        <View style={styles.content}>
           {publicationDemographic ? (
             <Chip compact>{capitalize(publicationDemographic)}</Chip>
           ) : null}

@@ -1,6 +1,7 @@
 import Icon, { IconProps } from '@components/Core/Icon'
+import useTheme from '@styles/appStyle'
 import { View } from 'react-native'
-import { Text, TouchableRipple, useTheme } from 'react-native-paper'
+import { Text, TouchableRipple } from 'react-native-paper'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -46,7 +47,7 @@ export default function ThreewaySwitch({
 
     let triStateColor
     if (diff < 0) triStateColor = colors.error
-    else if (diff > 0) triStateColor = colors.primary
+    else if (diff > 0) triStateColor = colors.success
     else triStateColor = colors.background
 
     return {
@@ -63,8 +64,8 @@ export default function ThreewaySwitch({
       triStateColor = colors.onErrorContainer
       triStateBackground = colors.errorContainer
     } else if (diff > 0) {
-      triStateColor = colors.onPrimaryContainer
-      triStateBackground = colors.primaryContainer
+      triStateColor = colors.onSuccessContainer
+      triStateBackground = colors.successContainer
     }
 
     return {
@@ -107,7 +108,7 @@ export default function ThreewaySwitch({
             alignItems: 'center'
           }}
         >
-          <Icon name="check" color={colors.onPrimary} {...rightIconProps} />
+          <Icon name="check" color={colors.onSuccess} {...rightIconProps} />
         </View>
         <Animated.View
           style={[

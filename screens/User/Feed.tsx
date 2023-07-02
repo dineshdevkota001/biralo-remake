@@ -1,15 +1,38 @@
 import ChapterCompactThumbnail from '@components/Chapter/Thumbnail/Compact'
 import MangaRow1Thumbnail from '@components/Manga/Thumbnails/Row-1'
+import useAuth from '@contexts/AuthContext'
+import LoginButton from '@screens/Profile/LoginButton'
 import { FlatList } from 'react-native'
-import { Card, Text } from 'react-native-paper'
+import { Appbar, Button, Card, Dialog, Portal, Text } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function UserFeedScreen() {
+  const { user } = useAuth()
   const mangas = []
+
+  if (!user)
+    return (
+      <>
+        <Appbar.Header>
+          <Appbar.Content title="Feed" />
+        </Appbar.Header>
+        <Dialog visible dismissable={false}>
+          <Dialog.Title>No user login</Dialog.Title>
+          <Dialog.Content>
+            <Text>Log in to get your feed here.</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <LoginButton />
+          </Dialog.Actions>
+        </Dialog>
+      </>
+    )
+
   return (
     <SafeAreaView edges={['top']}>
       <FlatList
         data={mangas}
+        scrollEnabled={false}
         renderItem={({ item }) =>
           item ? (
             <MangaRow1Thumbnail {...item}>

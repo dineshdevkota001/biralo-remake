@@ -32,7 +32,7 @@ export default function Flag({
   if (!isoCode) return null
 
   if (!Object.values(LocalizationLanguageEnum).includes(isoCode))
-    console.log(isoCode)
+    console.log('unknown isoCode', isoCode)
 
   const [primary, secondary] =
     isoCode?.length <= 2 ? [isoCode, ''] : isoCode.split('-')

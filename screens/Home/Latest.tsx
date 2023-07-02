@@ -5,10 +5,12 @@ import MangaRow1Thumbnail, {
 import { FlatList } from 'react-native'
 import { useLatestChapters } from '@hooks/api/chapter'
 import ChapterCompactThumbnail from '@components/Chapter/Thumbnail/Compact'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Card, Text } from 'react-native-paper'
+import { Appbar, Card, Text } from 'react-native-paper'
+import { LATEST, PROFILE } from '@constants/static/screens'
 
-export default function RecentChapters() {
+export default function RecentChapters({
+  navigation
+}: IRootBottomTabsScreenProps<typeof LATEST>) {
   const {
     data: mangas,
     isLoading,
@@ -17,7 +19,14 @@ export default function RecentChapters() {
   } = useLatestChapters()
 
   return (
-    <SafeAreaView edges={['top']}>
+    <>
+      <Appbar.Header>
+        <Appbar.Action
+          icon="face-agent"
+          onPress={() => navigation.navigate(PROFILE)}
+        />
+        <Appbar.Content title="Latest" />
+      </Appbar.Header>
       <FlatList
         data={mangas}
         renderItem={({ item }) =>
@@ -58,6 +67,6 @@ export default function RecentChapters() {
         }
         onEndReached={() => (pageInfo?.hasNextPage ? fetchNextPage() : null)}
       />
-    </SafeAreaView>
+    </>
   )
 }
