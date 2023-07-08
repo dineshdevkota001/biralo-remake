@@ -1,4 +1,4 @@
-interface IConfigContext {
+interface IConfig {
   quality: QualityEnum
   language: LocalizationLanguageEnum
   coverQuality: CoverQualityEnum
@@ -13,6 +13,6 @@ interface IConfigContext {
 }
 
 interface IConfigurationContext {
-  config: IConfigContext
-  setConfig: (v: Partial<IConfigContext>) => void
+  config: IConfig
+  setConfig: (v: Partial<IConfig>) => void
 }

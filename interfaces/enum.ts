@@ -119,7 +119,11 @@ export enum LocalizationLanguageEnum {
   TR = 'tr',
   EO = 'eo',
   VI = 'vi',
-  DE = 'de'
+  DE = 'de',
+  HI = 'hi',
+  AR = 'ar',
+  TH = 'th',
+  RO = 'ro'
 }
 
 export enum CoverQualityEnum {

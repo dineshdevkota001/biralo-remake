@@ -165,6 +165,7 @@ declare global {
     publishAt?: string
     readableAt?: string
   }
+
   interface ITagAttributes {
     name?: LocalizedString
     description?: LocalizedString

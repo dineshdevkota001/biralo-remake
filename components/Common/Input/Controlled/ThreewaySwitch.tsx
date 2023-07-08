@@ -1,5 +1,6 @@
 import Icon, { IconProps } from '@components/Core/Icon'
 import useTheme from '@styles/appStyle'
+import { useEffect } from 'react'
 import { View } from 'react-native'
 import { Text, TouchableRipple } from 'react-native-paper'
 import Animated, {
@@ -30,7 +31,7 @@ export default function ThreewaySwitch({
   onChange: (v: ITriStateValue) => void
 }) {
   const { colors } = useTheme()
-  const offset = useSharedValue(triStateToNumber(value) * iconWidth)
+  const offset = useSharedValue(0)
 
   const setValue = (newValue: ITriStateValue) => {
     onChange(newValue)
@@ -39,8 +40,11 @@ export default function ThreewaySwitch({
   const toggleValue = () => {
     const newValue = value === false ? undefined : !value
     setValue(newValue)
-    offset.value = withTiming(triStateToNumber(newValue) * iconWidth)
   }
+
+  useEffect(() => {
+    offset.value = withTiming(triStateToNumber(value) * iconWidth)
+  }, [value, iconWidth, offset])
 
   const containerStyle = useAnimatedStyle(() => {
     const diff = offset.value

@@ -3,7 +3,26 @@ import useConfiguration from '@contexts/ConfigurationContext'
 import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import useBottomSheetModal from '@hooks/useBottomSheet'
 import { FormProvider, useForm } from 'react-hook-form'
-import { Button, Text, useTheme } from 'react-native-paper'
+import { StyleSheet, View } from 'react-native'
+import { Button, Card, Text, useTheme } from 'react-native-paper'
+
+const styles = StyleSheet.create({
+  horizontal: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 16,
+    justifyContent: 'space-between'
+  },
+  vertical: {
+    display: 'flex',
+    alignItems: 'center',
+    flex: 1,
+    padding: 16
+  },
+  textCenter: {
+    textAlign: 'center'
+  }
+})
 
 export default function Tags() {
   const { colors } = useTheme()
@@ -19,8 +38,9 @@ export default function Tags() {
       includedTags
     }
   })
+
   const onSubmit = form.handleSubmit(
-    (values: Pick<IConfigContext, 'excludedTags' | 'includedTags'>) => {
+    (values: Pick<IConfig, 'excludedTags' | 'includedTags'>) => {
       setConfig({
         excludedTags: values?.excludedTags,
         includedTags: values?.includedTags
@@ -30,10 +50,26 @@ export default function Tags() {
 
   return (
     <>
-      <Text>{excludedTags?.length || 0} tags excluded</Text>
-      <Text>{includedTags?.length || 0} tags included</Text>
-      <Text>{JSON.stringify(config)} tags included</Text>
-      <Button onPress={handleOpen}>Change</Button>
+      <View style={styles.horizontal}>
+        <Text variant="titleMedium">Tags</Text>
+        <Button onPress={handleOpen} mode="text">
+          Change
+        </Button>
+      </View>
+      <View style={styles.horizontal}>
+        <Card style={styles.vertical}>
+          <Text variant="titleSmall">Excluded</Text>
+          <Text variant="displaySmall" style={styles.textCenter}>
+            {excludedTags.length ?? 0}
+          </Text>
+        </Card>
+        <Card style={styles.vertical}>
+          <Text variant="titleSmall">Included</Text>
+          <Text variant="displaySmall" style={styles.textCenter}>
+            {includedTags.length ?? 0}
+          </Text>
+        </Card>
+      </View>
       <BottomSheetModal
         {...props}
         snapPoints={['50%', '80%']}

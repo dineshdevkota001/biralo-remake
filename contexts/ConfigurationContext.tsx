@@ -25,7 +25,7 @@ export function ConfigurationProvider({
   children
 }: IHaveChildren & Parameters<typeof useForm>[0]) {
   const [configuration, setConfiguration] = useState<
-    Partial<IConfigContext> | undefined
+    Partial<IConfig> | undefined
   >()
   const { getItem, setItem } = useAsyncStorage(configKey)
 
@@ -39,7 +39,7 @@ export function ConfigurationProvider({
   }, [refreshConfig, configuration])
 
   const setConfig = useCallback(
-    (change: Partial<IConfigContext>) => {
+    (change: Partial<IConfig>) => {
       setConfiguration(c => {
         const changedConfig = { ...(c ?? {}), ...change }
         setItem(JSON.stringify(changedConfig))

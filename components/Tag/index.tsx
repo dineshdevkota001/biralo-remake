@@ -4,7 +4,11 @@ import { capitalize, groupBy } from 'lodash'
 import { View } from 'react-native'
 import { Chip, Text, useTheme } from 'react-native-paper'
 
-export default function Tag({ name, group }: ITagAttributes) {
+export default function Tag({
+  name,
+  group,
+  id
+}: ITagAttributes & { id: string }) {
   const { colors } = useTheme()
 
   const groupToColorMap: Record<TagGroupEnum, string> = {
@@ -54,7 +58,7 @@ export function TagGroup({
         }}
       >
         {tags?.map(({ attributes: tag, id }) => (
-          <Tag key={id} {...tag} />
+          <Tag key={id} {...tag} id={id} />
         ))}
       </View>
     </View>

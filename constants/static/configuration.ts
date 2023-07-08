@@ -4,7 +4,7 @@ import {
   QualityEnum
 } from '@interfaces/enum'
 
-const defaultConfig: IConfigContext = {
+const defaultConfig: IConfig = {
   quality: QualityEnum.DATA_SAVER,
   language: LocalizationLanguageEnum.EN,
   coverQuality: CoverQualityEnum.LOW,

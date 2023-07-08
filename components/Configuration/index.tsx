@@ -31,7 +31,6 @@ export default function Configuration() {
       <ColorScheme />
       <Text variant="titleMedium">Theme</Text>
       <Themes />
-      <Text variant="titleMedium">Tags</Text>
       <Tags />
     </View>
   )
