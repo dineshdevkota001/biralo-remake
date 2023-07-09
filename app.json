@@ -1,7 +1,10 @@
 {
   "id": 1,
   "expo": {
-    "scheme": "localhost",
+    "scheme": "biralo",
+    "web": {
+      "bundler": "metro"
+    },
     "userInterfaceStyle": "automatic",
     "ios": {
       "userInterfaceStyle": "automatic"

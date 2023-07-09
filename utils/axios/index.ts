@@ -1,16 +1,16 @@
 import { BACKEND } from '@constants/api'
 import axios from 'axios'
 import { merge } from 'lodash'
-import getToken, { refreshToken } from './token'
+// import getToken, { refreshToken } from './token'
 
 axios.defaults.baseURL = BACKEND
 
-let token: string | null
+const token: string | null = null
 let tested = false
 let tries = 0
 
 export async function refreshTokenOnAxios() {
-  token = await getToken()
+  // token = await getToken()
 }
 
 axios.interceptors.request.use(
@@ -33,7 +33,7 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(async v => {
   if ((v.status === 401 || v.status === 403) && tries < 3) {
-    token = await refreshToken()
+    // token = await refreshToken()
     if (token) tries = 0
     else tries += 1
   }
