@@ -15,7 +15,6 @@ const defaultConfig: IConfig = {
   translatedLanguage: [],
   originalLanguage: [],
   themeColor: '#ff6740'
-  // readingMode: 'adaptive'
 }
 
 export default defaultConfig

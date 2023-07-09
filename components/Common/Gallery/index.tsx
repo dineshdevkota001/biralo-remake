@@ -118,7 +118,7 @@ export default function Gallery() {
             ]}
           />
         </GestureDetector>
-        <Menu title={title} />
+        <Menu title={title} id={chapterId} />
       </SafeAreaView>
     </GalleryContextProvider>
   )

@@ -5,7 +5,8 @@ import {
   GALLERY,
   LATEST,
   PROFILE,
-  SEARCH
+  SEARCH,
+  WEBVIEW
 } from '@constants/static/screens'
 import { QualityEnum } from '@interfaces/enum'
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
@@ -20,6 +21,10 @@ declare global {
       manga: IManga
     }
     [PROFILE]: undefined
+    [WEBVIEW]: {
+      uri: string
+      title?: string
+    }
   }
   type IRootBottomTabsParams = {
     [SEARCH]: undefined

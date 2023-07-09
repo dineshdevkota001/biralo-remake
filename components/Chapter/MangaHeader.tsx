@@ -4,7 +4,6 @@ import { useRoute } from '@react-navigation/native'
 import { getString, getTitle } from '@utils/getLocalizedString'
 import { StyleSheet, View } from 'react-native'
 import { Card, Chip, Surface, Text, TouchableRipple } from 'react-native-paper'
-import { SharedElement } from 'react-navigation-shared-element'
 import { capitalize, flatten } from 'lodash'
 import Flag from '@components/Common/Flag'
 import MangaStatistics from './MangaStatistics'
@@ -48,14 +47,12 @@ export default function MangaHeader() {
     <Surface mode="flat" style={styles.container}>
       <Card.Content>
         <View style={styles.root}>
-          <SharedElement id={`${manga.id}.cover`}>
-            <Card.Cover
-              source={{
-                uri: url
-              }}
-              style={styles.cover}
-            />
-          </SharedElement>
+          <Card.Cover
+            source={{
+              uri: url
+            }}
+            style={styles.cover}
+          />
           <View style={{ flex: 1, alignItems: 'flex-start' }}>
             <Card.Title
               title={getTitle(title)}

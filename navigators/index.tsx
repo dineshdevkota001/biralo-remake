@@ -1,17 +1,21 @@
 import { getHeaderTitle } from '@react-navigation/elements'
-import { StackHeaderProps } from '@react-navigation/stack'
 import Gallery from '@screens/Common/Gallery'
 import ChapterList from '@screens/Manga/MangaFeed'
 import { getTitle } from '@utils/getLocalizedString'
 import { Appbar } from 'react-native-paper'
-import { createSharedElementStackNavigator } from 'react-navigation-shared-element'
 import {
   BOTTOM_TABS,
   CHAPTERS,
   GALLERY,
-  PROFILE
+  PROFILE,
+  WEBVIEW
 } from '@constants/static/screens'
 import Profile from '@screens/Profile/Settings'
+import {
+  NativeStackHeaderProps,
+  createNativeStackNavigator
+} from '@react-navigation/native-stack'
+import WebViewScreen from '@screens/Common/Webview'
 import BottomTabs from './BottomTabs'
 
 export function MaterialYouHeader({
@@ -19,7 +23,7 @@ export function MaterialYouHeader({
   route,
   navigation,
   back
-}: StackHeaderProps) {
+}: NativeStackHeaderProps) {
   const title = getHeaderTitle(options, route.name)
   return (
     <Appbar.Header>
@@ -29,7 +33,7 @@ export function MaterialYouHeader({
   )
 }
 
-const Stack = createSharedElementStackNavigator<IRootStackParams>()
+const Stack = createNativeStackNavigator<IRootStackParams>()
 
 export default function Navigation() {
   return (
@@ -51,14 +55,17 @@ export default function Navigation() {
         options={({ route }) => ({
           title: getTitle(route.params.manga.attributes.title)
         })}
-        sharedElements={route => {
-          const { id } = route.params
-          return [`${id}.cover`]
-        }}
       />
       <Stack.Screen
         name={GALLERY}
         component={Gallery}
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name={WEBVIEW}
+        component={WebViewScreen}
         options={{
           headerShown: false
         }}

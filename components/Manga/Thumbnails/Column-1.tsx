@@ -29,15 +29,13 @@ export default function MangaColumn1Thumbnail({
         })
       }
     >
-      <SharedElement id={`${id}.cover`}>
-        <Card.Cover
-          source={{
-            uri: url,
-            height: 90,
-            width: 160
-          }}
-        />
-      </SharedElement>
+      <Card.Cover
+        source={{
+          uri: url,
+          height: 90,
+          width: 160
+        }}
+      />
       <Card.Title title={getTitle(title)} />
       <Card.Content>
         <Tags tags={tags} hideTitle includeTags={[TagGroupEnum.THEME]} />

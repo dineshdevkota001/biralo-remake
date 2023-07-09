@@ -1,17 +1,22 @@
+import { MANGA_THREAD_LINK } from '@constants/api/routes'
+import { GALLERY, WEBVIEW } from '@constants/static/screens'
 import useGallery, { RESIZE_MODE } from '@contexts/GalleryContext'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import useChapterStats from '@hooks/api/statistics/chapter/<id>'
 import useBottomSheetModal, { useDynamicModal } from '@hooks/useBottomSheet'
 import useChapterControls from '@hooks/useChapterControl'
 import { useNavigation } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import {
+  Chip,
   IconButton,
   IconButtonProps,
   Surface,
   Text,
   useTheme
 } from 'react-native-paper'
+import Gallery from '.'
 
 function MenuIcon(props: IconButtonProps) {
   const { colors } = useTheme()
@@ -55,8 +60,9 @@ function GroupedSetting({
   )
 }
 
-export default function Menu({ title }: { title: string }) {
-  const navigation = useNavigation()
+export default function Menu({ title, id }: { title: string; id: string }) {
+  const navigation =
+    useNavigation<IRootStackScreenProps<typeof GALLERY>['navigation']>()
   const [props, { handleOpen, handleClose }] = useBottomSheetModal()
   const [dynamicProps, dynamicChildrenProps] = useDynamicModal({
     snapPoints: [32, 'CONTENT_HEIGHT']
@@ -64,6 +70,7 @@ export default function Menu({ title }: { title: string }) {
 
   const [{ isHorizontal, resizeMode }, { setIsHorizontal, setResizeMode }] =
     useGallery()
+  const { data } = useChapterStats({ id })
 
   const [isExtraMenuOpen, setIsExtraMenuOpen] = useState(false)
 
@@ -118,6 +125,25 @@ export default function Menu({ title }: { title: string }) {
           >
             {title}
           </Text>
+          {data?.statistics?.comments ? (
+            <View style={{ minWidth: '90%', flex: 1, alignSelf: 'flex-start' }}>
+              <Chip
+                compact
+                mode="flat"
+                onPress={e => {
+                  e.stopPropagation()
+                  navigation.navigate(WEBVIEW, {
+                    uri: MANGA_THREAD_LINK(
+                      data?.statistics?.comments?.threadId as string
+                    ),
+                    title
+                  })
+                }}
+              >
+                {data?.statistics?.comments?.repliesCount}
+              </Chip>
+            </View>
+          ) : null}
           <MenuIcon
             icon="file-image"
             onPress={() => {

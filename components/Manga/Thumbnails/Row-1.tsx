@@ -30,16 +30,14 @@ export default function MangaRow1Thumbnail({
           overflow: 'hidden'
         }}
       >
-        <SharedElement id={`${id}.cover`}>
-          <Card.Cover
-            source={{
-              uri: url
-            }}
-            style={{
-              width: 120
-            }}
-          />
-        </SharedElement>
+        <Card.Cover
+          source={{
+            uri: url
+          }}
+          style={{
+            width: 120
+          }}
+        />
         <View
           style={{
             flex: 1,
