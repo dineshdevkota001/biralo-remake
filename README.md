@@ -7,14 +7,14 @@ General Features i want to reach with this project
 - [x] Manga reading
 - [x] Link to comments
 - [x] Manga ratings
-- [-] link tags to manga search field
-- [-] Progress
-- [-] login
-- [-] Show seen unseen chapters
-- [-] show logged in feed
-- [-] show library for the user
-- [-] link to outside for manga
-- [-] Like unlike and rate after login
+- [ ] link tags to manga search field
+- [ ] Progress
+- [ ] login
+- [ ] Show seen unseen chapters
+- [ ] show logged in feed
+- [ ] show library for the user
+- [ ] link to outside for manga
+- [ ] Like unlike and rate after login
 
 # Important Notice
 
