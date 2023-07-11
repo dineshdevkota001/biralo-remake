@@ -1,4 +1,4 @@
-import { LocalizationLanguageEnum } from '@interfaces/enum'
+import { LocalizationLanguageEnum } from '@interfaces/mangadex/enum'
 import { get } from 'lodash'
 
 const defaultLanguage = LocalizationLanguageEnum.EN

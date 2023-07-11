@@ -5,7 +5,7 @@ import {
   Path,
   useFormContext
 } from 'react-hook-form'
-import { OrderEnum } from '@interfaces/enum'
+import { OrderEnum } from '@interfaces/mangadex/enum'
 import ThreewaySwitch from '@components/Common/Input/Controlled/ThreewaySwitch'
 
 const orderProperties = [

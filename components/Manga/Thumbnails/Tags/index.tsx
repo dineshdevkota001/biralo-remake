@@ -1,5 +1,5 @@
 import { Tags } from '@components/Tag'
-import { TagGroupEnum } from '@interfaces/enum'
+import { TagGroupEnum } from '@interfaces/mangadex/enum'
 import { Card } from 'react-native-paper'
 
 export default function ThumbnailTags({

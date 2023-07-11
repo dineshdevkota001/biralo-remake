@@ -1,6 +1,6 @@
 import Flag from '@components/Common/Flag'
 import useChapterThumbnail from '@hooks/components/useChapterThumbnail'
-import { LocalizationLanguageEnum } from '@interfaces/enum'
+import { LocalizationLanguageEnum } from '@interfaces/mangadex/enum'
 import { formatDistance } from 'date-fns'
 import { View } from 'react-native'
 import { Text, TouchableRipple, useTheme } from 'react-native-paper'

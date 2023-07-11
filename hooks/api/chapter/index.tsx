@@ -1,6 +1,6 @@
 import getFlattenedList from '@utils/getFlattenedList'
 import { CHAPTER, MANGA } from '@constants/api/routes'
-import { OrderEnum, TypeEnum } from '@interfaces/enum'
+import { OrderEnum, TypeEnum } from '@interfaces/mangadex/enum'
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query'
 import axios from '@utils/axios'
 import getRelationOfType from '@utils/getRelationshipOfType'
@@ -24,15 +24,15 @@ async function chapters({
       }
     )
 
+    if (res.data.result === 'error') throw Error(res.data.errors?.[0]?.message)
+
     const chapterList = res.data?.data
 
     const mangaIdToChapters: Record<string, IChapter[]> = chapterList.reduce(
       (acc, curr) => {
-        const mangaId = (
-          getRelationOfType(
-            curr.relationships,
-            TypeEnum.MANGA
-          ) as IGeneralRelation<IManga>
+        const mangaId = getRelationOfType<IMangaRelated>(
+          curr.relationships,
+          TypeEnum.MANGA
         )?.id
 
         if (mangaId && acc?.[mangaId]) acc[mangaId].push(curr)

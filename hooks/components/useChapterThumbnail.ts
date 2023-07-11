@@ -1,4 +1,4 @@
-import { TypeEnum } from '@interfaces/enum'
+import { TypeEnum } from '@interfaces/mangadex/enum'
 import { useNavigation } from '@react-navigation/native'
 import getRelationOfType from '@utils/getRelationshipOfType'
 

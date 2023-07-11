@@ -3,7 +3,6 @@ import { useNavigation } from '@react-navigation/native'
 import { getTitle } from '@utils/getLocalizedString'
 import { View } from 'react-native'
 import { Card, useTheme } from 'react-native-paper'
-import { SharedElement } from 'react-navigation-shared-element'
 
 export default function MangaRow1Thumbnail({
   children,

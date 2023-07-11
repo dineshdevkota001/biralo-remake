@@ -1,4 +1,7 @@
-import { PublicationDemographicEnum, ContentRatingEnum } from '@interfaces/enum'
+import {
+  PublicationDemographicEnum,
+  ContentRatingEnum
+} from '@interfaces/mangadex/enum'
 import { capitalize } from 'lodash'
 import { Controller, useFormContext } from 'react-hook-form'
 import { View } from 'react-native'

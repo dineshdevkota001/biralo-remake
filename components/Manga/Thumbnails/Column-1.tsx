@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import { getTitle } from '@utils/getLocalizedString'
 import { Card, useTheme } from 'react-native-paper'
 import { SharedElement } from 'react-navigation-shared-element'
-import { TagGroupEnum } from '@interfaces/enum'
+import { TagGroupEnum } from '@interfaces/mangadex/enum'
 
 export default function MangaColumn1Thumbnail({
   children,

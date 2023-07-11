@@ -1,7 +1,7 @@
 import { CDN } from '@constants/api'
 import { GalleryContextProvider } from '@contexts/GalleryContext'
 import useChapterControls from '@hooks/useChapterControl'
-import { QualityEnum } from '@interfaces/enum'
+import { QualityEnum } from '@interfaces/mangadex/enum'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'

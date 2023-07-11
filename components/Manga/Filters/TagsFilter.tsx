@@ -5,7 +5,7 @@ import { capitalize, groupBy } from 'lodash'
 import { Control, Controller, Path, useFormContext } from 'react-hook-form'
 import { View, ViewStyle } from 'react-native'
 import { Switch, Text, useTheme } from 'react-native-paper'
-import { TagModeEnum } from '@interfaces/enum'
+import { TagModeEnum } from '@interfaces/mangadex/enum'
 import ThreewaySwitch from '@components/Common/Input/Controlled/ThreewaySwitch'
 import { Section, formArrayHelpers } from './commmon'
 

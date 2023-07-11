@@ -130,3 +130,21 @@ export enum CoverQualityEnum {
   LOW = 256,
   HIGH = 512
 }
+
+declare global {
+  type IQualityEnum = QualityEnum
+  type IResponseResultEnum = ResponseResultEnum
+  type IResponseTypeEnum = ResponseTypeEnum
+  type ITagModeEnum = TagModeEnum
+  type ITypeEnum = TypeEnum
+  type IPublicationDemographicEnum = PublicationDemographicEnum
+  type IStatusEnum = StatusEnum
+  type IContentRatingEnum = ContentRatingEnum
+  type IContentWarningEnum = ContentWarningEnum
+  type IStateEnum = StateEnum
+  type IOrderEnum = OrderEnum
+  type IMangaRelationEnum = MangaRelationEnum
+  type ITagGroupEnum = TagGroupEnum
+  type ILocalizationLanguageEnum = LocalizationLanguageEnum
+  type ICoverQualityEnum = CoverQualityEnum
+}

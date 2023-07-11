@@ -3,12 +3,12 @@ import MangaRow1Thumbnail from '@components/Manga/Thumbnails/Row-1'
 import useAuth from '@contexts/AuthContext'
 import LoginButton from '@screens/Profile/LoginButton'
 import { FlatList } from 'react-native'
-import { Appbar, Button, Card, Dialog, Portal, Text } from 'react-native-paper'
+import { Appbar, Card, Dialog, Text } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function UserFeedScreen() {
   const { user } = useAuth()
-  const mangas = []
+  const mangas: (IManga & { chapters: IChapter[] })[] = []
 
   if (!user)
     return (
@@ -61,15 +61,6 @@ export default function UserFeedScreen() {
           `${item?.id}${item?.chapters?.[0]?.id}${index}` || ''
         }
         onEndReachedThreshold={0.8}
-        // ListFooterComponent={
-        //   pageInfo?.hasNextPage || isLoading ? (
-        //     <Duplicate
-        //       Component={MangaRow1Skeleton}
-        //       times={isLoading ? 6 : undefined}
-        //     />
-        //   ) : null
-        // }
-        // onEndReached={() => (pageInfo?.hasNextPage ? fetchNextPage() : null)}
       />
     </SafeAreaView>
   )

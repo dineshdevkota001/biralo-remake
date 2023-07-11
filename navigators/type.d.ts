@@ -8,7 +8,7 @@ import {
   SEARCH,
   WEBVIEW
 } from '@constants/static/screens'
-import { QualityEnum } from '@interfaces/enum'
+import { QualityEnum } from '@interfaces/mangadex/enum'
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 

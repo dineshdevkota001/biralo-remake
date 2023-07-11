@@ -1,7 +1,7 @@
-import { TypeEnum } from '@interfaces/enum'
+import { TypeEnum } from '@interfaces/mangadex/enum'
 
-export default function getRelationOfType<U, T = unknown>(
-  relationships: IGeneralRelation<T>[],
+export default function getRelationOfType<U>(
+  relationships: IBaseRelation[],
   objectType: TypeEnum
 ): U {
   return relationships?.find(({ type }) => type === objectType) as unknown as U

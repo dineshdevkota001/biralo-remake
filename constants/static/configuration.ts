@@ -2,7 +2,7 @@ import {
   CoverQualityEnum,
   LocalizationLanguageEnum,
   QualityEnum
-} from '@interfaces/enum'
+} from '@interfaces/mangadex/enum'
 
 const defaultConfig: IConfig = {
   quality: QualityEnum.DATA_SAVER,

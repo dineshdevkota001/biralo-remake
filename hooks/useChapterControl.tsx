@@ -1,4 +1,4 @@
-import { ResponseResultEnum } from '@interfaces/enum'
+import { ResponseResultEnum } from '@interfaces/mangadex/enum'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { flatten } from 'lodash'

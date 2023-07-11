@@ -8,7 +8,7 @@ import {
   useState
 } from 'react'
 import axios from '@utils/axios'
-import { ResponseResultEnum } from '@interfaces/enum'
+import { ResponseResultEnum } from '@interfaces/mangadex/enum'
 
 type AuthContext = {
   isAuthenticated: boolean

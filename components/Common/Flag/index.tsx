@@ -1,5 +1,5 @@
 import CountryFlag from 'react-native-country-flag'
-import { LocalizationLanguageEnum } from '@interfaces/enum'
+import { LocalizationLanguageEnum } from '@interfaces/mangadex/enum'
 import { ComponentProps } from 'react'
 import { View } from 'react-native'
 import { Text } from 'react-native-paper'

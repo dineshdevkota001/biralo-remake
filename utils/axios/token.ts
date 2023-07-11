@@ -1,6 +1,6 @@
 import { REFRESH_TOKEN_KEY, SESSION_TOKEN_KEY } from '@constants/static/key'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { ResponseResultEnum } from '@interfaces/enum'
+import { ResponseResultEnum } from '@interfaces/mangadex/enum'
 import axios from './index'
 
 export default function getToken() {

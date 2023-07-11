@@ -6,18 +6,15 @@ import Duplicate from '@components/Core/Duplicate'
 import { groupBy } from 'lodash'
 import { SectionList } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
-import { Chip, Surface, Text } from 'react-native-paper'
+import { Surface, Text } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import useMangaFeed from '@hooks/api/manga/<id>/feed'
 import useConfiguration from '@contexts/ConfigurationContext'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import cleanObject from '@utils/cleanObject'
-import { WEBVIEW } from '@constants/static/screens'
-import { MANGA_THREAD_LINK } from '@constants/api/routes'
 
 export default function ChapterList({
-  route,
-  navigation
+  route
 }: IRootStackScreenProps<'Chapter List'>) {
   const { config } = useConfiguration()
   const form = useForm<IChapterRequest>({
