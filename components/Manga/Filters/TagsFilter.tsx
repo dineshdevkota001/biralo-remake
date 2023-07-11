@@ -1,4 +1,4 @@
-import { generalQueryFn } from '@api/common'
+import { generalQueryFn } from '@hooks/api/common'
 import { MANGA_TAGS } from '@constants/api/routes'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize, groupBy } from 'lodash'

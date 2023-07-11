@@ -1,4 +1,4 @@
-import { generalQueryFn } from '@api/common'
+import { generalQueryFn } from '@hooks/api/common'
 import {
   UseQueryOptions,
   useQuery as useReactQuery

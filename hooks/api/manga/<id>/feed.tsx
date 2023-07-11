@@ -1,4 +1,4 @@
-import { generalNextPageParam } from '@api/common'
+import { generalNextPageParam } from '@hooks/api/common'
 import { CHAPTER_STATISTICS, MANGA_FEED } from '@constants/api/routes'
 import useConfiguration from '@contexts/ConfigurationContext'
 import { OrderEnum, TypeEnum } from '@interfaces/enum'

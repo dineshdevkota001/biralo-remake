@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { flatten } from 'lodash'
 
 import { useMemo } from 'react'
-import { generalQueryFn } from '@api/common'
+import { generalQueryFn } from '@hooks/api/common'
 
 type IChapter = {
   chapter: string

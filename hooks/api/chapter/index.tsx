@@ -6,7 +6,7 @@ import axios from '@utils/axios'
 import getRelationOfType from '@utils/getRelationshipOfType'
 import { AxiosResponse } from 'axios'
 import useConfiguration from '@contexts/ConfigurationContext'
-import { generalNextPageParam } from '@api/common'
+import { generalNextPageParam } from '@hooks/api/common'
 
 async function chapters({
   queryKey,
