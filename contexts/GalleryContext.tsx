@@ -15,23 +15,26 @@ export enum RESIZE_MODE {
 }
 
 type IGalleryValues = { isHorizontal: boolean; resizeMode: RESIZE_MODE }
-type IGalleryFunction = {
+type IGalleryDispatch = {
   setIsHorizontal: Dispatch<SetStateAction<boolean>>
   setResizeMode: Dispatch<SetStateAction<RESIZE_MODE>>
 }
 
-type IGalleryContext = [IGalleryValues, IGalleryFunction]
+export const GalleryValuesContext = createContext<IGalleryValues>({
+  isHorizontal: true,
+  resizeMode: RESIZE_MODE.FIT_BOTH
+})
 
-export const GalleryContext = createContext<IGalleryContext>([
-  { isHorizontal: true, resizeMode: RESIZE_MODE.FIT_BOTH },
-  {
-    setIsHorizontal: () => undefined,
-    setResizeMode: () => undefined
-  }
-])
+export const GalleryDispatchContext = createContext<IGalleryDispatch>({
+  setIsHorizontal: () => undefined,
+  setResizeMode: () => undefined
+})
 
 export default function useGallery() {
-  return useContext(GalleryContext)
+  return useContext(GalleryValuesContext)
+}
+export function useGalleryDispatch() {
+  return useContext(GalleryDispatchContext)
 }
 
 export function GalleryContextProvider({ children }: IHaveChildren) {
@@ -41,16 +44,20 @@ export function GalleryContextProvider({ children }: IHaveChildren) {
   )
 
   return (
-    <GalleryContext.Provider
-      value={useMemo(
-        () => [
-          { isHorizontal, resizeMode },
-          { setIsHorizontal, setResizeMode }
-        ],
-        [isHorizontal, resizeMode]
-      )}
+    <GalleryDispatchContext.Provider
+      value={useMemo(() => ({ setIsHorizontal, setResizeMode }), [])}
     >
-      {children}
-    </GalleryContext.Provider>
+      <GalleryValuesContext.Provider
+        value={useMemo(
+          () => ({
+            isHorizontal,
+            resizeMode
+          }),
+          [isHorizontal, resizeMode]
+        )}
+      >
+        {children}
+      </GalleryValuesContext.Provider>
+    </GalleryDispatchContext.Provider>
   )
 }

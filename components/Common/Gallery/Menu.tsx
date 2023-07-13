@@ -1,6 +1,9 @@
 import { MANGA_THREAD_LINK } from '@constants/api/routes'
 import { GALLERY, WEBVIEW } from '@constants/static/screens'
-import useGallery, { RESIZE_MODE } from '@contexts/GalleryContext'
+import useGallery, {
+  RESIZE_MODE,
+  useGalleryDispatch
+} from '@contexts/GalleryContext'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import useChapterStats from '@hooks/api/statistics/chapter/<id>'
 import useBottomSheetModal, { useDynamicModal } from '@hooks/useBottomSheet'
@@ -16,7 +19,6 @@ import {
   Text,
   useTheme
 } from 'react-native-paper'
-import Gallery from '.'
 
 function MenuIcon(props: IconButtonProps) {
   const { colors } = useTheme()
@@ -68,8 +70,9 @@ export default function Menu({ title, id }: { title: string; id: string }) {
     snapPoints: [32, 'CONTENT_HEIGHT']
   })
 
-  const [{ isHorizontal, resizeMode }, { setIsHorizontal, setResizeMode }] =
-    useGallery()
+  const { isHorizontal, resizeMode } = useGallery()
+  const { setIsHorizontal, setResizeMode } = useGalleryDispatch()
+
   const { data } = useChapterStats({ id })
 
   const [isExtraMenuOpen, setIsExtraMenuOpen] = useState(false)

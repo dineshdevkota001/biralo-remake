@@ -1,4 +1,7 @@
-import useGallery, { RESIZE_MODE } from '@contexts/GalleryContext'
+import useGallery, {
+  RESIZE_MODE,
+  useGalleryDispatch
+} from '@contexts/GalleryContext'
 import { useEffect, useState } from 'react'
 import { Dimensions, Image } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
@@ -13,10 +16,9 @@ const windowRatio = window.width / window.height
 
 export default function ImagePage({ url }: { url: string }) {
   const [ratio, setRatio] = useState<number>(windowRatio)
-  const [
-    { isHorizontal, resizeMode: resizeContext },
-    { setIsHorizontal, setResizeMode }
-  ] = useGallery()
+
+  const { isHorizontal, resizeMode: resizeContext } = useGallery()
+  const { setIsHorizontal, setResizeMode } = useGalleryDispatch()
 
   useEffect(() => {
     const fetchImageDimensions = async () => {

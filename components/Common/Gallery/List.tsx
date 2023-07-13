@@ -13,7 +13,7 @@ export default function GalleryFlatList(
     | 'style'
   > & { style: StyleProp<ViewStyle> }
 ) {
-  const [{ isHorizontal }] = useGallery()
+  const { isHorizontal } = useGallery()
 
   return (
     <Animated.FlatList
