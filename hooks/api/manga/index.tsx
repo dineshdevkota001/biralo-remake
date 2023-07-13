@@ -4,53 +4,56 @@ import useConfiguration from '@contexts/ConfigurationContext'
 import { TypeEnum } from '@interfaces/mangadex/enum'
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query'
 import axios from '@utils/axios'
-import getFlattenedList from '@utils/getFlattenedList'
+import mergeInfinite from '@utils/api/mergeInfinite'
+import { merge } from 'lodash'
 
 type IMangaFlags = {
   includeStats?: boolean
 }
 
-type IMangaCollectionWithStats = IResponseCollection<
-  IManga & { statistics: IMangaStats }
->
-
-async function manga({
+async function getManga({
   queryKey,
   pageParam
 }: QueryFunctionContext<[string, IMangaRequest, IMangaFlags | undefined]>) {
   try {
     const [, params, flags] = queryKey
-    const res = await axios.get<IMangaCollectionWithStats>(MANGA, {
+    const { data: res } = await axios.get<IMangaCollection>(MANGA, {
       params: {
         offset: pageParam ?? 0,
         ...(params ?? {})
       }
     })
 
-    if (flags?.includeStats) {
-      const mangaIds = res.data?.data?.map(m => m?.id)
-      const statistics = await axios.get<IMangaStatsResponse>(
-        MANGA_STATISTICS,
-        {
-          params: {
-            manga: mangaIds
-          }
+    if (!flags?.includeStats) return res
+
+    const mangas = res?.data
+    const mangaIds = mangas?.map(m => m?.id)
+
+    const { data: stats } = await axios.get<IMangaStatsResponse>(
+      MANGA_STATISTICS,
+      {
+        params: {
+          manga: mangaIds
         }
-      )
+      }
+    )
 
-      res.data?.data?.forEach((m, index) => {
-        res.data.data[index].statistics = statistics?.data?.statistics?.[m.id]
-      })
+    const mangasWithStats = mangas.map(manga => ({
+      ...manga,
+      statistics: stats.statistics?.[manga.id]
+    }))
+
+    return {
+      ...res,
+      data: mangasWithStats
     }
-
-    return res.data
   } catch (e) {
     console.warn('Manga List', (e as Error)?.message)
   }
   return undefined
 }
 
-export default function useManga(props?: {
+export default function useMangas(props?: {
   variables: IMangaRequest
   flags?: IMangaFlags
 }) {
@@ -59,29 +62,20 @@ export default function useManga(props?: {
   const queryRes = useInfiniteQuery(
     [
       MANGA,
-      {
+      merge(variables, {
         limit: config.pageSize,
-        ...variables,
-        includes: [TypeEnum.COVER_ART, ...(variables?.includes ?? [])]
-      },
+        includes: [TypeEnum.COVER_ART]
+      }),
       flags
     ],
-    manga,
+    getManga,
     {
       getNextPageParam: generalNextPageParam
     }
   )
 
-  const data = getFlattenedList(queryRes?.data)
-  const noOfPages = queryRes?.data?.pages?.length
-  const lastPage = queryRes?.data?.pages?.[(noOfPages ?? 1) - 1]
-  const pageInfo = {
-    limit: lastPage?.limit,
-    offset: lastPage?.offset,
-    total: lastPage?.total,
-    hasNextPage:
-      data?.length && lastPage?.total && data?.length < lastPage?.total
+  return {
+    ...queryRes,
+    data: mergeInfinite(queryRes?.data)
   }
-
-  return { ...queryRes, data, pageInfo }
 }

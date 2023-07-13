@@ -1,67 +1,64 @@
-import getFlattenedList from '@utils/getFlattenedList'
 import { CHAPTER, MANGA } from '@constants/api/routes'
 import { OrderEnum, TypeEnum } from '@interfaces/mangadex/enum'
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query'
 import axios from '@utils/axios'
 import getRelationOfType from '@utils/getRelationshipOfType'
-import { AxiosResponse } from 'axios'
 import useConfiguration from '@contexts/ConfigurationContext'
 import { generalNextPageParam } from '@hooks/api/common'
+import mergeInfinite from '@utils/api/mergeInfinite'
 
-async function chapters({
+async function getChapters({
   queryKey,
   pageParam
 }: QueryFunctionContext<[string, IChapterRequest]>) {
   try {
     const [, params] = queryKey
-    const res = await axios.get<unknown, AxiosResponse<IChapterCollection>>(
-      CHAPTER,
-      {
-        params: {
-          offset: pageParam ?? 0,
-          ...(params ?? {})
-        }
+    const { data: res } = await axios.get<IChapterCollection>(CHAPTER, {
+      params: {
+        offset: pageParam ?? 0,
+        ...(params ?? {})
       }
-    )
+    })
 
-    if (res.data.result === 'error') throw Error(res.data.errors?.[0]?.message)
+    const chapters = res?.data
 
-    const chapterList = res.data?.data
-
-    const mangaIdToChapters: Record<string, IChapter[]> = chapterList.reduce(
-      (acc, curr) => {
+    const idChaptersMap: Record<string, IChapter[]> = chapters.reduce(
+      (idMapAcc, chapter) => {
         const mangaId = getRelationOfType<IMangaRelated>(
-          curr.relationships,
+          chapter.relationships,
           TypeEnum.MANGA
         )?.id
 
-        if (mangaId && acc?.[mangaId]) acc[mangaId].push(curr)
-        else if (mangaId) acc[mangaId] = [curr]
-        return acc
+        if (!mangaId) return idMapAcc
+
+        if (!idMapAcc?.[mangaId]) return { ...idMapAcc, [mangaId]: [chapter] }
+
+        idMapAcc[mangaId].push(chapter)
+        return idMapAcc
       },
       Object.create(null)
     )
 
-    const mangas = await axios.get<
-      IMangaRequest,
-      AxiosResponse<IMangaCollection>
-    >(MANGA, {
+    const mangaIds = Object.keys(idChaptersMap)
+
+    const { data: mangas } = await axios.get<IMangaCollection>(MANGA, {
       params: {
-        ids: Object.keys(mangaIdToChapters),
+        ids: mangaIds,
         includes: [TypeEnum.COVER_ART]
       }
     })
 
-    const mangaWithChapters = mangas?.data?.data?.map(props => ({
+    const mangaWithChapters = mangas?.data?.map(props => ({
       ...props,
-      chapters: mangaIdToChapters?.[props.id] ?? []
+      chapters: idChaptersMap?.[props.id] ?? []
     }))
+
     return {
-      ...res.data,
+      ...res,
       data: mangaWithChapters
     }
   } catch (e) {
-    console.log('chapters or manga', e)
+    //
   }
   return null
 }
@@ -86,24 +83,16 @@ export default function useChapters(
         ]
       } ?? {}
     ],
-    chapters,
+    getChapters,
     {
       getNextPageParam: generalNextPageParam
     }
   )
 
-  const data = getFlattenedList(queryRes?.data)
-  const noOfPages = queryRes?.data?.pages?.length
-  const lastPage = queryRes?.data?.pages?.[(noOfPages ?? 1) - 1]
-  const pageInfo = {
-    limit: lastPage?.limit,
-    offset: lastPage?.offset,
-    total: lastPage?.total,
-    hasNextPage:
-      data?.length && lastPage?.total && data?.length < lastPage?.total
+  return {
+    ...queryRes,
+    data: mergeInfinite(queryRes.data)
   }
-
-  return { ...queryRes, data, pageInfo }
 }
 
 export function useLatestChapters(props?: { variables: IChapterRequest }) {

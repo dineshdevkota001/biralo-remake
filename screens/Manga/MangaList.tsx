@@ -7,7 +7,7 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { FlatList } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import useManga from '@hooks/api/manga'
+import useMangas from '@hooks/api/manga'
 import ThumbnailTags from '@components/Manga/Thumbnails/Tags'
 import useConfiguration from '@contexts/ConfigurationContext'
 import cleanObject from '@utils/cleanObject'
@@ -28,13 +28,12 @@ export default function MangaList() {
   )
 
   const {
-    data: mangas,
-    pageInfo,
+    data: { items: mangas, pageInfo },
     isLoading,
     isRefetching,
     refetch,
     fetchNextPage
-  } = useManga({
+  } = useMangas({
     variables,
     flags: { includeStats: true }
   })

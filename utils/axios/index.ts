@@ -1,5 +1,5 @@
 import { BACKEND } from '@constants/api'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { merge } from 'lodash'
 // import getToken, { refreshToken } from './token'
 
@@ -16,12 +16,10 @@ export async function refreshTokenOnAxios() {
 axios.interceptors.request.use(
   async config => {
     // Do something before request is sent
-
     if (!token && !tested) {
       refreshTokenOnAxios()
       tested = true
     }
-
     return merge(config, {
       headers: { Authorization: token ? `Bearer ${token}` : undefined }
     })
@@ -31,13 +29,20 @@ axios.interceptors.request.use(
   }
 )
 
-axios.interceptors.response.use(async v => {
-  if ((v.status === 401 || v.status === 403) && tries < 3) {
+axios.interceptors.response.use(async (res: AxiosResponse<IResponseError>) => {
+  if ((res.status === 401 || res.status === 403) && tries < 3) {
     // token = await refreshToken()
     if (token) tries = 0
     else tries += 1
   }
-  return v
+
+  // NOTICE: We handle all response errors here
+  if (res.data.result === 'error') {
+    console.warn('Known error', res.status, res.data)
+    throw Error(res.data.errors?.[0]?.message)
+  }
+
+  return res
 })
 
 export default axios

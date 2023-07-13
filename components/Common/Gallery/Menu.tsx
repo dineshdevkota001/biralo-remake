@@ -5,7 +5,7 @@ import useGallery, {
   useGalleryDispatch
 } from '@contexts/GalleryContext'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
-import useChapterStats from '@hooks/api/statistics/chapter/<id>'
+import { useChapterStats } from '@hooks/api/statistics'
 import useBottomSheetModal, { useDynamicModal } from '@hooks/useBottomSheet'
 import useChapterControls from '@hooks/useChapterControl'
 import { useNavigation } from '@react-navigation/native'

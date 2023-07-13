@@ -1,6 +1,6 @@
 import Icon from '@components/Core/Icon'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
-import useMangaStats from '@hooks/api/statistics/manga/<id>'
+import { useMangaStats } from '@hooks/api/statistics'
 import useBottomSheetModal from '@hooks/useBottomSheet'
 import { useRoute } from '@react-navigation/native'
 import formatNumber from '@utils/format/formatNumber'

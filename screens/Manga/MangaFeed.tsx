@@ -4,14 +4,24 @@ import ChapterType1Thumbnail, {
 } from '@components/Chapter/Thumbnail/Type-1'
 import Duplicate from '@components/Core/Duplicate'
 import { groupBy } from 'lodash'
-import { SectionList } from 'react-native'
-import { RefreshControl } from 'react-native-gesture-handler'
+import { SectionList, StyleSheet } from 'react-native'
 import { Surface, Text } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import useMangaFeed from '@hooks/api/manga/<id>/feed'
 import useConfiguration from '@contexts/ConfigurationContext'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import cleanObject from '@utils/cleanObject'
+import spacing from '@utils/theme/spacing'
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1
+  },
+  root: {
+    padding: spacing(1),
+    marginBottom: spacing(2)
+  }
+})
 
 export default function ChapterList({
   route
@@ -20,24 +30,29 @@ export default function ChapterList({
   const form = useForm<IChapterRequest>({
     defaultValues: { translatedLanguage: config?.translatedLanguage }
   })
+  // NOTICE: I hate this. get something better
   const variables = cleanObject(useWatch({ control: form.control }))
 
   const { id } = route.params
   const { bottom } = useSafeAreaInsets()
-  const { data, isRefetching, isLoading, refetch, fetchNextPage, pageInfo } =
-    useMangaFeed({ id, variables, flags: { includeStats: true } })
-
+  const {
+    data: { items, pageInfo },
+    isRefetching,
+    isLoading,
+    refetch,
+    fetchNextPage
+  } = useMangaFeed({
+    id,
+    variables,
+    flags: { includeStats: true }
+  })
   const { hasNextPage } = pageInfo
 
-  const groupedByVolume = groupBy(data, 'attributes.volume')
-  const sections = Object.keys(groupedByVolume)
-    ?.map(key => {
-      return {
-        title: key === 'null' ? null : key,
-        data: groupedByVolume?.[key]
-      }
-    })
-    .sort((a, b) => Number(b.title ?? 9999) - Number(a.title ?? 9999))
+  const groupedByVolume = groupBy(items, 'attributes.volume')
+  const sections = Object.keys(groupedByVolume)?.map(key => ({
+    volume: key,
+    data: groupedByVolume?.[key]
+  }))
 
   return (
     <FormProvider {...form}>
@@ -47,25 +62,19 @@ export default function ChapterList({
           marginBottom: bottom
         }}
         ListHeaderComponent={<MangaHeader />}
-        renderSectionHeader={({ section: { title } }) => (
-          <Surface
-            style={{
-              padding: 4,
-              marginBottom: 8
-            }}
-          >
+        renderSectionHeader={({ section: { volume } }) => (
+          <Surface style={styles.root}>
             <Text variant="headlineSmall" style={{ textAlign: 'center' }}>
-              Volume {title ?? 'None'}
+              Volume {volume}
             </Text>
           </Surface>
         )}
-        renderItem={({ item }) =>
-          item ? <ChapterType1Thumbnail {...item} /> : null
+        renderItem={({ item: chapter }) =>
+          chapter ? <ChapterType1Thumbnail {...chapter} /> : null
         }
-        refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
-        }
-        keyExtractor={item => item?.id ?? ''}
+        refreshing={isRefetching}
+        onRefresh={refetch}
+        keyExtractor={chapter => chapter?.id ?? ''}
         onEndReachedThreshold={0.8}
         ListFooterComponent={
           hasNextPage || isLoading ? (

@@ -12,10 +12,9 @@ export default function RecentChapters({
   navigation
 }: IRootBottomTabsScreenProps<typeof LATEST>) {
   const {
-    data: mangas,
+    data: { items: mangas, pageInfo },
     isLoading,
-    fetchNextPage,
-    pageInfo
+    fetchNextPage
   } = useLatestChapters()
 
   return (

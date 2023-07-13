@@ -26,16 +26,14 @@ type IResponseEntity<T> =
       data: T
     }
 
-type IResponseCollection<T> =
-  | IResponseError
-  | {
-      result: 'ok'
-      response: 'collection'
-      data: Array<T>
-      limit?: number
-      offset?: number
-      total?: number
-    }
+type IResponseCollection<T> = {
+  result: 'ok'
+  response: 'collection'
+  data: Array<T>
+  limit?: number
+  offset?: number
+  total?: number
+}
 
 type ICommonObject = {
   id: string

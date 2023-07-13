@@ -21,12 +21,10 @@ type IChapterStats = {
   comments: IComment
 }
 
-type IResponseStatistics<T> =
-  | {
-      result: 'ok'
-      statistics: Record<string, T>
-    }
-  | IResponseError
+type IResponseStatistics<T> = {
+  result: 'ok'
+  statistics: Record<string, T>
+}
 
 type IMangaStatsResponse = IResponseStatistics<IMangaStats>
 
