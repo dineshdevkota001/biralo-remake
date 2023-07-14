@@ -7,7 +7,7 @@ import {
 export default function useQuery<
   RequestType,
   ResponseType,
-  ErrorType = Response.ErrorResponse
+  ErrorType = IResponseError
 >({
   route,
   variables,

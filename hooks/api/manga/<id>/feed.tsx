@@ -1,6 +1,6 @@
 import { generalNextPageParam } from '@hooks/api/common'
 import { CHAPTER_STATISTICS, MANGA_FEED } from '@constants/api/routes'
-import useConfiguration from '@contexts/ConfigurationContext'
+import { useMangadexConfig } from '@contexts/ConfigurationContext'
 import { OrderEnum, TypeEnum } from '@interfaces/mangadex/enum'
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query'
 import axios from '@utils/axios'
@@ -63,15 +63,15 @@ export default function useMangaFeed({
   variables?: IChapterRequest
   flags?: IChapterListFlags
 }) {
-  const { config } = useConfiguration()
+  const { pageSize, translatedLanguage } = useMangadexConfig()
 
   const queryRes = useInfiniteQuery(
     [
       MANGA_FEED(id),
       merge(
         {
-          limit: 3 * config.pageSize,
-          translatedLanguage: config.translatedLanguage,
+          limit: 3 * pageSize,
+          translatedLanguage,
           order: {
             volume: OrderEnum.DESC,
             chapter: OrderEnum.DESC

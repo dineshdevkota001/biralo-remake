@@ -12,10 +12,7 @@ export default function ThumbnailTags({
         flex: 1
       }}
     >
-      <Tags
-        tags={tags}
-        includeTags={[TagGroupEnum.THEME, TagGroupEnum.GENRE]}
-      />
+      <Tags tags={tags} groups={[TagGroupEnum.THEME, TagGroupEnum.GENRE]} />
     </Card.Content>
   )
 }

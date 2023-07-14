@@ -3,7 +3,7 @@ import { OrderEnum, TypeEnum } from '@interfaces/mangadex/enum'
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query'
 import axios from '@utils/axios'
 import getRelationOfType from '@utils/getRelationshipOfType'
-import useConfiguration from '@contexts/ConfigurationContext'
+import { useMangadexConfig } from '@contexts/ConfigurationContext'
 import { generalNextPageParam } from '@hooks/api/common'
 import mergeInfinite from '@utils/api/mergeInfinite'
 
@@ -96,17 +96,17 @@ export default function useChapters(
 }
 
 export function useLatestChapters(props?: { variables: IChapterRequest }) {
-  const { config } = useConfiguration()
+  const { pageSize, translatedLanguage } = useMangadexConfig()
 
   return useChapters({
     ...props,
     variables: {
-      limit: 3 * config.pageSize,
+      limit: 3 * pageSize,
       ...props?.variables,
       order: {
         updatedAt: OrderEnum.DESC
       },
-      translatedLanguage: config.translatedLanguage
+      translatedLanguage
     }
   })
 }

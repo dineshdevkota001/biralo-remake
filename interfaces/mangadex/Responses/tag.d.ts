@@ -1,7 +1,7 @@
 interface ITagAttributes {
   name?: LocalizedString
   description?: LocalizedString
-  group?: TagGroupEnum
+  group?: ITagGroupEnum
   version?: number
 }
 

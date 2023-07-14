@@ -1,6 +1,6 @@
 import { UPLOADS } from '@constants/api'
 import { COVERS } from '@constants/api/routes'
-import useConfiguration from '@contexts/ConfigurationContext'
+import { useMangadexConfig } from '@contexts/ConfigurationContext'
 import { CoverQualityEnum, TypeEnum } from '@interfaces/mangadex/enum'
 import getRelationOfType from '@utils/getRelationshipOfType'
 
@@ -10,16 +10,14 @@ export default function useCoverArt(
   quality?: CoverQualityEnum
 ) {
   const fileName = relationships
-    ? getRelationOfType<IGeneralRelation<ICover>>(
-        relationships,
-        TypeEnum.COVER_ART
-      )?.attributes?.fileName
+    ? getRelationOfType<ICoverArtRelated>(relationships, TypeEnum.COVER_ART)
+        ?.attributes?.fileName
     : null
 
-  const { config } = useConfiguration()
+  const { coverQuality } = useMangadexConfig()
 
   const url = `${UPLOADS}${COVERS}/${id}/${fileName}.${
-    quality ?? config.coverQuality
+    quality ?? coverQuality
   }.jpg`
 
   return { url }

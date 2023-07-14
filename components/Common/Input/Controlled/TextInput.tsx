@@ -1,5 +1,4 @@
 import { capitalize } from 'lodash'
-import { ComponentProps } from 'react'
 import { Control, Controller, FieldValues, Path } from 'react-hook-form'
 import {
   ActivityIndicator,
@@ -10,7 +9,6 @@ import {
 export default function ControlledInput<T extends FieldValues>({
   control,
   name,
-  renderProps,
   // textinput props
   label,
   right,
@@ -23,9 +21,6 @@ export default function ControlledInput<T extends FieldValues>({
 }: TextInputProps & {
   control: Control<T>
   name: Path<T>
-  renderProps?: (
-    x: Parameters<ComponentProps<typeof Controller>['render']>[0]
-  ) => TextInputProps
 }) {
   return (
     <Controller
@@ -54,7 +49,6 @@ export default function ControlledInput<T extends FieldValues>({
               onBlur?.(e)
             }}
             value={value || fieldVlaue}
-            {...renderProps?.(renderProp)}
           />
         )
       }}

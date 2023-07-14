@@ -28,7 +28,7 @@ export async function generalQueryFn({
 
     return res.data
   } catch (e) {
-    console.warn(queryKey[0], (e as Error)?.message, { ...e })
+    console.warn(queryKey[0], (e as Error)?.message)
   }
   return null
 }

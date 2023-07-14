@@ -8,7 +8,7 @@ import { SectionList, StyleSheet } from 'react-native'
 import { Surface, Text } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import useMangaFeed from '@hooks/api/manga/<id>/feed'
-import useConfiguration from '@contexts/ConfigurationContext'
+import { useMangadexConfig } from '@contexts/ConfigurationContext'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import cleanObject from '@utils/cleanObject'
 import spacing from '@utils/theme/spacing'
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 export default function ChapterList({
   route
 }: IRootStackScreenProps<'Chapter List'>) {
-  const { config } = useConfiguration()
+  const config = useMangadexConfig()
   const form = useForm<IChapterRequest>({
     defaultValues: { translatedLanguage: config?.translatedLanguage }
   })

@@ -34,7 +34,7 @@ export const useMangadexConfig = () =>
 export const useMangadexConfigDispatch = () =>
   useContext(MangadexConfigurationDispatchContext)
 
-function useAsyncConfiguration<T>(key: string) {
+function useAsyncConfiguration<T>(key: string): [T | undefined, IDispatch<T>] {
   const [configuration, setConfiguration] = useImmer<T | undefined>(undefined)
 
   const { getItem, setItem } = useAsyncStorage(key)

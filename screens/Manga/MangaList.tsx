@@ -9,11 +9,11 @@ import { RefreshControl } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import useMangas from '@hooks/api/manga'
 import ThumbnailTags from '@components/Manga/Thumbnails/Tags'
-import useConfiguration from '@contexts/ConfigurationContext'
+import { useMangadexConfig } from '@contexts/ConfigurationContext'
 import cleanObject from '@utils/cleanObject'
 
 export default function MangaList() {
-  const { config } = useConfiguration()
+  const config = useMangadexConfig()
   const form = useForm<IMangaRequest>({
     defaultValues: {
       excludedTags: config.excludedTags,

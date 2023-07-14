@@ -1,8 +1,44 @@
 import { TagGroupEnum } from '@interfaces/mangadex/enum'
 import { getTitle } from '@utils/getLocalizedString'
+import spacing from '@utils/theme/spacing'
 import { capitalize, groupBy } from 'lodash'
-import { View } from 'react-native'
+import { ReactNode } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { Chip, Text, useTheme } from 'react-native-paper'
+
+const styles = StyleSheet.create({
+  tagContainerRoot: {
+    marginVertical: spacing(1)
+  },
+  tagChildrenContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 4
+  }
+})
+
+export function TagGroupContainer({
+  group,
+  children,
+  hideTitle
+}: {
+  group: TagGroupEnum
+  children: ReactNode
+  hideTitle?: boolean
+}) {
+  const { colors } = useTheme()
+  return (
+    <View style={styles.tagContainerRoot}>
+      {hideTitle ? null : (
+        <Text style={{ color: colors.onSurfaceVariant }}>
+          {capitalize(group)}
+        </Text>
+      )}
+      <View style={styles.tagChildrenContainer}>{children}</View>
+    </View>
+  )
+}
 
 export default function Tag({
   name,
@@ -12,10 +48,10 @@ export default function Tag({
   const { colors } = useTheme()
 
   const groupToColorMap: Record<TagGroupEnum, string> = {
-    format: colors.primaryContainer,
-    content: colors.errorContainer,
-    genre: colors.secondaryContainer,
-    theme: colors.tertiaryContainer
+    [TagGroupEnum.FORMAT]: colors.primaryContainer,
+    [TagGroupEnum.CONTENT]: colors.errorContainer,
+    [TagGroupEnum.GENRE]: colors.secondaryContainer,
+    [TagGroupEnum.THEME]: colors.tertiaryContainer
   }
 
   return (
@@ -32,82 +68,38 @@ export default function Tag({
   )
 }
 
-export function TagGroup({
-  group,
-  tags,
-  hideTitle
-}: {
-  group: TagGroupEnum
-  tags: ITag[]
-  hideTitle?: boolean
-}) {
-  const { colors } = useTheme()
-  return (
-    <View style={{ marginBottom: 4, marginTop: 4 }}>
-      {hideTitle ? null : (
-        <Text style={{ color: colors.onSurfaceVariant }}>
-          {capitalize(group)}
-        </Text>
-      )}
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          gap: 4
-        }}
-      >
-        {tags?.map(({ attributes: tag, id }) => (
-          <Tag key={id} {...tag} id={id} />
-        ))}
-      </View>
-    </View>
-  )
-}
+const defaultGroups = [
+  TagGroupEnum.GENRE,
+  TagGroupEnum.THEME,
+  TagGroupEnum.CONTENT,
+  TagGroupEnum.FORMAT
+]
 
 export function Tags({
   tags,
-  includeTags,
-  excludeTags,
+  groups = defaultGroups,
   hideTitle
 }: {
   tags?: ITag[]
-  includeTags?: TagGroupEnum[]
-  excludeTags?: TagGroupEnum[]
+  groups?: TagGroupEnum[]
+
   hideTitle?: boolean
 }) {
-  if (!tags) return null
-
-  const tagGroup = groupBy(tags, 'attributes.group')
-
-  if (!includeTags?.length)
-    return (
-      // eslint-disable-next-line react/jsx-no-useless-fragment
-      <>
-        {Object.keys(tagGroup)?.map(group =>
-          excludeTags?.includes(group as TagGroupEnum) ? null : (
-            <TagGroup
-              key={group}
-              group={group as TagGroupEnum}
-              tags={tagGroup?.[group]}
-              hideTitle={hideTitle}
-            />
-          )
-        )}
-      </>
-    )
+  const tagGroup = groupBy(tags ?? [], 'attributes.group') as Record<
+    TagGroupEnum,
+    ITag[]
+  >
 
   return (
     // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
-      {Object.keys(tagGroup)?.map(group =>
-        includeTags.includes(group as TagGroupEnum) ? (
-          <TagGroup
-            key={group}
-            group={group as TagGroupEnum}
-            tags={tagGroup?.[group]}
-            hideTitle={hideTitle}
-          />
+      {(Object.keys(tagGroup) as TagGroupEnum[])?.map(group =>
+        groups.includes(group as TagGroupEnum) ? (
+          <TagGroupContainer key={group} group={group} hideTitle={hideTitle}>
+            {tagGroup?.[group]?.map(({ attributes, id }) => (
+              <Tag key={id} {...attributes} id={id} />
+            ))}
+          </TagGroupContainer>
         ) : null
       )}
     </>

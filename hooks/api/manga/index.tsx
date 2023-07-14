@@ -1,6 +1,6 @@
 import { generalNextPageParam } from '@hooks/api/common'
 import { MANGA, MANGA_STATISTICS } from '@constants/api/routes'
-import useConfiguration from '@contexts/ConfigurationContext'
+import { useMangadexConfig } from '@contexts/ConfigurationContext'
 import { TypeEnum } from '@interfaces/mangadex/enum'
 import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query'
 import axios from '@utils/axios'
@@ -58,12 +58,12 @@ export default function useMangas(props?: {
   flags?: IMangaFlags
 }) {
   const { variables, flags } = props ?? {}
-  const { config } = useConfiguration()
+  const { pageSize } = useMangadexConfig()
   const queryRes = useInfiniteQuery(
     [
       MANGA,
       merge(variables, {
-        limit: config.pageSize,
+        limit: pageSize,
         includes: [TypeEnum.COVER_ART]
       }),
       flags

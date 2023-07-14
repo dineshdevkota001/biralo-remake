@@ -1,7 +1,14 @@
 import useTheme from '@styles/appStyle'
 import { capitalize } from 'lodash'
 import { ScrollView, StyleSheet } from 'react-native'
-import { Button, Card, Surface, Text, Chip } from 'react-native-paper'
+import {
+  Button,
+  Card,
+  Surface,
+  Text,
+  Chip,
+  TextProps
+} from 'react-native-paper'
 
 const styles = StyleSheet.create({
   container: {
@@ -52,7 +59,12 @@ export default function TempDisplay() {
       {textStyles.map(position => (
         <Surface mode="flat" key={position}>
           {sizes.map(size => (
-            <Text variant={`${position}${capitalize(size)}`} key={`${size}`}>
+            <Text
+              variant={
+                `${position}${capitalize(size)}` as TextProps<string>['variant']
+              }
+              key={`${size}`}
+            >
               {position}
               {size}
             </Text>

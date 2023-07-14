@@ -1,7 +1,11 @@
 import TagsFilter from '@components/Manga/Filters/TagsFilter'
-import useConfiguration from '@contexts/ConfigurationContext'
+import {
+  useMangadexConfig,
+  useMangadexConfigDispatch
+} from '@contexts/ConfigurationContext'
 import { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import useBottomSheetModal from '@hooks/useBottomSheet'
+import spacing from '@utils/theme/spacing'
 import { FormProvider, useForm } from 'react-hook-form'
 import { StyleSheet, View } from 'react-native'
 import { Button, Card, Text, useTheme } from 'react-native-paper'
@@ -10,23 +14,50 @@ const styles = StyleSheet.create({
   horizontal: {
     display: 'flex',
     flexDirection: 'row',
-    gap: 16,
+    gap: spacing(4),
     justifyContent: 'space-between'
   },
   vertical: {
     display: 'flex',
     alignItems: 'center',
     flex: 1,
-    padding: 16
+    padding: spacing(4)
   },
   textCenter: {
     textAlign: 'center'
+  },
+  bottomSheetContentContainer: {
+    paddingBottom: spacing(4)
+  },
+  bottomSheetContainer: {
+    margin: spacing(1),
+    padding: spacing(2),
+    borderRadius: spacing(4)
   }
 })
 
+function TagCountCard({
+  title,
+  count
+}: {
+  title: string
+  count: number | undefined
+}) {
+  return (
+    <Card style={styles.vertical}>
+      <Text variant="titleSmall">{title}</Text>
+      <Text variant="displaySmall" style={styles.textCenter}>
+        {count ?? 0}
+      </Text>
+    </Card>
+  )
+}
+
 export default function Tags() {
   const { colors } = useTheme()
-  const { config, setConfig } = useConfiguration()
+  const config = useMangadexConfig()
+  const setConfig = useMangadexConfigDispatch()
+
   const [props, { handleOpen }] = useBottomSheetModal({
     shouldRenderBackdrop: true
   })
@@ -41,10 +72,8 @@ export default function Tags() {
 
   const onSubmit = form.handleSubmit(
     (values: Pick<IMangadexConfig, 'excludedTags' | 'includedTags'>) => {
-      setConfig({
-        excludedTags: values?.excludedTags,
-        includedTags: values?.includedTags
-      })
+      setConfig('includedTags', values.includedTags)
+      setConfig('excludedTags', values.excludedTags)
     }
   )
 
@@ -57,18 +86,8 @@ export default function Tags() {
         </Button>
       </View>
       <View style={styles.horizontal}>
-        <Card style={styles.vertical}>
-          <Text variant="titleSmall">Excluded</Text>
-          <Text variant="displaySmall" style={styles.textCenter}>
-            {excludedTags.length ?? 0}
-          </Text>
-        </Card>
-        <Card style={styles.vertical}>
-          <Text variant="titleSmall">Included</Text>
-          <Text variant="displaySmall" style={styles.textCenter}>
-            {includedTags.length ?? 0}
-          </Text>
-        </Card>
+        <TagCountCard title="Excluded" count={excludedTags?.length} />
+        <TagCountCard title="Included" count={includedTags?.length} />
       </View>
       <BottomSheetModal
         {...props}
@@ -78,15 +97,13 @@ export default function Tags() {
         }}
       >
         <BottomSheetScrollView
-          style={{
-            margin: 4,
-            padding: 8,
-            backgroundColor: colors.surface,
-            borderRadius: 16
-          }}
-          contentContainerStyle={{
-            paddingBottom: 16
-          }}
+          style={[
+            styles.bottomSheetContainer,
+            {
+              backgroundColor: colors.surface
+            }
+          ]}
+          contentContainerStyle={styles.bottomSheetContentContainer}
         >
           <FormProvider {...form}>
             <TagsFilter />
