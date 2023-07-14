@@ -1,68 +1,112 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState
-} from 'react'
+import { createContext, useContext, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAsyncStorage } from '@react-native-async-storage/async-storage'
-import defaultConfig from '@constants/static/configuration'
+import {
+  defaultAppConfig,
+  defaultMangadexConfig
+} from '@constants/static/configuration'
+import { useImmer } from 'use-immer'
+import { Draft } from 'immer'
 
-export const ConfigurationContext = createContext<IConfigurationContext>({
-  config: defaultConfig,
-  setConfig: () => undefined
-})
+type IDispatch<T> = <U extends keyof Draft<T>>(
+  arg0: U,
+  arg1: NonNullable<Draft<T>>[U]
+) => void
 
-export default function useConfiguration() {
-  return useContext(ConfigurationContext)
-}
+export const AppConfigurationValueContext =
+  createContext<IAppConfig>(defaultAppConfig)
+export const AppConfigurationDispatchContext = createContext<
+  IDispatch<IAppConfig>
+>(() => undefined)
 
-const configKey = '@CONFIGURATIONS'
+export const MangadexConfigurationValueContext = createContext<IMangadexConfig>(
+  defaultMangadexConfig
+)
+export const MangadexConfigurationDispatchContext = createContext<
+  IDispatch<IMangadexConfig>
+>(() => undefined)
 
-export function ConfigurationProvider({
-  children
-}: IHaveChildren & Parameters<typeof useForm>[0]) {
-  const [configuration, setConfiguration] = useState<
-    Partial<IConfig> | undefined
-  >()
-  const { getItem, setItem } = useAsyncStorage(configKey)
+export const useAppConfig = () => useContext(AppConfigurationValueContext)
+export const useAppConfigDispatch = () =>
+  useContext(AppConfigurationDispatchContext)
+export const useMangadexConfig = () =>
+  useContext(MangadexConfigurationValueContext)
+export const useMangadexConfigDispatch = () =>
+  useContext(MangadexConfigurationDispatchContext)
 
-  const refreshConfig = useCallback(async () => {
-    const config = await getItem()
-    setConfiguration(config ? JSON.parse(config) : {})
-  }, [getItem])
+function useAsyncConfiguration<T>(key: string) {
+  const [configuration, setConfiguration] = useImmer<T | undefined>(undefined)
+
+  const { getItem, setItem } = useAsyncStorage(key)
 
   useEffect(() => {
-    if (!configuration) refreshConfig()
-  }, [refreshConfig, configuration])
+    const createConfig = async () => {
+      const config = await getItem()
+      setConfiguration(config ? JSON.parse(config) : {})
+    }
+    if (!configuration) createConfig()
+  }, [setConfiguration, configuration, getItem])
 
-  const setConfig = useCallback(
-    (change: Partial<IConfig>) => {
-      setConfiguration(c => {
-        const changedConfig = { ...(c ?? {}), ...change }
-        setItem(JSON.stringify(changedConfig))
-        return changedConfig
-      })
-    },
-    [setItem, setConfiguration]
+  useEffect(() => {
+    if (configuration) setItem(JSON.stringify(configuration))
+  }, [configuration, setItem])
+
+  const setConfig: IDispatch<T> = (k, value) => {
+    setConfiguration(d => {
+      if (!d) return { [k]: value }
+      // eslint-disable-next-line no-param-reassign
+      d[k] = value
+      return d
+    })
+  }
+
+  return [configuration, setConfig]
+}
+
+export function AppConfigurationProvider({
+  children
+}: IHaveChildren & Parameters<typeof useForm>[0]) {
+  const [configuration, setConfiguration] = useAsyncConfiguration<IAppConfig>(
+    '@APP_CONFIGURATIONS'
   )
 
   return (
-    <ConfigurationContext.Provider
-      value={useMemo(
-        () => ({
-          config: {
-            ...defaultConfig,
+    <AppConfigurationDispatchContext.Provider value={setConfiguration}>
+      <AppConfigurationValueContext.Provider
+        value={useMemo(
+          () => ({
+            ...defaultAppConfig,
             ...configuration
-          },
-          setConfig
-        }),
-        [configuration, setConfig]
-      )}
-    >
-      {children}
-    </ConfigurationContext.Provider>
+          }),
+          [configuration]
+        )}
+      >
+        {children}
+      </AppConfigurationValueContext.Provider>
+    </AppConfigurationDispatchContext.Provider>
+  )
+}
+
+export function MangadexConfigurationProvider({
+  children
+}: IHaveChildren & Parameters<typeof useForm>[0]) {
+  const [configuration, setConfiguration] = useAsyncConfiguration<
+    IMangadexConfig | undefined
+  >('@MANGADEX_CONFIGURATIONS')
+
+  return (
+    <MangadexConfigurationDispatchContext.Provider value={setConfiguration}>
+      <MangadexConfigurationValueContext.Provider
+        value={useMemo(
+          () => ({
+            ...defaultMangadexConfig,
+            ...configuration
+          }),
+          [configuration]
+        )}
+      >
+        {children}
+      </MangadexConfigurationValueContext.Provider>
+    </MangadexConfigurationDispatchContext.Provider>
   )
 }

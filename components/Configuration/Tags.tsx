@@ -40,7 +40,7 @@ export default function Tags() {
   })
 
   const onSubmit = form.handleSubmit(
-    (values: Pick<IConfig, 'excludedTags' | 'includedTags'>) => {
+    (values: Pick<IMangadexConfig, 'excludedTags' | 'includedTags'>) => {
       setConfig({
         excludedTags: values?.excludedTags,
         includedTags: values?.includedTags

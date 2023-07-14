@@ -1,4 +1,4 @@
-import useConfiguration from '@contexts/ConfigurationContext'
+import { useAppConfig } from '@contexts/ConfigurationContext'
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme'
 import { useMemo } from 'react'
 import { useColorScheme } from 'react-native'
@@ -27,7 +27,7 @@ type IAppTheme = MD3Theme & {
 }
 
 export function useAppColors() {
-  const { config } = useConfiguration()
+  const config = useAppConfig()
 
   const colorScheme = useColorScheme()
 

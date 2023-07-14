@@ -4,17 +4,19 @@ import {
   QualityEnum
 } from '@interfaces/mangadex/enum'
 
-const defaultConfig: IConfig = {
+export const defaultMangadexConfig: IMangadexConfig = {
   quality: QualityEnum.DATA_SAVER,
-  language: LocalizationLanguageEnum.EN,
-  coverQuality: CoverQualityEnum.LOW,
   pageSize: 10,
   chapterMultiplier: 3,
+  language: LocalizationLanguageEnum.EN,
+  coverQuality: CoverQualityEnum.LOW,
   excludedTags: [],
   includedTags: [],
   translatedLanguage: [],
-  originalLanguage: [],
-  themeColor: '#ff6740'
+  originalLanguage: []
 }
 
-export default defaultConfig
+export const defaultAppConfig: IAppConfig = {
+  themeColor: '#ff6740',
+  colorScheme: undefined
+}

@@ -1,4 +1,7 @@
-import useConfiguration from '@contexts/ConfigurationContext'
+import {
+  useAppConfig,
+  useAppConfigDispatch
+} from '@contexts/ConfigurationContext'
 import { View } from 'react-native'
 import { TouchableRipple } from 'react-native-paper'
 import ColorSelection from '@components/Common/Filters/ColorSelection'
@@ -12,12 +15,11 @@ const themes = [
 ]
 
 export default function ColorScheme() {
-  const { config, setConfig } = useConfiguration()
+  const config = useAppConfig()
+  const setConfig = useAppConfigDispatch()
 
   const handleThemeChange = (colorScheme: IColorScheme) => {
-    setConfig({
-      colorScheme: colorScheme || undefined
-    })
+    setConfig('colorScheme', colorScheme)
   }
 
   return (

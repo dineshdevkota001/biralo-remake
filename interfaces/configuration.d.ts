@@ -1,4 +1,4 @@
-interface IConfig {
+interface IMangadexConfig {
   quality: QualityEnum
   language: LocalizationLanguageEnum
   coverQuality: CoverQualityEnum
@@ -8,11 +8,9 @@ interface IConfig {
   includedTags: string[]
   translatedLanguage: string[]
   originalLanguage: string[]
-  themeColor: string
-  colorScheme?: 'dark' | 'light'
 }
 
-interface IConfigurationContext {
-  config: IConfig
-  setConfig: (v: Partial<IConfig>) => void
+interface IAppConfig {
+  themeColor: string
+  colorScheme?: 'dark' | 'light'
 }

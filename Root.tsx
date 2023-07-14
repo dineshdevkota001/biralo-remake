@@ -1,4 +1,7 @@
-import { ConfigurationProvider } from '@contexts/ConfigurationContext'
+import {
+  AppConfigurationProvider,
+  MangadexConfigurationProvider
+} from '@contexts/ConfigurationContext'
 import { FontAwesome } from '@expo/vector-icons'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import QueryProvider from '@utils/react-query'
@@ -28,12 +31,14 @@ function App() {
   return (
     <PaperProvider theme={paperTheme}>
       <QueryProvider>
-        <BottomSheetModalProvider>
-          <NavigationContainer theme={navigationTheme}>
-            <StatusBar barStyle={barStyle} />
-            <Navigation />
-          </NavigationContainer>
-        </BottomSheetModalProvider>
+        <MangadexConfigurationProvider>
+          <BottomSheetModalProvider>
+            <NavigationContainer theme={navigationTheme}>
+              <StatusBar barStyle={barStyle} />
+              <Navigation />
+            </NavigationContainer>
+          </BottomSheetModalProvider>
+        </MangadexConfigurationProvider>
       </QueryProvider>
     </PaperProvider>
   )
@@ -42,13 +47,13 @@ function App() {
 export default function Wrapper() {
   return (
     <AuthProvider>
-      <ConfigurationProvider>
+      <AppConfigurationProvider>
         <SafeAreaProvider>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <App />
           </GestureHandlerRootView>
         </SafeAreaProvider>
-      </ConfigurationProvider>
+      </AppConfigurationProvider>
     </AuthProvider>
   )
 }
