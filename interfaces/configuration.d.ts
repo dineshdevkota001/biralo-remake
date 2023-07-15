@@ -1,13 +1,13 @@
 interface IMangadexConfig {
   quality: QualityEnum
-  language: LocalizationLanguageEnum
+  language: ILocalizationLanguageEnum
   coverQuality: CoverQualityEnum
   pageSize: number
   chapterMultiplier: number
   excludedTags: string[]
   includedTags: string[]
-  translatedLanguage: string[]
-  originalLanguage: string[]
+  translatedLanguage: ILocalizationLanguageEnum[]
+  originalLanguage: ILocalizationLanguageEnum[]
 }
 
 interface IAppConfig {

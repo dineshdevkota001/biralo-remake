@@ -3,6 +3,8 @@ import { Text } from 'react-native-paper'
 import Themes from './Themes'
 import ColorScheme from './ColorScheme'
 import Tags from './Tags'
+import TranslatedLanguage from './TranslatedLanguage'
+import OriginalLanguage from './OriginalLanguage'
 
 const styles = StyleSheet.create({
   root: {
@@ -20,6 +22,8 @@ export default function Configuration() {
       <Text variant="titleMedium">Theme</Text>
       <Themes />
       <Tags />
+      <OriginalLanguage />
+      <TranslatedLanguage />
     </View>
   )
 }

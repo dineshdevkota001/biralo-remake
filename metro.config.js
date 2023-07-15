@@ -5,6 +5,7 @@ const path = require('path')
 const { getDefaultConfig } = require('expo/metro-config')
 const projectRoot = __dirname
 const config = getDefaultConfig(projectRoot)
+config.resolver.sourceExts.push('mjs')
 config.path = path
 config.resolver.resolveRequest = MetroSymlinksResolver()
 module.exports = config

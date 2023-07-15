@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { View } from 'react-native'
 import { Card, useTheme } from 'react-native-paper'
 
-export default function MangaRow1Thumbnail({
+export default function MangaRow2Thumbnail({
   children,
   ...item
 }: IMangaThumbnailProps) {

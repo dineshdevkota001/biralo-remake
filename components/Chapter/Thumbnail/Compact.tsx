@@ -3,7 +3,8 @@ import useChapterThumbnail from '@hooks/components/useChapterThumbnail'
 import { LocalizationLanguageEnum } from '@interfaces/mangadex/enum'
 import { formatDistance } from 'date-fns'
 import { View } from 'react-native'
-import { Text, TouchableRipple, useTheme } from 'react-native-paper'
+import { List, Text, TouchableRipple, useTheme } from 'react-native-paper'
+import ListItem from 'react-native-paper/lib/typescript/src/components/List/ListItem'
 
 const today = new Date()
 
@@ -13,6 +14,7 @@ export default function ChapterCompactThumbnail({
   const { colors } = useTheme()
   const { handleGallery, translatedLanguage, chapter, readableAt } =
     useChapterThumbnail({ item })
+
   return (
     <TouchableRipple
       style={{

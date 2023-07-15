@@ -3,8 +3,6 @@ import useCoverArt from '@hooks/useCoverArt'
 import { useNavigation } from '@react-navigation/native'
 import { getTitle } from '@utils/getLocalizedString'
 import { Card, useTheme } from 'react-native-paper'
-import { SharedElement } from 'react-navigation-shared-element'
-import { TagGroupEnum } from '@interfaces/mangadex/enum'
 
 export default function MangaColumn1Thumbnail({
   children,
@@ -13,7 +11,7 @@ export default function MangaColumn1Thumbnail({
   relationships,
   type
 }: IMangaThumbnailProps) {
-  const { title, tags } = attributes
+  const { title, altTitles, tags } = attributes
   const navigation = useNavigation<IRootBottomTabsScreenProps<'Home'>>()
   const { url } = useCoverArt(id, relationships)
 
@@ -36,9 +34,9 @@ export default function MangaColumn1Thumbnail({
           width: 160
         }}
       />
-      <Card.Title title={getTitle(title)} />
+      <Card.Title title={getTitle(title)} subtitle={getTitle(altTitles?.[0])} />
       <Card.Content>
-        <Tags tags={tags} hideTitle includeTags={[TagGroupEnum.THEME]} />
+        <Tags tags={tags} hideTitle />
       </Card.Content>
       {children}
     </Card>

@@ -1,4 +1,5 @@
 import Icon, { IconProps } from '@components/Core/Icon'
+import { useEffect } from 'react'
 import { View } from 'react-native'
 import { Text, TouchableRipple, useTheme } from 'react-native-paper'
 import Animated, {
@@ -38,8 +39,11 @@ export default function TwowaySwitch({
   const toggleValue = () => {
     const newValue = !value
     setValue(newValue)
-    offset.value = withTiming(triStateToNumber(newValue) * iconWidth)
   }
+
+  useEffect(() => {
+    offset.value = withTiming(triStateToNumber(value) * iconWidth)
+  }, [value, iconWidth, offset])
 
   const containerStyle = useAnimatedStyle(() => {
     const diff = offset.value

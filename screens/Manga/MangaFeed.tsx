@@ -3,7 +3,7 @@ import ChapterType1Thumbnail, {
   ChapterType1Skeleton
 } from '@components/Chapter/Thumbnail/Type-1'
 import Duplicate from '@components/Core/Duplicate'
-import { groupBy } from 'lodash'
+import { groupBy, map } from 'lodash'
 import { SectionList, StyleSheet } from 'react-native'
 import { Surface, Text } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -46,10 +46,14 @@ export default function ChapterList({
     variables,
     flags: { includeStats: true }
   })
+
   const { hasNextPage } = pageInfo
 
   const groupedByVolume = groupBy(items, 'attributes.volume')
-  const sections = Object.keys(groupedByVolume)?.map(key => ({
+  const volumes = new Set<string>(map(items, 'attributes.volume'))
+
+  // The object .keys changes the order of the volumes
+  const sections = Array.from(volumes)?.map(key => ({
     volume: key,
     data: groupedByVolume?.[key]
   }))

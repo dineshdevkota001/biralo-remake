@@ -99,6 +99,7 @@ export enum TagGroupEnum {
 export enum LocalizationLanguageEnum {
   EN = 'en',
   JP_RO = 'jp-RO',
+  JP = 'jp',
   PT = 'pt',
   PT_BR = 'pt-br',
   UK = 'uk',
@@ -123,7 +124,10 @@ export enum LocalizationLanguageEnum {
   HI = 'hi',
   AR = 'ar',
   TH = 'th',
-  RO = 'ro'
+  RO = 'ro',
+  CA = 'ca',
+  HU = 'hu',
+  BG = 'bg'
 }
 
 export enum CoverQualityEnum {

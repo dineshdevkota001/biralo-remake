@@ -1,16 +1,14 @@
 import Duplicate from '@components/Core/Duplicate'
 import MangaFilter from '@components/Manga/Filters'
-import MangaRow1Thumbnail, {
-  MangaRow1Skeleton
-} from '@components/Manga/Thumbnails/Row-1'
+import { MangaRow1Skeleton } from '@components/Manga/Thumbnails/Row-1'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { FlatList } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import useMangas from '@hooks/api/manga'
-import ThumbnailTags from '@components/Manga/Thumbnails/Tags'
 import { useMangadexConfig } from '@contexts/ConfigurationContext'
 import cleanObject from '@utils/cleanObject'
+import MangaColumn1Thumbnail from '@components/Manga/Thumbnails/Column-1'
 
 export default function MangaList() {
   const config = useMangadexConfig()
@@ -46,11 +44,7 @@ export default function MangaList() {
         <FlatList
           data={mangas}
           renderItem={({ item }) =>
-            item ? (
-              <MangaRow1Thumbnail {...item}>
-                <ThumbnailTags {...item} />
-              </MangaRow1Thumbnail>
-            ) : null
+            item ? <MangaColumn1Thumbnail {...item} /> : null
           }
           refreshControl={
             <RefreshControl refreshing={isRefetching} onRefresh={refetch} />

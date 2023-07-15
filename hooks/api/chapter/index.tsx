@@ -6,6 +6,7 @@ import getRelationOfType from '@utils/getRelationshipOfType'
 import { useMangadexConfig } from '@contexts/ConfigurationContext'
 import { generalNextPageParam } from '@hooks/api/common'
 import mergeInfinite from '@utils/api/mergeInfinite'
+import { merge } from 'lodash'
 
 async function getChapters({
   queryKey,
@@ -13,6 +14,7 @@ async function getChapters({
 }: QueryFunctionContext<[string, IChapterRequest]>) {
   try {
     const [, params] = queryKey
+
     const { data: res } = await axios.get<IChapterCollection>(CHAPTER, {
       params: {
         offset: pageParam ?? 0,
@@ -63,25 +65,14 @@ async function getChapters({
   return null
 }
 
-export default function useChapters(
-  props:
-    | {
-        variables: IChapterRequest
-      }
-    | undefined
-) {
+export default function useChapters(props: { variables: IChapterRequest }) {
   const { variables } = props ?? {}
   const queryRes = useInfiniteQuery(
     [
       CHAPTER,
-      {
-        ...variables,
-        includes: [
-          TypeEnum.SCANLATION_GROUP,
-          TypeEnum.USER,
-          ...(variables?.includes ?? [])
-        ]
-      } ?? {}
+      merge(variables, {
+        includes: [TypeEnum.SCANLATION_GROUP, TypeEnum.USER]
+      })
     ],
     getChapters,
     {
@@ -100,13 +91,14 @@ export function useLatestChapters(props?: { variables: IChapterRequest }) {
 
   return useChapters({
     ...props,
-    variables: {
+    variables: merge(props?.variables, {
       limit: 3 * pageSize,
-      ...props?.variables,
       order: {
-        updatedAt: OrderEnum.DESC
+        readableAt: OrderEnum.DESC
       },
-      translatedLanguage
-    }
+      translatedLanguage: translatedLanguage?.length
+        ? translatedLanguage
+        : undefined
+    } as IChapterRequest)
   })
 }

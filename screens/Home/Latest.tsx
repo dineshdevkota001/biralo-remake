@@ -5,27 +5,25 @@ import MangaRow1Thumbnail, {
 import { FlatList } from 'react-native'
 import { useLatestChapters } from '@hooks/api/chapter'
 import ChapterCompactThumbnail from '@components/Chapter/Thumbnail/Compact'
-import { Appbar, Card, Text } from 'react-native-paper'
-import { LATEST, PROFILE } from '@constants/static/screens'
+import { Card, Text } from 'react-native-paper'
+import MangaListAppbar from '@components/Common/Header/MangaListAppbar'
+import { useState } from 'react'
 
-export default function RecentChapters({
-  navigation
-}: IRootBottomTabsScreenProps<typeof LATEST>) {
+export default function RecentChapters() {
+  const [title, setTitle] = useState('')
   const {
     data: { items: mangas, pageInfo },
     isLoading,
     fetchNextPage
-  } = useLatestChapters()
+  } = useLatestChapters({
+    variables: {
+      title: title || undefined
+    }
+  })
 
   return (
     <>
-      <Appbar.Header>
-        <Appbar.Action
-          icon="face-agent"
-          onPress={() => navigation.navigate(PROFILE)}
-        />
-        <Appbar.Content title="Latest" />
-      </Appbar.Header>
+      <MangaListAppbar setText={setTitle} title="Latest" />
       <FlatList
         data={mangas}
         renderItem={({ item }) =>

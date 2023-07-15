@@ -16,7 +16,7 @@ export default function mergeInfinite<
 >(
   data: UseInfiniteQueryResult<T>['data']
 ): IInfiniteDataList<NonNullable<T>['data']> {
-  if (!data || data?.pages?.length)
+  if (!data || !data?.pages?.length)
     return {
       items: [],
       pageInfo: {
