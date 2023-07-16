@@ -66,7 +66,7 @@ export default function MangaRow1Thumbnail({
             }}
           >
             {tags?.map(tag => (
-              <Tag {...tag.attributes} id={id} />
+              <Tag key={tag.id} {...tag.attributes} id={tag.id} />
             ))}
           </Card.Content>
         </View>

@@ -17,6 +17,7 @@ async function getManga({
 }: QueryFunctionContext<[string, IMangaRequest, IMangaFlags | undefined]>) {
   try {
     const [, params, flags] = queryKey
+
     const { data: res } = await axios.get<IMangaCollection>(MANGA, {
       params: {
         offset: pageParam ?? 0,
@@ -59,6 +60,7 @@ export default function useMangas(props?: {
 }) {
   const { variables, flags } = props ?? {}
   const { pageSize } = useMangadexConfig()
+
   const queryRes = useInfiniteQuery(
     [
       MANGA,

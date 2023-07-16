@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { BOTTOM_TABS, PROFILE } from '@constants/static/screens'
 import { useNavigation } from '@react-navigation/native'
 import { Appbar } from 'react-native-paper'
@@ -12,10 +11,12 @@ import DebouncedSearchbar from '../Input/Debounced/Searchbar'
 
 export default function MangaListAppbar({
   setText,
-  title
+  title,
+  onFilter
 }: {
   setText: (arg0: string) => void
   title: string
+  onFilter?: () => void
 }) {
   const navigation =
     useNavigation<IRootBottomTabsScreenProps<typeof BOTTOM_TABS>>()
@@ -34,7 +35,7 @@ export default function MangaListAppbar({
     <>
       <Appbar.Header>
         <Appbar.Action
-          icon="face-agent"
+          icon="face-man-outline"
           onPress={() => navigation.navigate(PROFILE)}
         />
         <Appbar.Content title={title} />
@@ -44,6 +45,9 @@ export default function MangaListAppbar({
             height.value = withTiming(height.value > 0 ? 0 : 1)
           })}
         />
+        {onFilter ? (
+          <Appbar.Action icon="filter-outline" onPress={onFilter} />
+        ) : null}
       </Appbar.Header>
       <Animated.View style={style}>
         <DebouncedSearchbar placeholder="Search" onChangeText={setText} />

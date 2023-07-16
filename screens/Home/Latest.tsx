@@ -21,6 +21,9 @@ export default function RecentChapters() {
     }
   })
 
+  const keyExtractor = (item: (typeof mangas)[0], index: number) =>
+    `${item?.id}-${item?.chapters?.[0]?.id}-${index}` || ''
+
   return (
     <>
       <MangaListAppbar setText={setTitle} title="Latest" />
@@ -50,9 +53,7 @@ export default function RecentChapters() {
             </MangaRow1Thumbnail>
           ) : null
         }
-        keyExtractor={(item, index) =>
-          `${item?.id}${item?.chapters?.[0]?.id}${index}` || ''
-        }
+        keyExtractor={keyExtractor}
         onEndReachedThreshold={0.8}
         ListFooterComponent={
           pageInfo?.hasNextPage || isLoading ? (

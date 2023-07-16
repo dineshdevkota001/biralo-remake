@@ -22,6 +22,7 @@ interface IMangaRequest extends IPaginationInput {
   originalLanguage?: Array<string>
   excludedOriginalLanguage?: Array<string>
   availableTranslatedLanguage?: Array<string>
+  translatedLanguage?: Array<string>
 
   status?: Status
   contentRating?: ContentRating[]

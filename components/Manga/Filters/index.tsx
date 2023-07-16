@@ -1,8 +1,7 @@
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
 import useBottomSheetModal from '@hooks/useBottomSheet'
 import { ScrollView, ScrollViewProps, StyleSheet } from 'react-native'
-// import { ScrollView } from 'react-native-gesture-handler'
-import { Appbar, Searchbar, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 import { TabScreen, Tabs } from 'react-native-paper-tabs'
 import { TabScreenProps } from 'react-native-paper-tabs/lib/typescript/TabScreen'
 import {
@@ -11,8 +10,8 @@ import {
   useWatch,
   FormProvider
 } from 'react-hook-form'
-import useDebouncedInput from '@hooks/useDebouncedInput'
-import { useEffect } from 'react'
+import { RefObject, useEffect } from 'react'
+import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types'
 import FormatFilter from './FormatFilter'
 import TagsFilter from './TagsFilter'
 import OrderByFilter from './OrderByFilter'
@@ -52,14 +51,18 @@ function FilterTab({
   )
 }
 
-export default function MangaFilter() {
+export default function MangaFilter({
+  modalRef
+}: {
+  modalRef: RefObject<BottomSheetModalMethods> | null
+}) {
   const { colors } = useTheme()
 
-  const [props, { handleOpen }] = useBottomSheetModal({
+  const [props] = useBottomSheetModal({
     shouldRenderBackdrop: true
   })
 
-  const { control, reset, setValue } = useFormContext<IMangaRequest>()
+  const { control, reset } = useFormContext<IMangaRequest>()
   const defaultValues = useWatch({ control })
 
   const onSubmit = (value: IMangaRequest) => {
@@ -75,69 +78,55 @@ export default function MangaFilter() {
     localReset(defaultValues)
   }, [localReset, defaultValues])
 
-  const { value, setValue: handleChangeText } = useDebouncedInput(v => {
-    setValue('title', v)
-  })
-
   return (
-    <Appbar>
-      <Searchbar
-        value={value}
-        onChangeText={handleChangeText}
-        style={{
-          flex: 1
-        }}
-        traileringIcon="filter-variant"
-        onTraileringIconPress={handleOpen}
-      />
-      <BottomSheetModal
-        {...props}
-        snapPoints={['70%']}
-        onDismiss={form.handleSubmit(onSubmit)}
-      >
-        <FormProvider {...form}>
-          <BottomSheetView
+    <BottomSheetModal
+      {...props}
+      ref={modalRef}
+      snapPoints={['70%']}
+      onDismiss={form.handleSubmit(onSubmit)}
+    >
+      <FormProvider {...form}>
+        <BottomSheetView
+          style={{
+            marginHorizontal: 8,
+            backgroundColor: colors.surface,
+            borderRadius: 16,
+            flex: 1,
+            overflow: 'hidden'
+          }}
+        >
+          <Tabs
             style={{
-              marginHorizontal: 8,
-              backgroundColor: colors.surface,
-              borderRadius: 16,
-              flex: 1,
-              overflow: 'hidden'
+              backgroundColor: colors.surface
             }}
+            iconPosition="top"
+            uppercase={false}
+            mode="scrollable"
           >
-            <Tabs
-              style={{
-                backgroundColor: colors.surface
-              }}
-              iconPosition="top"
-              uppercase={false}
-              mode="scrollable"
+            <FilterTab
+              label="Tags"
+              icon="tag"
+              contentContainerStyle={styles.tabScreen}
             >
-              <FilterTab
-                label="Tags"
-                icon="tag"
-                contentContainerStyle={styles.tabScreen}
-              >
-                <TagsFilter />
-              </FilterTab>
-              <FilterTab
-                contentContainerStyle={styles.tabScreen}
-                label="Status"
-                icon="account-group"
-              >
-                <FormatFilter />
-              </FilterTab>
-              <FilterTab
-                label="Order"
-                icon="sort"
-                contentContainerStyle={styles.tabScreen}
-              >
-                <OrderByFilter />
-              </FilterTab>
-            </Tabs>
-          </BottomSheetView>
-        </FormProvider>
-      </BottomSheetModal>
-    </Appbar>
+              <TagsFilter />
+            </FilterTab>
+            <FilterTab
+              contentContainerStyle={styles.tabScreen}
+              label="Status"
+              icon="account-group"
+            >
+              <FormatFilter />
+            </FilterTab>
+            <FilterTab
+              label="Order"
+              icon="sort"
+              contentContainerStyle={styles.tabScreen}
+            >
+              <OrderByFilter />
+            </FilterTab>
+          </Tabs>
+        </BottomSheetView>
+      </FormProvider>
+    </BottomSheetModal>
   )
 }
