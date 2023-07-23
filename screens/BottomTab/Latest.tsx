@@ -7,7 +7,7 @@ import { useLatestChapters } from '@hooks/api/chapter'
 import ChapterCompactThumbnail from '@components/Chapter/Thumbnail/Compact'
 import { Card, Text } from 'react-native-paper'
 import MangaListAppbar from '@components/Common/Header/MangaListAppbar'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useMangadexConfig } from '@contexts/ConfigurationContext'
 import cleanObject from '@utils/cleanObject'
@@ -19,22 +19,31 @@ const keyExtractor = (item: IManga & { chapters: IChapter[] }, index: number) =>
 
 export default function RecentChapters() {
   const config = useMangadexConfig()
-  const form = useForm<IChapterRequest>({
-    defaultValues: {
-      translatedLanguage: config.translatedLanguage,
-      originalLanguage: config.originalLanguage
-    }
-  })
 
-  const variables = cleanObject<IMangaRequest>(
-    useWatch({ control: form.control })
-  )
+  const form = useForm<IChapterRequest>({
+    defaultValues: {}
+  })
+  const { control, setValue } = form
+
+  useEffect(() => {
+    if (config) {
+      setValue('translatedLanguage', config.translatedLanguage)
+      setValue('originalLanguage', config.originalLanguage)
+      setValue('contentRating', config.contentRating)
+    }
+  }, [setValue, config])
+
+  const watched = useWatch({ control })
+
+  const variables = cleanObject<IChapterRequest>(watched)
 
   const [title, setTitle] = useState('')
   const {
     data: { items: mangas, pageInfo },
     isLoading,
-    fetchNextPage
+    fetchNextPage,
+    isRefetching,
+    refetch
   } = useLatestChapters({
     variables: {
       title: title || undefined,
@@ -80,6 +89,8 @@ export default function RecentChapters() {
             </MangaRow1Thumbnail>
           ) : null
         }
+        refreshing={isRefetching}
+        onRefresh={refetch}
         keyExtractor={keyExtractor}
         onEndReachedThreshold={0.8}
         ListFooterComponent={

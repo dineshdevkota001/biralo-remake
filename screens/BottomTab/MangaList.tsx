@@ -1,16 +1,16 @@
+import MangaListAppbar from '@components/Common/Header/MangaListAppbar'
 import Duplicate from '@components/Core/Duplicate'
+import MangaFilter from '@components/Manga/Filters'
+import MangaColumn1Thumbnail from '@components/Manga/Thumbnails/Column-1'
 import { MangaRow1Skeleton } from '@components/Manga/Thumbnails/Row-1'
+import { useMangadexConfig } from '@contexts/ConfigurationContext'
+import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types'
+import useMangas from '@hooks/api/manga'
+import cleanObject from '@utils/cleanObject'
+import { useRef } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { FlatList } from 'react-native'
-import { RefreshControl } from 'react-native-gesture-handler'
-import useMangas from '@hooks/api/manga'
-import { useMangadexConfig } from '@contexts/ConfigurationContext'
-import cleanObject from '@utils/cleanObject'
-import MangaColumn1Thumbnail from '@components/Manga/Thumbnails/Column-1'
-import MangaListAppbar from '@components/Common/Header/MangaListAppbar'
-import MangaFilter from '@components/Manga/Filters'
-import { useRef } from 'react'
-import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types'
+import { Text } from 'react-native-paper'
 
 export default function MangaList() {
   const config = useMangadexConfig()
@@ -18,8 +18,8 @@ export default function MangaList() {
     defaultValues: {
       excludedTags: config.excludedTags,
       includedTags: config.includedTags,
-      availableTranslatedLanguage: config.translatedLanguage
-      // contentRating: config.contentRating
+      availableTranslatedLanguage: config.translatedLanguage,
+      contentRating: config.contentRating
       // This throws a 400 error. but it should work
       // originalLanguage: config.originalLanguage
     }
@@ -34,7 +34,8 @@ export default function MangaList() {
     isLoading,
     isRefetching,
     refetch,
-    fetchNextPage
+    fetchNextPage,
+    error
   } = useMangas({
     variables,
     flags: { includeStats: true }
@@ -58,11 +59,15 @@ export default function MangaList() {
         renderItem={({ item }) =>
           item ? <MangaColumn1Thumbnail {...item} /> : null
         }
-        refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
-        }
+        refreshing={isRefetching}
+        onRefresh={refetch}
         keyExtractor={item => item?.id ?? ''}
         onEndReachedThreshold={0.8}
+        ListEmptyComponent={
+          error ? (
+            <Text>{(error as Error)?.message || 'unknown error'}</Text>
+          ) : null
+        }
         ListFooterComponent={
           hasNextPage || isLoading ? (
             <Duplicate

@@ -1,4 +1,3 @@
-import Flag from '@components/Common/Flag'
 import TwowaySwitch from '@components/Common/Input/Controlled/TwoWaySwitch'
 import {
   useMangadexConfig,
@@ -6,7 +5,7 @@ import {
 } from '@contexts/ConfigurationContext'
 import { BottomSheetFlatList, BottomSheetModal } from '@gorhom/bottom-sheet'
 import useBottomSheetModal from '@hooks/useBottomSheet'
-import { LocalizationLanguageEnum } from '@interfaces/mangadex/enum'
+import { ContentRatingEnum } from '@interfaces/mangadex/enum'
 import spacing from '@utils/theme/spacing'
 import { identity } from 'lodash'
 import { StyleSheet, View } from 'react-native'
@@ -28,26 +27,26 @@ const styles = StyleSheet.create({
   }
 })
 
-export default function OriginalLanguage() {
+export default function ContentRating() {
   const { colors } = useTheme()
   const [bottomSheetProps, { handleOpen }] = useBottomSheetModal()
-  const { originalLanguage } = useMangadexConfig()
+  const { contentRating } = useMangadexConfig()
   const setConfig = useMangadexConfigDispatch()
 
-  const [selectedLangauges, setSelectedLangauges] = useImmer(originalLanguage)
+  const [selected, setSelected] = useImmer(contentRating ?? [])
 
   return (
     <>
       <View style={styles.horizontal}>
-        <Text variant="titleMedium">Original Language</Text>
+        <Text variant="titleMedium">Content Rating</Text>
         <Button onPress={handleOpen} mode="text">
           Change
         </Button>
       </View>
       <View style={styles.chipContainer}>
-        {originalLanguage?.map(language => (
+        {contentRating?.map(language => (
           <Chip compact key={language}>
-            <Flag isoCode={language} /> {language}
+            {language}
           </Chip>
         ))}
       </View>
@@ -55,10 +54,10 @@ export default function OriginalLanguage() {
         {...bottomSheetProps}
         snapPoints={['50%']}
         onDismiss={() => {
-          setConfig('originalLanguage', selectedLangauges)
+          setConfig('contentRating', selected)
         }}
       >
-        <Card.Title title="Original Language" />
+        <Card.Title title="Content Rating" />
         <BottomSheetFlatList
           style={{
             borderRadius: 16,
@@ -70,10 +69,10 @@ export default function OriginalLanguage() {
             flex: 1,
             backgroundColor: colors.surface
           }}
-          data={Object.values(LocalizationLanguageEnum)}
+          data={Object.values(ContentRatingEnum)}
           keyExtractor={identity}
           renderItem={({ item }) => {
-            const index = selectedLangauges.findIndex(lang => lang === item)
+            const index = selected?.findIndex(lang => lang === item)
             const isIncluded = index >= 0
 
             return (
@@ -81,7 +80,7 @@ export default function OriginalLanguage() {
                 label={item.toUpperCase()}
                 value={isIncluded || undefined}
                 onChange={() => {
-                  setSelectedLangauges(langs => {
+                  setSelected(langs => {
                     if (isIncluded) langs.splice(index, 1)
                     else langs.push(item)
                     return langs

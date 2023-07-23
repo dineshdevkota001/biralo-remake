@@ -1,7 +1,7 @@
 import { ResponseResultEnum } from '@interfaces/mangadex/enum'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { flatten } from 'lodash'
+import { flatten, orderBy } from 'lodash'
 
 import { useMemo } from 'react'
 import { generalQueryFn } from '@hooks/api/common'
@@ -37,23 +37,21 @@ export default function useChapterControls() {
   const { nextChapter, previousChapter, currentChapter } = useMemo(() => {
     if (!chapters) return {}
 
-    const flattenedVolumes = Object.values(chapters.volumes)
-    const chapterListVolumeList = flattenedVolumes
-      .map(({ chapters: chapterInVolume }) => chapterInVolume)
-      .map(e => Object.values(e))
-    const flattenedChapters = flatten(chapterListVolumeList)
+    const volumes = orderBy(Object.values(chapters.volumes), 'volume')
+    const chaps = flatten(
+      volumes
+        .map(({ chapters: chs }) => chs)
+        ?.map(a => orderBy(Object.values(a), 'chapter'))
+    )
 
-    const currentIndex =
-      flattenedChapters?.findIndex(({ id }) => id === chapterId) ?? -1
-    const prev = currentIndex > 0 ? flattenedChapters?.[currentIndex - 1] : null
+    const currentIndex = chaps?.findIndex(({ id }) => id === chapterId) ?? -1
+    const prev = currentIndex > 0 ? chaps?.[currentIndex - 1] : null
     const next =
-      currentIndex < (flattenedChapters?.length ?? 0) - 1
-        ? flattenedChapters?.[currentIndex + 1]
-        : null
+      currentIndex < (chaps?.length ?? 0) - 1 ? chaps?.[currentIndex + 1] : null
     return {
       nextChapter: next,
       previousChapter: prev,
-      currentChapter: flattenedChapters?.[currentIndex]
+      currentChapter: chaps?.[currentIndex]
     }
   }, [chapters, chapterId])
 

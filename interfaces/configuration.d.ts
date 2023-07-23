@@ -8,6 +8,7 @@ interface IMangadexConfig {
   includedTags: string[]
   translatedLanguage: ILocalizationLanguageEnum[]
   originalLanguage: ILocalizationLanguageEnum[]
+  contentRating: IContentRatingEnum[]
 }
 
 interface IAppConfig {

@@ -13,6 +13,7 @@ interface IChapterRequest extends IPaginationInput {
   chapter?: string
   translatedLanguage?: string[]
   originalLanguage?: string[]
+  contentRating?: IContentRatingEnum[]
   groups?: Array<string>
   version?: number
   includes?: Array<TypeEnum.MANGA | TypeEnum.SCANLATION_GROUP | TypeEnum.USER>

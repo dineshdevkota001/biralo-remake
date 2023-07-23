@@ -1,27 +1,18 @@
 import TwowaySwitch from '@components/Common/Input/Controlled/TwoWaySwitch'
-import {
-  ContentRatingEnum,
-  PublicationDemographicEnum
-} from '@interfaces/mangadex/enum'
 import { capitalize } from 'lodash'
 import { Controller, useFormContext } from 'react-hook-form'
 import { View } from 'react-native'
-import { Section, formArrayHelpers } from './commmon'
+import { Section, formArrayHelpers } from '../../Manga/Filters/commmon'
 
-const formatFilters = [
-  {
-    name: 'publicationDemographic',
-    title: 'Demographics',
-    values: PublicationDemographicEnum
-  },
-  {
-    name: 'contentRating',
-    title: 'Content Rating',
-    values: ContentRatingEnum
-  }
-]
-
-export default function FormatFilter() {
+export default function FormatFilter({
+  formatFilters
+}: {
+  formatFilters: {
+    name: string
+    title: string
+    values: Record<string, string>
+  }[]
+}) {
   const { control } = useFormContext()
 
   return (
@@ -35,10 +26,10 @@ export default function FormatFilter() {
           render={({ field: { value, onChange } }) => {
             return (
               <Section title={title}>
-                {Object.values(values).map(tag => {
+                {Object.values(values).map(item => {
                   const { isPresent, getToggledArray } = formArrayHelpers(
                     value,
-                    tag
+                    item
                   )
                   return (
                     <View
@@ -47,14 +38,14 @@ export default function FormatFilter() {
                         minWidth: '40%',
                         maxWidth: '50%'
                       }}
-                      key={tag.id}
+                      key={item?.id}
                     >
                       <TwowaySwitch
                         value={isPresent}
                         onChange={() => {
                           onChange(getToggledArray())
                         }}
-                        label={capitalize(tag.split('_').join(' '))}
+                        label={capitalize(item.split('_').join(' '))}
                       />
                     </View>
                   )

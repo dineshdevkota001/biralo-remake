@@ -6,7 +6,6 @@ import getRelationOfType from '@utils/getRelationshipOfType'
 import { useMangadexConfig } from '@contexts/ConfigurationContext'
 import { generalNextPageParam } from '@hooks/api/common'
 import mergeInfinite from '@utils/api/mergeInfinite'
-import { merge } from 'lodash'
 
 async function getChapters({
   queryKey,
@@ -70,9 +69,10 @@ export default function useChapters(props: { variables: IChapterRequest }) {
   const queryRes = useInfiniteQuery(
     [
       CHAPTER,
-      merge(variables, {
-        includes: [TypeEnum.SCANLATION_GROUP, TypeEnum.USER]
-      })
+      {
+        includes: [TypeEnum.SCANLATION_GROUP, TypeEnum.USER],
+        ...variables
+      }
     ],
     getChapters,
     {
@@ -87,18 +87,16 @@ export default function useChapters(props: { variables: IChapterRequest }) {
 }
 
 export function useLatestChapters(props?: { variables: IChapterRequest }) {
-  const { pageSize, translatedLanguage } = useMangadexConfig()
+  const { pageSize } = useMangadexConfig()
 
   return useChapters({
     ...props,
-    variables: merge(props?.variables, {
+    variables: {
       limit: 3 * pageSize,
       order: {
         readableAt: OrderEnum.DESC
       },
-      translatedLanguage: translatedLanguage?.length
-        ? translatedLanguage
-        : undefined
-    } as IChapterRequest)
+      ...props?.variables
+    }
   })
 }

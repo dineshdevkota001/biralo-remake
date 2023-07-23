@@ -1,7 +1,10 @@
+import FormatFilter from '@components/Common/Filters/FormatFilter'
 import FilterTab from '@components/Common/Filters/Tab'
+import LanguageFilter from '@components/Common/Input/Controlled/Language'
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types'
 import useBottomSheetModal from '@hooks/useBottomSheet'
+import { ContentRatingEnum } from '@interfaces/mangadex/enum'
 import useTheme, { createStyle } from '@styles/appStyle'
 import spacing from '@utils/theme/spacing'
 import { RefObject, useEffect } from 'react'
@@ -13,7 +16,6 @@ import {
 } from 'react-hook-form'
 import { Tabs } from 'react-native-paper-tabs'
 import MangaOrderByFilter from './OrderByFilter'
-import LanguageFilter from './Language'
 
 const getStyles = createStyle(({ colors }) => ({
   root: {
@@ -27,6 +29,14 @@ const getStyles = createStyle(({ colors }) => ({
     backgroundColor: colors.surface
   }
 }))
+
+const formatFilters = [
+  {
+    name: 'contentRating',
+    title: 'Content Rating',
+    values: ContentRatingEnum
+  }
+]
 
 export default function ChapterFilter({
   modalRef
@@ -70,11 +80,14 @@ export default function ChapterFilter({
             uppercase={false}
             mode="scrollable"
           >
-            <FilterTab label="Order" icon="sort">
-              <MangaOrderByFilter />
-            </FilterTab>
             <FilterTab label="Translated" icon="translate">
               <LanguageFilter name="translatedLanguage" />
+            </FilterTab>
+            <FilterTab label="Status" icon="account-group">
+              <FormatFilter formatFilters={formatFilters} />
+            </FilterTab>
+            <FilterTab label="Order" icon="sort">
+              <MangaOrderByFilter />
             </FilterTab>
             <FilterTab label="Original" icon="google-translate">
               <LanguageFilter name="originalLanguage" />

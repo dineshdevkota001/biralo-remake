@@ -5,6 +5,7 @@ import ColorScheme from './ColorScheme'
 import Tags from './Tags'
 import TranslatedLanguage from './TranslatedLanguage'
 import OriginalLanguage from './OriginalLanguage'
+import ContentRating from './ContentRating'
 
 const styles = StyleSheet.create({
   root: {
@@ -24,6 +25,7 @@ export default function Configuration() {
       <Tags />
       <OriginalLanguage />
       <TranslatedLanguage />
+      <ContentRating />
     </View>
   )
 }
