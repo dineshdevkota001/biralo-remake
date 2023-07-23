@@ -2,6 +2,10 @@
   "id": 1,
   "expo": {
     "scheme": "biralo",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "backgroundColor": "#ff6740"
+    },
     "web": {
       "bundler": "metro"
     },

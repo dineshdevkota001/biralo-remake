@@ -17,6 +17,8 @@ import { AuthProvider } from '@contexts/AuthContext'
 import { useAppColors } from 'styles/appStyle'
 import Navigation from './navigators'
 
+SplashScreen?.preventAutoHideAsync()
+
 function App() {
   const [loaded] = useFonts({
     ...FontAwesome.font
@@ -25,7 +27,6 @@ function App() {
 
   useEffect(() => {
     if (loaded) SplashScreen?.hideAsync()
-    else SplashScreen?.preventAutoHideAsync()
   }, [loaded])
 
   return (
