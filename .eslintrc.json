@@ -22,6 +22,7 @@
   "rules": {
     "prettier/prettier": "error",
     "import/no-unresolved": 0,
+    "react/jsx-key": "error",
     "react/require-default-props": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-props-no-spreading": "off",

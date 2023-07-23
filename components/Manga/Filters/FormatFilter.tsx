@@ -1,11 +1,11 @@
+import TwowaySwitch from '@components/Common/Input/Controlled/TwoWaySwitch'
 import {
-  PublicationDemographicEnum,
-  ContentRatingEnum
+  ContentRatingEnum,
+  PublicationDemographicEnum
 } from '@interfaces/mangadex/enum'
 import { capitalize } from 'lodash'
 import { Controller, useFormContext } from 'react-hook-form'
 import { View } from 'react-native'
-import TwowaySwitch from '@components/Common/Input/Controlled/TwoWaySwitch'
 import { Section, formArrayHelpers } from './commmon'
 
 const formatFilters = [
@@ -47,6 +47,7 @@ export default function FormatFilter() {
                         minWidth: '40%',
                         maxWidth: '50%'
                       }}
+                      key={tag.id}
                     >
                       <TwowaySwitch
                         value={isPresent}

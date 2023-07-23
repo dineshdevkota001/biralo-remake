@@ -4,15 +4,11 @@ import { useFormContext } from 'react-hook-form'
 const orderProperties = [
   { name: 'createdAt', label: 'Creation Date' },
   { name: 'updatedAt', label: 'Updated Date' },
-  { name: 'title', label: 'Alphabetical' },
-  { name: 'year', label: 'Publication Year' },
-  { name: 'latestUploadedChapter', label: 'Latest' },
-  { name: 'followedCount', label: 'Follows' },
-  { name: 'relevance', label: 'Relevance' },
-  { name: 'rating', label: 'Rating' }
+  { name: 'publishAt', label: 'Publication Year' },
+  { name: 'readableAt', label: 'Readable Date' }
 ]
 
-export default function MangaOrderByFilter() {
+export default function ChapterOrderByFilter() {
   const { control } = useFormContext()
   return (
     // eslint-disable-next-line react/jsx-no-useless-fragment

@@ -1,12 +1,12 @@
-import { generalQueryFn } from '@hooks/api/common'
+import ThreewaySwitch from '@components/Common/Input/Controlled/ThreewaySwitch'
 import { MANGA_TAGS } from '@constants/api/routes'
+import { generalQueryFn } from '@hooks/api/common'
+import { TagModeEnum } from '@interfaces/mangadex/enum'
 import { useQuery } from '@tanstack/react-query'
 import { capitalize, groupBy } from 'lodash'
 import { Control, Controller, Path, useFormContext } from 'react-hook-form'
 import { View, ViewStyle } from 'react-native'
 import { Switch, Text, useTheme } from 'react-native-paper'
-import { TagModeEnum } from '@interfaces/mangadex/enum'
-import ThreewaySwitch from '@components/Common/Input/Controlled/ThreewaySwitch'
 import { Section, formArrayHelpers } from './commmon'
 
 function SwitchWithTitle({
@@ -140,6 +140,7 @@ export default function TagsFilter() {
                           minWidth: '40%',
                           maxWidth: '50%'
                         }}
+                        key={tag.id}
                       >
                         <ThreewaySwitch
                           label={capitalize(

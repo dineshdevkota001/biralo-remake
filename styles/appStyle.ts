@@ -1,7 +1,7 @@
 import { useAppConfig } from '@contexts/ConfigurationContext'
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme'
 import { useMemo } from 'react'
-import { useColorScheme } from 'react-native'
+import { StyleSheet, useColorScheme } from 'react-native'
 import {
   MD3DarkTheme,
   MD3LightTheme,
@@ -17,7 +17,7 @@ import {
   MD3Theme
 } from 'react-native-paper/lib/typescript/src/types'
 
-type IAppTheme = MD3Theme & {
+export type IAppTheme = MD3Theme & {
   colors: MD3Colors & {
     success: string
     successContainer: string
@@ -81,3 +81,12 @@ export function useAppColors() {
 export default function useTheme() {
   return useM3Theme<IAppTheme>()
 }
+
+export const createStyle =
+  <T>(
+    styles:
+      | StyleSheet.NamedStyles<T>
+      | ((theme: IAppTheme) => StyleSheet.NamedStyles<T>)
+  ) =>
+  (theme: IAppTheme): StyleSheet.NamedStyles<T> =>
+    StyleSheet.create(typeof styles === 'function' ? styles(theme) : styles)

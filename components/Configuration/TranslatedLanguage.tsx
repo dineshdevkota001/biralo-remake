@@ -10,7 +10,7 @@ import { LocalizationLanguageEnum } from '@interfaces/mangadex/enum'
 import spacing from '@utils/theme/spacing'
 import { identity } from 'lodash'
 import { StyleSheet, View } from 'react-native'
-import { Button, Card, Chip, Surface, Text, useTheme } from 'react-native-paper'
+import { Button, Card, Chip, Text, useTheme } from 'react-native-paper'
 import { useImmer } from 'use-immer'
 
 const styles = StyleSheet.create({
@@ -46,7 +46,7 @@ export default function TranslatedLanguage() {
       </View>
       <View style={styles.chipContainer}>
         {translatedLanguage?.map(language => (
-          <Chip compact>
+          <Chip compact key={language}>
             <Flag isoCode={language} /> {language}
           </Chip>
         ))}

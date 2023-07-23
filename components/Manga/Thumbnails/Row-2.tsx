@@ -4,8 +4,34 @@ import { useNavigation } from '@react-navigation/native'
 import { getTitle } from '@utils/getLocalizedString'
 import spacing from '@utils/theme/spacing'
 import { useState } from 'react'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Card, useTheme } from 'react-native-paper'
+
+const styles = StyleSheet.create({
+  card: { margin: spacing(2) },
+  cardContent: { gap: spacing(2) },
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    overflow: 'hidden'
+  },
+  image: {
+    width: spacing(30)
+  },
+  details: {
+    flex: 1,
+    display: 'flex',
+    alignSelf: 'flex-start'
+  },
+  tags: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing(1)
+  },
+  skeleton: { height: 200, flex: 1, margin: spacing(2) }
+})
 
 export default function MangaRow2Thumbnail({
   children,
@@ -23,50 +49,30 @@ export default function MangaRow2Thumbnail({
 
   return (
     <Card
-      style={{
-        margin: 8
-      }}
-      contentStyle={{
-        gap: 8
-      }}
+      style={styles.card}
+      contentStyle={styles.cardContent}
       onPress={() => navigation.navigate('Chapter List', { id, manga: item })}
       onLongPress={toggleCardExpand}
     >
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'flex-start',
-          overflow: 'hidden'
-        }}
-      >
+      <View style={styles.container}>
         <Card.Cover
           source={{
             uri: url
           }}
-          style={{
-            width: 120
-          }}
+          style={styles.image}
         />
-        <View
-          style={{
-            flex: 1,
-            display: 'flex',
-            alignSelf: 'flex-start'
-          }}
-        >
+        <View style={styles.details}>
           <Card.Title title={getTitle(title)} titleNumberOfLines={2} />
           <Card.Content
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              gap: spacing(1),
-              maxHeight: showChildren ? undefined : spacing(22)
-            }}
+            style={[
+              styles.tags,
+              {
+                maxHeight: showChildren ? undefined : spacing(22)
+              }
+            ]}
           >
             {tags?.map(tag => (
-              <Tag {...tag.attributes} id={id} />
+              <Tag key={id} {...tag.attributes} id={id} />
             ))}
           </Card.Content>
         </View>
@@ -80,12 +86,12 @@ export function MangaRow1Skeleton() {
   const { colors } = useTheme()
   return (
     <Card
-      style={{
-        backgroundColor: colors.surfaceVariant,
-        height: 200,
-        flex: 1,
-        margin: 8
-      }}
+      style={[
+        styles.skeleton,
+        {
+          backgroundColor: colors.surfaceVariant
+        }
+      ]}
     >
       {
         //

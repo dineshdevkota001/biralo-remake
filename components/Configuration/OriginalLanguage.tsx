@@ -46,7 +46,7 @@ export default function OriginalLanguage() {
       </View>
       <View style={styles.chipContainer}>
         {originalLanguage?.map(language => (
-          <Chip compact>
+          <Chip compact key={language}>
             <Flag isoCode={language} /> {language}
           </Chip>
         ))}

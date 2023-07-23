@@ -7,9 +7,29 @@ import { useLatestChapters } from '@hooks/api/chapter'
 import ChapterCompactThumbnail from '@components/Chapter/Thumbnail/Compact'
 import { Card, Text } from 'react-native-paper'
 import MangaListAppbar from '@components/Common/Header/MangaListAppbar'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { FormProvider, useForm, useWatch } from 'react-hook-form'
+import { useMangadexConfig } from '@contexts/ConfigurationContext'
+import cleanObject from '@utils/cleanObject'
+import ChapterFilter from '@components/Chapter/Filters'
+import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types'
+
+const keyExtractor = (item: IManga & { chapters: IChapter[] }, index: number) =>
+  `${item?.id}-${item?.chapters?.[0]?.id}-${index}` || ''
 
 export default function RecentChapters() {
+  const config = useMangadexConfig()
+  const form = useForm<IChapterRequest>({
+    defaultValues: {
+      translatedLanguage: config.translatedLanguage,
+      originalLanguage: config.originalLanguage
+    }
+  })
+
+  const variables = cleanObject<IMangaRequest>(
+    useWatch({ control: form.control })
+  )
+
   const [title, setTitle] = useState('')
   const {
     data: { items: mangas, pageInfo },
@@ -17,16 +37,23 @@ export default function RecentChapters() {
     fetchNextPage
   } = useLatestChapters({
     variables: {
-      title: title || undefined
+      title: title || undefined,
+      ...variables
     }
   })
 
-  const keyExtractor = (item: (typeof mangas)[0], index: number) =>
-    `${item?.id}-${item?.chapters?.[0]?.id}-${index}` || ''
+  const ref = useRef<BottomSheetModalMethods>(null)
+  const handleOpen = () => {
+    ref.current?.present()
+  }
 
   return (
-    <>
-      <MangaListAppbar setText={setTitle} title="Latest" />
+    <FormProvider {...form}>
+      <MangaListAppbar
+        setText={setTitle}
+        title="Latest"
+        onFilter={handleOpen}
+      />
       <FlatList
         data={mangas}
         renderItem={({ item }) =>
@@ -65,6 +92,7 @@ export default function RecentChapters() {
         }
         onEndReached={() => (pageInfo?.hasNextPage ? fetchNextPage() : null)}
       />
-    </>
+      <ChapterFilter modalRef={ref} />
+    </FormProvider>
   )
 }
